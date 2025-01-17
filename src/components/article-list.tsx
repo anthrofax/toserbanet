@@ -4,7 +4,7 @@ import { MdArticle } from "react-icons/md";
 
 function ArticleList() {
   return (
-    <div className="py-5 flex flex-col gap-3">
+    <div className="py-5 flex flex-col gap-3 container mx-auto">
       <div className="flex items-center">
         <div className="bg-blue-600 flex gap-2 items-center justify-center rounded-r-full p-3 text-white w-max shrink-0 grow-0">
           <MdArticle className="text-xl" />

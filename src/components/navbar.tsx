@@ -8,8 +8,8 @@ import { RiHome6Line } from "react-icons/ri";
 
 function Navbar() {
   return (
-    <nav className="min-h-20 py-5 px-5 md:px-10 lg:px-20 relative bg-slate-50 flex flex-col gap-3">
-      <div className="flex-shrink-0 basis-full flex justify-between">
+    <nav className="min-h-20 py-5 px-5 md:px-10 lg:px-20 bg-slate-50/50 flex flex-col gap-3 fixed top-0 w-full z-10">
+      <div className="flex-shrink-0 basis-full flex justify-between gap-3">
         <Link
           href={"/"}
           className="flex items-center gap-3 uppercase sm:text-xl"
@@ -27,28 +27,28 @@ function Navbar() {
         <div className="justify-between gap-3 xl:gap-5 hidden lg:flex">
           <Link
             href={""}
-            className="flex items-center gap-3 w-max text-base xl:text-xl"
+            className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
           >
             <RiHome6Line className="text-2xl" />
             <span>Home</span>
           </Link>
           <Link
             href={""}
-            className="flex items-center gap-3 w-max text-base xl:text-xl"
+            className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
           >
             <CiUser className="text-2xl" />
             <span>Tentang</span>
           </Link>
           <Link
             href={""}
-            className="flex items-center gap-3 w-max text-base xl:text-xl"
+            className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
           >
             <CiDiscount1 className="text-2xl" />
             <span>Promo</span>
           </Link>
           <Link
             href={""}
-            className="flex items-center gap-3 w-max text-base xl:text-xl"
+            className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
           >
             <BiPhoneCall className="text-2xl" />
             <span>Kontak Kami</span>
@@ -71,7 +71,7 @@ function Navbar() {
         </div>
       </div>
 
-      <form className="relative block lg:hidden w-full place-self-end">
+      <form className="relative block lg:hidden w-full place-self-end opacity-50 focus:opacity-100 focus-within::opacity-100 focus-visible:opacity-100 hover:opacity-100 active:opacity-100">
         <input
           type="text"
           placeholder="Cari Produk"

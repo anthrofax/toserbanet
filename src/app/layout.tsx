@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 const poppins = Poppins({
   weight: ["400", "600"],
@@ -9,7 +11,6 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Toserbanet",
   description: "Menyediakan segala kebutuhan untuk anda.",
-  
 };
 
 export default function RootLayout({
@@ -19,7 +20,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} antialiased`}>{children}</body>
+      <body className={`${poppins.className} antialiased`}>
+        <Navbar />
+        <div className="pt-28 lg:pt-20 min-h-screen bg-slate-100">
+          {children}
+        </div>
+        <Footer />
+      </body>
     </html>
   );
 }
