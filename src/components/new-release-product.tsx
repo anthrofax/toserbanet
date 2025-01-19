@@ -2,10 +2,35 @@ import {
   MdKeyboardDoubleArrowDown,
   MdOutlineNewReleases,
 } from "react-icons/md";
-import ProductItem from "./product-item";
 import Link from "next/link";
+import { Suspense } from "react";
+import { Skeleton } from "./ui/skeleton";
+import { ProductItemType } from "@/types/product-item";
+import { wixClientServer } from "@/lib/wix-client-server";
+import ProductListGrid from "./product-list-grid";
 
-function NewReleaseProduct() {
+async function NewReleaseProduct() {
+  const wixClient = await wixClientServer();
+
+  // Temporary
+  const productQuery = await wixClient.products
+    .queryProducts()
+    .ascending("lastUpdated")
+    .limit(10)
+    .find();
+
+  const productItem: ProductItemType[] = productQuery.items.map((prod) => {
+    return {
+      title: prod.name || "",
+      imageObj: {
+        imageAlt: prod.name || "",
+        imageUrl: prod.media?.mainMedia?.image?.url || "",
+      },
+      price: prod.priceData?.price || 0,
+      slug: prod.slug || "",
+    };
+  });
+
   return (
     <div className="py-5 flex flex-col gap-3">
       <div className="flex items-center">
@@ -16,17 +41,20 @@ function NewReleaseProduct() {
         <hr className="flex-1 h-0.5 bg-slate-200" />
       </div>
 
-      <div className="grid max-[400px]:grid-cols-1 max-lg:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 place-items-center gap-x-2 md:gap-x-5 gap-y-5 container mx-auto px-2">
-        <ProductItem className="w-full" />
-        <ProductItem className="w-full" />
-        <ProductItem className="w-full" />
-        <ProductItem className="w-full" />
-        <ProductItem className="w-full" />
-        <ProductItem className="w-full" />
-        <ProductItem className="w-full" />
-        <ProductItem className="w-full" />
-        <ProductItem className="w-full" />
-      </div>
+      <Suspense
+        fallback={
+          <div className="grid max-[400px]:grid-cols-1 max-lg:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 place-items-center gap-x-2 md:gap-x-5 gap-y-5 container mx-auto px-2">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <Skeleton
+                className="bg-slate-50 rounded-lg h-max shrink-0 bg-slate-300/50"
+                key={i}
+              />
+            ))}
+          </div>
+        }
+      >
+        {<ProductListGrid productItem={productItem} />}
+      </Suspense>
 
       <Link
         href=""

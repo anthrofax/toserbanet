@@ -1,13 +1,21 @@
+import { wixClientServer } from "@/lib/wix-client-server";
 import Link from "next/link";
 
-function MainCategory() {
+async function MainCategory() {
+  const wixClient = await wixClientServer();
+  const { items } = await wixClient.collections.queryCollections().find();
+
   return (
     <div className="px-5 md:px-10 lg:px-20 py-5 flex gap-5 md:gap-10 lg:gap-20 max-w-screen overflow-x-auto scrollbar-hide whitespace-nowrap">
-      <Link href="" className="font-bold">Artikel</Link>
-      <Link href="" className="font-bold">Sandal</Link>
-      <Link href="" className="font-bold">Sandal Kulit</Link>
-      <Link href="" className="font-bold">Sendal Pria</Link>
-      <Link href="" className="font-bold">Sepatu Pria</Link>
+      {items.map((item) => (
+        <Link
+          href={`/products?cat=${item.slug}`}
+          className="font-bold shrink-0"
+          key={item._id}
+        >
+          {item.name}
+        </Link>
+      ))}
     </div>
   );
 }

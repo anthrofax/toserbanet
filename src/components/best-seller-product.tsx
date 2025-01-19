@@ -1,7 +1,31 @@
 import { MdOutlineShowChart } from "react-icons/md";
-import ProductItem from "./product-item";
+import { wixClientServer } from "@/lib/wix-client-server";
+import ListProductScroll from "./list-product-scroll";
+import { ProductItemType } from "@/types/product-item";
+import { Suspense } from "react";
+import { Skeleton } from "./ui/skeleton";
 
-function BestSellerProduct() {
+async function BestSellerProduct() {
+  const wixClient = await wixClientServer();
+
+  // Temporary
+  const productQuery = await wixClient.products
+    .queryProducts()
+    .limit(10)
+    .find();
+
+  const productItem: ProductItemType[] = productQuery.items.map((prod) => {
+    return {
+      title: prod.name || "",
+      imageObj: {
+        imageAlt: prod.name || "",
+        imageUrl: prod.media?.mainMedia?.image?.url || "",
+      },
+      price: prod.priceData?.price || 0,
+      slug: prod.slug || "",
+    };
+  });
+
   return (
     <div className="py-5 flex flex-col gap-3">
       <div className="flex items-center">
@@ -12,12 +36,20 @@ function BestSellerProduct() {
         <hr className="flex-1 h-0.5 bg-slate-200" />
       </div>
 
-      <div className="px-2 overflow-x-auto flex gap-2 scrollbar-hide">
-        <ProductItem className="shrink-0 w-56" />
-        <ProductItem className="shrink-0 w-56" />
-        <ProductItem className="shrink-0 w-56" />
-        <ProductItem className="shrink-0 w-56" />
-      </div>
+      <Suspense
+        fallback={
+          <div className="px-2 overflow-x-auto flex gap-2 scrollbar-hide">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <Skeleton
+                className="bg-slate-50 rounded-lg h-max shrink-0 bg-slate-300/50"
+                key={i}
+              />
+            ))}
+          </div>
+        }
+      >
+        {<ListProductScroll productItem={productItem} />}
+      </Suspense>
     </div>
   );
 }

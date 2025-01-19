@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BiPhoneCall } from "react-icons/bi";
-import { CiDiscount1, CiSearch, CiUser } from "react-icons/ci";
+import { CiSearch, CiUser } from "react-icons/ci";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { LuSettings2 } from "react-icons/lu";
+import { LuGlasses, LuSettings2 } from "react-icons/lu";
 import { RiHome6Line } from "react-icons/ri";
 
 function Navbar() {
@@ -24,30 +24,30 @@ function Navbar() {
           <h1>Toserbanet</h1>
         </Link>
 
-        <div className="justify-between gap-3 xl:gap-5 hidden lg:flex">
+        <div className="justify-between gap-3 lg:gap-4 xl:gap-5 hidden lg:flex">
           <Link
-            href={""}
+            href={"/"}
             className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
           >
             <RiHome6Line className="text-2xl" />
             <span>Home</span>
           </Link>
           <Link
-            href={""}
+            href={"/products"}
+            className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
+          >
+            <LuGlasses className="text-2xl" />
+            <span>Produk</span>
+          </Link>
+          <Link
+            href={"/about"}
             className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
           >
             <CiUser className="text-2xl" />
             <span>Tentang</span>
           </Link>
           <Link
-            href={""}
-            className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
-          >
-            <CiDiscount1 className="text-2xl" />
-            <span>Promo</span>
-          </Link>
-          <Link
-            href={""}
+            href={"/kontak"}
             className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
           >
             <BiPhoneCall className="text-2xl" />

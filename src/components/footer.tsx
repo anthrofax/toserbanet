@@ -1,3 +1,4 @@
+import { CiUser } from "react-icons/ci";
 import { FaRegCopyright } from "react-icons/fa";
 import { FiCoffee } from "react-icons/fi";
 import { HiOutlineDocumentText } from "react-icons/hi";
@@ -14,7 +15,7 @@ function Footer() {
           Home
         </li>
         <li className="flex gap-1 items-center justify-center text-slate-50">
-          <IoHomeOutline />
+          <CiUser />
           About
         </li>
         <li className="flex gap-1 items-center justify-center text-slate-50">
