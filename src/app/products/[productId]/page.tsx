@@ -20,9 +20,6 @@ async function SinglePage({
 
   const product = items[0];
 
-  console.log(product.productOptions)
-  console.log(product.variants);
-
   if (!product) return notFound();
 
   return (

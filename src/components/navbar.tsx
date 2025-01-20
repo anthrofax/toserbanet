@@ -57,16 +57,24 @@ function Navbar() {
 
         <div className="flex gap-2 justify-between items-center">
           <GiHamburgerMenu className="block lg:hidden text-2xl" />
-          <form className="relative hidden lg:block">
+          <form
+            className="relative hidden lg:block"
+            action="/products"
+          >
             <input
               type="text"
+              name="name" // This is the key step to include the query parameter "name"
               placeholder="Cari Produk"
               className="rounded-full border-2 border-slate-400 py-2 px-5 w-full"
             />
-            <button className="bg-slate-950 absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full">
+            <button
+              type="submit"
+              className="bg-slate-950 absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full"
+            >
               <CiSearch className="text-white text-2xl" />
             </button>
           </form>
+
           <LuSettings2 className="text-3xl shrink-0" />
         </div>
       </div>

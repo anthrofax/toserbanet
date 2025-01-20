@@ -67,7 +67,7 @@ function CartModal() {
         Checkout
       </button>
 
-      {document.body &&
+      {typeof window !== "undefined" &&
         createPortal(
           isModalOpen && (
             <>

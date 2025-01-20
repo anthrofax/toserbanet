@@ -76,9 +76,7 @@ export const useCartStore = create<CartState>((set) => ({
       isLoading: false,
     });
 
-    toast.success("Produk berhasil ditambahkan ke keranjang.", {
-      position: "bottom-left",
-    });
+    toast.success("Produk berhasil ditambahkan ke keranjang.");
   },
   updateQuantity: async (wixClient, productId, quantity) => {
     set((state) => ({ ...state, isLoading: true }));

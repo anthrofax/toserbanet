@@ -5,6 +5,7 @@ import { products, collections } from "@wix/stores";
 import { currentCart } from "@wix/ecom";
 import { createContext, useContext } from "react";
 import Cookies from "js-cookie";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const refreshToken = JSON.parse(Cookies.get("refreshToken") || "{}");
 
@@ -35,7 +36,13 @@ export const WixClientConectProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  return <WixClientContext value={wixClient}>{children}</WixClientContext>;
+  const queryClient = new QueryClient();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <WixClientContext value={wixClient}>{children}</WixClientContext>;
+    </QueryClientProvider>
+  );
 };
 
 export const useWixClientContext = () => {

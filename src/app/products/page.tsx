@@ -1,8 +1,25 @@
 import Filter from "@/components/filter";
+import Pagination from "@/components/pagination";
 import ProductList from "@/components/product-list";
+import { Skeleton } from "@/components/ui/skeleton";
+import { wixClientServer } from "@/lib/wix-client-server";
 import Image from "next/image";
+import { Suspense } from "react";
 
-function ListPage() {
+async function ListPage(props: { searchParams: Promise<any> }) {
+  const searchParams = await props.searchParams;
+
+  const wixClient = await wixClientServer();
+
+  let cat;
+  try {
+    cat = await wixClient.collections.getCollectionBySlug(
+      searchParams?.cat || "all-products"
+    );
+  } catch (error) {
+    cat = null;
+  }
+
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative pb-5">
       {/* Compaign */}
@@ -13,7 +30,7 @@ function ListPage() {
             Grab up to 50% off on
             <br /> Selected Products
           </h1>
-          <button className="rounded-3xl bg-accent text-white w-max px-5 text-sm">
+          <button className="rounded-3xl bg-slate-900 text-white w-max py-2 px-5 text-sm">
             BUY NOW
           </button>
         </div>
@@ -26,8 +43,28 @@ function ListPage() {
       <Filter />
 
       {/* Products */}
-      <h1 className="mt-12 text-xl font-semibold">Shoes for you!</h1>
-      <ProductList />
+      <h1 className="mt-12 mb-3 text-xl font-semibold">
+        Berikut produk yang anda cari...
+      </h1>
+      <Suspense
+        fallback={
+          <div className="grid max-[400px]:grid-cols-1 max-lg:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 place-items-center gap-x-2 md:gap-x-5 gap-y-5 container mx-auto px-2">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton
+                className="h-[316px] w-full rounded-lg bg-slate-300/50 shrink-0"
+                key={i}
+              />
+            ))}
+          </div>
+        }
+      >
+        <ProductList
+          categoryId={
+            cat?.collection?._id || "00000000-000000-000000-000000000001"
+          }
+          searchParams={searchParams}
+        />
+      </Suspense>
     </div>
   );
 }

@@ -19,7 +19,7 @@ async function NewReleaseProduct() {
     .limit(10)
     .find();
 
-  const productItem: ProductItemType[] = productQuery.items.map((prod) => {
+  const productItems: ProductItemType[] = productQuery.items.map((prod) => {
     return {
       title: prod.name || "",
       imageObj: {
@@ -53,7 +53,7 @@ async function NewReleaseProduct() {
           </div>
         }
       >
-        {<ProductListGrid productItem={productItem} />}
+        {<ProductListGrid productItems={productItems} />}
       </Suspense>
 
       <Link
