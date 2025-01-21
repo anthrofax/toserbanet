@@ -1,10 +1,11 @@
-import Image from "next/image";
-import Link from "next/link";
-import ProductListGrid from "./product-list-grid";
+import ProductListGrid from "../product-list-grid";
 import { ProductItemType } from "@/types/product-item";
 import { wixClientServer } from "@/lib/wix-client-server";
 import { products } from "@wix/stores";
-import Pagination from "./pagination";
+import Pagination from "../pagination";
+import Image from "next/image";
+import NotFoundIcon from "@/assets/nothing.svg";
+import { CiSearch } from "react-icons/ci";
 
 interface PropsType {
   limit?: number;
@@ -60,15 +61,42 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
   });
 
   return (
-    <>
-      <ProductListGrid productItems={productItems} />
-      <Pagination
-        className="mt-5"
-        currentPage={(res.currentPage || 0) + 1}
-        hasPrev={res.hasPrev()}
-        hasNext={res.hasNext()}
-      />
-    </>
+    <div className="mt-3 min-h-[30rem]">
+      {productItems && productItems.length > 0 && (
+        <div className="ml-2 mt-12 mb-3 flex items-center gap-2">
+          <CiSearch className="text-3xl font-semibold" />
+          <h1 className="text-xl font-semibold">Hasil Pencarian</h1>
+        </div>
+      )}
+      {productItems.length > 0 ? (
+        <>
+          {" "}
+          <ProductListGrid productItems={productItems} />
+          <Pagination
+            className="mt-5"
+            currentPage={(res.currentPage || 0) + 1}
+            hasPrev={res.hasPrev()}
+            hasNext={res.hasNext()}
+          />
+        </>
+      ) : (
+        <div className="p-5 flex flex-col justify-center items-center gap-3 min-h-[30rem]">
+          <Image
+            src={NotFoundIcon}
+            alt="Product is not found"
+            className="w-24 h-24"
+          />
+          <div className="text-center">
+            <h3 className="text-xl font-semibold">
+              Produk yang anda cari tidak ditemukan
+            </h3>
+            <p className="text-xs">
+              Coba kata kunci lain atau cek produk rekomendasi di bawah.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

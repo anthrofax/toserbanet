@@ -40,7 +40,7 @@ export const WixClientConectProvider = ({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <WixClientContext value={wixClient}>{children}</WixClientContext>;
+      <WixClientContext value={wixClient}>{children}</WixClientContext>
     </QueryClientProvider>
   );
 };

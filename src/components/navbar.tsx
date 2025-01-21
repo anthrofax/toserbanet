@@ -3,8 +3,10 @@ import Link from "next/link";
 import { BiPhoneCall } from "react-icons/bi";
 import { CiSearch, CiUser } from "react-icons/ci";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { LuGlasses, LuSettings2 } from "react-icons/lu";
+import { LuGlasses } from "react-icons/lu";
 import { RiHome6Line } from "react-icons/ri";
+import CategorySheet from "./category-sheet";
+import SearchProduct from "./search-product";
 
 function Navbar() {
   return (
@@ -57,38 +59,13 @@ function Navbar() {
 
         <div className="flex gap-2 justify-between items-center">
           <GiHamburgerMenu className="block lg:hidden text-2xl" />
-          <form
-            className="relative hidden lg:block"
-            action="/products"
-          >
-            <input
-              type="text"
-              name="name" // This is the key step to include the query parameter "name"
-              placeholder="Cari Produk"
-              className="rounded-full border-2 border-slate-400 py-2 px-5 w-full"
-            />
-            <button
-              type="submit"
-              className="bg-slate-950 absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full"
-            >
-              <CiSearch className="text-white text-2xl" />
-            </button>
-          </form>
+          <SearchProduct className="relative hidden lg:block" />
 
-          <LuSettings2 className="text-3xl shrink-0" />
+          <CategorySheet />
         </div>
       </div>
 
-      <form className="relative block lg:hidden w-full place-self-end opacity-50 focus:opacity-100 focus-within::opacity-100 focus-visible:opacity-100 hover:opacity-100 active:opacity-100">
-        <input
-          type="text"
-          placeholder="Cari Produk"
-          className="rounded-full border-2 border-slate-400 py-2 px-5 w-full"
-        />
-        <button className="bg-slate-950 absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full">
-          <CiSearch className="text-white text-2xl" />
-        </button>
-      </form>
+      <SearchProduct className="relative block lg:hidden w-full place-self-end opacity-50 focus:opacity-100 focus-within::opacity-100 focus-visible:opacity-100 hover:opacity-100 active:opacity-100" />
     </nav>
   );
 }

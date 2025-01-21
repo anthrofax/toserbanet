@@ -1,7 +1,6 @@
 import Filter from "@/components/filter";
-import Pagination from "@/components/pagination";
-import ProductList from "@/components/product-list";
-import { Skeleton } from "@/components/ui/skeleton";
+import ProductList from "@/components/product-list/product-list";
+import ProductListSkeletons from "@/components/product-list/product-list-skeletons";
 import { wixClientServer } from "@/lib/wix-client-server";
 import Image from "next/image";
 import { Suspense } from "react";
@@ -43,21 +42,7 @@ async function ListPage(props: { searchParams: Promise<any> }) {
       <Filter />
 
       {/* Products */}
-      <h1 className="mt-12 mb-3 text-xl font-semibold">
-        Berikut produk yang anda cari...
-      </h1>
-      <Suspense
-        fallback={
-          <div className="grid max-[400px]:grid-cols-1 max-lg:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 place-items-center gap-x-2 md:gap-x-5 gap-y-5 container mx-auto px-2">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <Skeleton
-                className="h-[316px] w-full rounded-lg bg-slate-300/50 shrink-0"
-                key={i}
-              />
-            ))}
-          </div>
-        }
-      >
+      <Suspense fallback={<ProductListSkeletons />}>
         <ProductList
           categoryId={
             cat?.collection?._id || "00000000-000000-000000-000000000001"

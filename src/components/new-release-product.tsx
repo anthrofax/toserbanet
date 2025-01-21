@@ -57,7 +57,7 @@ async function NewReleaseProduct() {
       </Suspense>
 
       <Link
-        href=""
+        href="/products"
         className="border-2 text-slate-700 border-blue-500 rounded-full px-5 py-2 w-max flex items-center gap-2 text-md mx-auto my-5"
       >
         Produk Lainnya <MdKeyboardDoubleArrowDown />
