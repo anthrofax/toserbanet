@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import Add from "./add";
 
 const CustomizeProducts = ({
-  productId,
+  productData,
   variants,
   productOptions,
 }: {
-  productId: string;
+  productData: products.Product;
   variants: products.Variant[];
   productOptions: products.ProductOption[];
 }) => {
@@ -128,10 +128,8 @@ const CustomizeProducts = ({
         </div>
       ))}
       <Add
-        productId={productId}
-        variantId={
-          selectedVariant?._id || null
-        }
+        productData={productData}
+        variantId={selectedVariant?._id || null}
         stockQuantity={selectedVariant?.stock?.quantity || 0}
       />
     </div>

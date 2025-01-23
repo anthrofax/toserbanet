@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} antialiased relative pb-[152px] min-[414px]:pb-[92px] bg-slate-100`}>
+      <body className={`${poppins.className} antialiased relative pb-[152px] min-[414px]:pb-[92px] bg-slate-100 relative`}>
         <Toaster />
         <WixClientConectProvider>
           <Navbar />

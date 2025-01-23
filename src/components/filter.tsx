@@ -1,20 +1,15 @@
 "use client";
 
-import { useWixClientContext } from "@/contexts/wix-context";
-import { useQuery } from "@tanstack/react-query";
+import { IoIosArrowDown } from "react-icons/io";
+import { useCategorySheetStore } from "@/hooks/useCategorySheetStore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 function Filter() {
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const wixClient = useWixClientContext();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["kategori"],
-    queryFn: () => wixClient.collections.queryCollections().find(),
-  });
-
+  const { toggleCategorySheet } = useCategorySheetStore();
 
   function handleChange(
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
@@ -29,16 +24,12 @@ function Filter() {
   return (
     <div className="mt-12 flex flex-col md:flex-row items-center md:justify-between gap-3">
       <div className="flex justify-center md:justify-start gap-6 flex-wrap">
-        <select
-          name="type"
-          id=""
-          className="py-2 px-4 rounded-2xl text-xs font-medium bg-[#EBEDED] shrink-0"
-          onChange={handleChange}
+        <button
+          className="py-2 px-4 rounded-2xl text-xs font-medium bg-slate-200 shrink-0 flex gap-2 items-center transition-colors hover:bg-slate-300 text-slate-700"
+          onClick={toggleCategorySheet}
         >
-          <option value="">Category</option>
-          <option value="physical">Physical</option>
-          <option value="digital">Digital</option>
-        </select>
+          Category <IoIosArrowDown className="text-xl" />
+        </button>
 
         <input
           type="text"
@@ -60,7 +51,7 @@ function Filter() {
         <select
           name="sort"
           id=""
-          className="py-2 px-4 rounded-2xl text-xs font-medium bg-[#EBEDED]"
+          className="py-2 px-4 rounded-2xl text-xs font-medium bg-slate-200 transition-colors hover:bg-slate-300 text-slate-700 cursor-pointer"
           onChange={handleChange}
         >
           <option value="">Sort By</option>

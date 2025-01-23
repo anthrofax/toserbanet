@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BiPhoneCall } from "react-icons/bi";
-import { CiSearch, CiUser } from "react-icons/ci";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { LuGlasses } from "react-icons/lu";
 import { RiHome6Line } from "react-icons/ri";
 import CategorySheet from "./category-sheet";
 import SearchProduct from "./search-product";
+import HamburgerButton from "./hamburger-button";
+import { Skeleton } from "./ui/skeleton";
+import { Suspense } from "react";
 
 function Navbar() {
   return (
@@ -42,13 +43,6 @@ function Navbar() {
             <span>Produk</span>
           </Link>
           <Link
-            href={"/about"}
-            className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
-          >
-            <CiUser className="text-2xl" />
-            <span>Tentang</span>
-          </Link>
-          <Link
             href={"/kontak"}
             className="flex items-center gap-1 xl:gap-3 w-max text-base xl:text-lg"
           >
@@ -58,10 +52,16 @@ function Navbar() {
         </div>
 
         <div className="flex gap-2 justify-between items-center">
-          <GiHamburgerMenu className="block lg:hidden text-2xl" />
+          <HamburgerButton />
           <SearchProduct className="relative hidden lg:block" />
 
-          <CategorySheet />
+          <Suspense
+            fallback={
+              <Skeleton className="bg-slate-300 w-8 aspect-square rounded-full" />
+            }
+          >
+            <CategorySheet />
+          </Suspense>
         </div>
       </div>
 

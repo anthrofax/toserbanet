@@ -77,21 +77,22 @@ async function SinglePage({
           <CustomizeProducts
             productOptions={product.productOptions}
             variants={product.variants}
-            productId={product._id!}
+            productData={product}
           />
         ) : (
           <Add
             stockQuantity={product.stock?.quantity || 0}
-            productId={product._id!}
+            productData={product}
             variantId={null}
           />
         )}
         <div className="h-[2px] bg-gray-200 rounded-full" />
-
-        <div className="flex flex-col gap-3">
-          <h3 className="text-xl font-semibold">Belanja Via Marketplace:</h3>
-          <MarketplaceList marketplaceLinks={marketplaceLinks} />
-        </div>
+        {marketplaceLinks.length > 0 && (
+          <div className="flex flex-col gap-3">
+            <h3 className="text-xl font-semibold">Belanja Via Marketplace:</h3>
+            <MarketplaceList marketplaceLinks={marketplaceLinks} />
+          </div>
+        )}
       </div>
     </div>
   );
