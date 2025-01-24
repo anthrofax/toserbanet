@@ -12,7 +12,6 @@ export async function wixClientServer() {
     modules: {
       products,
       collections,
-      // Current Cart
     },
     auth: OAuthStrategy({
       clientId: process.env.NEXT_PUBLIC_WIX_CLIENTID!,
