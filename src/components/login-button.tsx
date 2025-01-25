@@ -1,29 +1,19 @@
 "use client";
 
 import { useWixClientContext } from "@/contexts/wix-context";
-import { useIsLoginSuccess } from "@/hooks/useIsLoginSuccess";
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { cn } from "@/utils/cn";
 import toast from "react-hot-toast";
 import { IoMdLogIn } from "react-icons/io";
+import PrimaryButton from "./primary-button";
 
 function LoginButton({ className }: { className?: string }) {
   const wixClient = useWixClientContext();
-  const { isSuccess } = useIsLoginSuccess();
-  const isLoggedIn = wixClient.auth.loggedIn();
-  const { replace } = useRouter();
-
-  useEffect(() => {
-    if (isLoggedIn) replace("/");
-  }, [isSuccess, isLoggedIn]);
 
   async function handleLogin() {
     const loginRequestData = wixClient.auth.generateOAuthData(
       process.env.NEXT_PUBLIC_LOGIN_REDIRECT_URL!
     );
 
-    console.log(loginRequestData);
     localStorage.setItem("oath-data", JSON.stringify(loginRequestData));
     const { authUrl } = await wixClient.auth.getAuthUrl(loginRequestData);
 
@@ -35,16 +25,16 @@ function LoginButton({ className }: { className?: string }) {
   }
 
   return (
-    <button
+    <PrimaryButton
       className={`${cn(
         className,
-        "bg-blue-500 text-slate-50 transition-all hover:bg-blue-400"
+        "bg-blue-500 text-slate-50 transition-all hover:bg-blue-400 gap-1 rounded-none lg:rounded-full"
       )}`}
       onClick={handleLogin}
     >
       <IoMdLogIn className="text-xl" />
       <span>Masuk</span>
-    </button>
+    </PrimaryButton>
   );
 }
 

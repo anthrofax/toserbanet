@@ -8,12 +8,15 @@ import { createPortal } from "react-dom";
 import { IoCartOutline, IoClose } from "react-icons/io5";
 import { LuShoppingBag } from "react-icons/lu";
 import CartItem from "./cart-item";
+import PrimaryButton from "./primary-button";
+import SecondaryButton from "./secondary-botton";
 
 function CartModal() {
   const { cart, getCart, counter, isLoading } = useCartStore();
   const wixClient = useWixClientContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [totalCartItem, setTotalCartItem] = useState(0);
+  const isLoggedIn = wixClient.auth.loggedIn();
 
   useEffect(() => {
     getCart(wixClient);
@@ -59,13 +62,23 @@ function CartModal() {
         </div>
       </div>
 
-      <button
-        className="h-10 w-44 bg-blue-500 flex items-center justify-center gap-1 text-slate-50 text-xl rounded-full"
-        onClick={() => setIsModalOpen(true)}
-      >
-        <IoCartOutline />
-        Checkout
-      </button>
+      {isLoggedIn ? (
+        <PrimaryButton
+          className="text-xl"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <IoCartOutline />
+          Checkout
+        </PrimaryButton>
+      ) : (
+        <SecondaryButton
+          className="text-xl"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <IoCartOutline />
+          Checkout
+        </SecondaryButton>
+      )}
 
       {typeof window !== "undefined" &&
         createPortal(

@@ -6,6 +6,7 @@ import Footer from "@/components/footer";
 import CartModal from "@/components/cart-modal";
 import { WixClientConectProvider } from "@/contexts/wix-context";
 import { Toaster } from "react-hot-toast";
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 
 const poppins = Poppins({
   weight: ["400", "600"],
@@ -24,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} antialiased relative pb-[152px] min-[414px]:pb-[92px] bg-slate-100 relative`}>
+      <body className={`${poppins.className} antialiased relative pb-[152px] min-[414px]:pb-[92px] bg-slate-100`}>
         <Toaster />
         <WixClientConectProvider>
           <Navbar />

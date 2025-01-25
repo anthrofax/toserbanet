@@ -13,6 +13,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@tanstack/react-query": "^5.64.2",
     "@wix/ecom": "^1.0.892",
+    "@wix/members": "^1.0.178",
     "@wix/sdk": "^1.15.8",
     "@wix/site": "^1.20.0",
     "@wix/site-members": "^1.18.0",

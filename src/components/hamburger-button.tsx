@@ -11,12 +11,35 @@ import { usePathname } from "next/navigation";
 import LogoutButton from "./logout-button";
 import LoginButton from "./login-button";
 import { useWixClientContext } from "@/contexts/wix-context";
+import { useQuery } from "@tanstack/react-query";
 
 function HamburgerButton() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const wixClient = useWixClientContext();
   const isLoggedIn = wixClient.auth.loggedIn();
+
+  const { data: currentMember } = useQuery({
+    queryKey: ["currentMember"],
+    queryFn: async () => {
+      const currentMember = await wixClient.members.getCurrentMember();
+
+      return currentMember;
+    },
+  });
+
+  useEffect(() => {
+    (async () => {
+      console.log(currentMember);
+
+      if (currentMember && currentMember.member && currentMember.member._id) {
+        const fetchedMember = await wixClient.members.getMember(
+          currentMember.member?._id
+        );
+        console.log(fetchedMember);
+      }
+    })();
+  }, [currentMember]);
 
   function handleToggle() {
     setIsOpen((val) => !val);
@@ -52,13 +75,13 @@ function HamburgerButton() {
         createPortal(
           <>
             <div
-              className={`fixed left-0 top-0 right-0 bottom-0 z-20 bg-slate-700/30 cursor-pointer lg:hidden ${
+              className={`delay-100 fixed left-0 top-0 right-0 bottom-0 z-20 bg-slate-700/30 cursor-pointer lg:hidden ${
                 isOpen ? "" : "hidden w-max"
               }  `}
               onClick={() => setIsOpen(false)}
             />
             <div
-              className={`transition-all fixed bg-slate-50 w-52 h-screen lg:hidden ${
+              className={`duration-500 ease-out delay-100 fixed bg-slate-50 w-52 h-screen lg:hidden ${
                 isOpen ? "translate-x-0" : "translate-x-96"
               } right-0 z-30 rounded-l-lg py-16 space-y-3`}
             >

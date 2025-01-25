@@ -7,14 +7,19 @@ import Cookies from "js-cookie";
 
 export function useIsLoginSuccess() {
   const wixClient = useWixClientContext();
-  const returnedOAuthData = wixClient.auth.parseFromUrl();
-  const oAuthData = JSON.parse(localStorage.getItem("oath-data") || "{}");
+  const returnedOAuthData =
+    typeof window !== "undefined" ? wixClient.auth.parseFromUrl() : null;
+  const oAuthData = JSON.parse(
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("oath-data") || "{}"
+      : "{}"
+  );
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["memberToken"],
     queryFn: async () => {
-      console.log("returnedOAuthData");
-      console.log(returnedOAuthData);
+      if (!returnedOAuthData) throw new Error("window is not defined");
+
       const memberTokens = await wixClient.auth.getMemberTokens(
         returnedOAuthData.code,
         returnedOAuthData.state,
@@ -25,23 +30,23 @@ export function useIsLoginSuccess() {
     },
   });
 
-  if (returnedOAuthData.error) {
+  if (!returnedOAuthData || returnedOAuthData.error) {
     toast.error("Login gagal");
-    return { isSuccess: false };
+    return { isSuccess: false, isLoading };
   }
 
   if (isError) {
-    return { isSuccess: false };
+    return { isSuccess: false, isLoading };
   }
 
   if (!isLoading && !isError) {
     console.log(data);
-    Cookies.set("refreshToken", JSON.stringify(data?.refreshToken), {
+    Cookies.set("refreshToken", JSON.stringify(data?.refreshToken || {}), {
       expires: 2,
     });
     if (typeof data !== "undefined") wixClient.auth.setTokens(data);
-    return { isSuccess: true };
+    return { isSuccess: true, isLoading };
   }
 
-  return { isSuccess: false };
+  return { isSuccess: false, isLoading };
 }

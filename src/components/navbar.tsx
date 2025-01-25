@@ -8,6 +8,7 @@ import SearchProduct from "./search-product";
 import HamburgerButton from "./hamburger-button";
 import { Skeleton } from "./ui/skeleton";
 import { Suspense } from "react";
+import LoginElements from "./login-elements";
 
 function Navbar() {
   return (
@@ -62,6 +63,8 @@ function Navbar() {
           >
             <CategorySheet />
           </Suspense>
+
+          <LoginElements />
         </div>
       </div>
 
