@@ -48,8 +48,8 @@ function LogoutButton({
   return (
     <button
       className={`${cn(
-        className,
-        " bg-red-300 text-red-500 transition-all hover:bg-red-200 flex gap-1 items-center p-2"
+        " bg-red-300 text-red-500 transition-all hover:bg-red-200 flex gap-1 items-center p-2",
+        className
       )}`}
       onClick={handleLogout}
     >

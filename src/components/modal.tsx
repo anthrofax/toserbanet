@@ -1,85 +1,102 @@
-// "use client";
+"use client";
 
-// import { useOutsideClick } from "@/hooks/useOutsideClick";
-// import React, {
-//   cloneElement,
-//   createContext,
-//   Dispatch,
-//   JSXElementConstructor,
-//   ReactElement,
-//   SetStateAction,
-//   useContext,
-//   useState,
-// } from "react";
+import { cn } from "@/utils/cn";
+import {
+  createContext,
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useContext,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 
-// interface ModalContextType {
-//   openModalName: string;
-//   handleClose: () => void;
-//   setOpenModalName: Dispatch<SetStateAction<string>>;
-// }
+interface ModalContextType {
+  isOpen: boolean;
+  handleOpen: () => void;
+  handleClose: () => void;
+}
 
-// const ModalContext = createContext<ModalContextType>({
-//   setOpenModalName: () => {},
-//   handleClose: () => {},
-//   openModalName: "",
-// });
+const ModalContext = createContext<ModalContextType>({
+  isOpen: false,
+  handleOpen: () => {},
+  handleClose: () => {},
+});
 
-// function Modal({ children }: { children: React.ReactNode }) {
-//   const [openModalName, setOpenModalName] = useState("");
+function Modal({
+  children,
+  isOpen,
+  handleOpen,
+  handleClose,
+}: {
+  children: React.ReactNode;
+  isOpen?: boolean;
+  handleOpen?: () => void;
+  handleClose?: () => void;
+}) {
+  const [isOpenStatus, setIsOpenStatus] = useState(false);
 
-//   const handleClose = function () {
-//     setOpenModalName("");
-//   };
+  handleOpen = handleOpen || (() => setIsOpenStatus(true));
+  handleClose = handleClose || (() => setIsOpenStatus(false));
 
-//   return (
-//     <ModalContext value={{ openModalName, handleClose, setOpenModalName }}>
-//       {children}
-//     </ModalContext>
-//   );
-// }
+  return (
+    <ModalContext
+      value={{ isOpen: isOpen || isOpenStatus, handleOpen, handleClose }}
+    >
+      {children}
+    </ModalContext>
+  );
+}
 
-// function Open({
-//   children,
-//   opens,
-// }: {
-//   children: React.ReactNode;
-//   opens: string;
-// }) {
-//   const { setOpenModalName } = useContext(ModalContext);
+function Button({
+  children,
+  className,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+}) {
+  const { handleOpen } = useContext(ModalContext);
+  return (
+    <div
+      onClick={handleOpen}
+      className={cn("min-w-8 rounded-lg relative cursor-pointer", className)}
+    >
+      {children}
+    </div>
+  );
+}
 
-//   return cloneElement(
-//     children as ReactElement<unknown, string | JSXElementConstructor<any>>,
-//     { onClick: () => setOpenModalName(opens) }
-//   );
-// }
+function OpenedModal({
+  children,
+  className,
+  ...props
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  [key: string]: any;
+}) {
+  const { isOpen } = useContext(ModalContext);
 
-// function Window({
-//   children,
-//   name,
-// }: {
-//   children: React.ReactNode;
-//   name: string;
-// }) {
-//   const { openModalName, handleClose } = useContext(ModalContext);
+  return createPortal(
+    <div
+      className={cn(
+        `overflow-hidden p-3 bg-slate-50 shadow min-w-8 rounded-lg absolute top-[103%] right-0 delay-75 ease-out transition-all ${
+          isOpen
+            ? "translate-y-0 opacity-100"
+            : "-translate-y-5 opacity-0 -z-10"
+        }`,
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>,
+    window.document.body
+  );
+}
 
-//   const modal = useOutsideClick(handleClose);
+Modal.Button = Button;
+Modal.OpenedModal = OpenedModal;
 
-//   if (openModalName !== name) return null;
-
-//   return createPortal(
-//     <Overlay /*onClick={handleClose}*/>
-//       <StyledModal ref={modal} /*onClick={(e) => e.stopPropagation()} */>
-//         <StyledButton onClick={handleClose}>
-//           <HiXMark />
-//         </StyledButton>
-//         <div>{cloneElement(children, { onCloseModal: handleClose })}</div>
-//       </StyledModal>
-//     </Overlay>,
-//     document.body
-//   );
-// }
-
-// Modal.Open = Open;
-// Modal.Window = Window;
-
-// export default Modal;
+export default Modal;

@@ -29,7 +29,7 @@ export default function RootLayout({
         <Toaster />
         <WixClientConectProvider>
           <Navbar />
-          <div className="pt-28 lg:pt-20 min-h-screen">
+          <div className="pt-28 lg:pt-20 min-h-screen relative">
             {children}
           </div>
           <Footer />

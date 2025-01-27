@@ -15,7 +15,7 @@ import { createPortal } from "react-dom";
 interface DropdownContextType {
   isOpen: boolean;
   onToggle: () => void;
-  dropdownTriggerButtonRef: RefObject<HTMLButtonElement | null>;
+  dropdownTriggerButtonRef: RefObject<HTMLDivElement | null>;
 }
 
 const DropdownContext = createContext<DropdownContextType>({
@@ -63,22 +63,24 @@ function Icon({
 }) {
   const { onToggle, dropdownTriggerButtonRef } = useContext(DropdownContext);
   return (
-    <button
+    <div
       onClick={onToggle}
-      className={cn("min-w-8 rounded-lg relative", className)}
+      className={cn("min-w-8 rounded-lg relative cursor-pointer", className)}
       ref={dropdownTriggerButtonRef}
     >
       {children}
-    </button>
+    </div>
   );
 }
 
 function OpenedModal({
   children,
   className,
+  ...props
 }: {
   children?: React.ReactNode;
   className?: string;
+  [key: string]: any;
 }) {
   const { isOpen, dropdownTriggerButtonRef } = useContext(DropdownContext);
 
@@ -94,6 +96,7 @@ function OpenedModal({
             }`,
             className
           )}
+          {...props}
         >
           {children}
         </div>,

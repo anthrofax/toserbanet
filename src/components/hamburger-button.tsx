@@ -12,6 +12,7 @@ import LogoutButton from "./logout-button";
 import LoginButton from "./login-button";
 import { useWixClientContext } from "@/contexts/wix-context";
 import { useQuery } from "@tanstack/react-query";
+import { members } from "@wix/members";
 
 function HamburgerButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +23,9 @@ function HamburgerButton() {
   const { data: currentMember } = useQuery({
     queryKey: ["currentMember"],
     queryFn: async () => {
-      const currentMember = await wixClient.members.getCurrentMember();
+      const currentMember = await wixClient.members.getCurrentMember({
+        fieldsets: [members.Set.FULL],
+      });
 
       return currentMember;
     },
@@ -31,13 +34,6 @@ function HamburgerButton() {
   useEffect(() => {
     (async () => {
       console.log(currentMember);
-
-      if (currentMember && currentMember.member && currentMember.member._id) {
-        const fetchedMember = await wixClient.members.getMember(
-          currentMember.member?._id
-        );
-        console.log(fetchedMember);
-      }
     })();
   }, [currentMember]);
 

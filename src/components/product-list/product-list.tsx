@@ -4,8 +4,8 @@ import { wixClientServer } from "@/lib/wix-client-server";
 import { products } from "@wix/stores";
 import Pagination from "../pagination";
 import Image from "next/image";
-import NotFoundIcon from "@/assets/nothing.svg";
 import { CiSearch } from "react-icons/ci";
+import NotFoundInfo from "../not-found-info";
 
 interface PropsType {
   limit?: number;
@@ -80,21 +80,10 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
           />
         </>
       ) : (
-        <div className="p-5 flex flex-col justify-center items-center gap-3 min-h-[30rem]">
-          <Image
-            src={NotFoundIcon}
-            alt="Product is not found"
-            className="w-24 h-24"
-          />
-          <div className="text-center">
-            <h3 className="text-xl font-semibold">
-              Produk yang anda cari tidak ditemukan
-            </h3>
-            <p className="text-xs">
-              Coba kata kunci lain atau cek produk rekomendasi di bawah.
-            </p>
-          </div>
-        </div>
+        <NotFoundInfo
+          description="Coba kata kunci lain atau sesuaikan pengaturan filter"
+          object="Produk"
+        />
       )}
     </div>
   );
