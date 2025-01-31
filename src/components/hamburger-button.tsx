@@ -23,6 +23,8 @@ function HamburgerButton() {
   const { data: currentMember } = useQuery({
     queryKey: ["currentMember"],
     queryFn: async () => {
+      if (!isLoggedIn) return null;
+      
       const currentMember = await wixClient.members.getCurrentMember({
         fieldsets: [members.Set.FULL],
       });
@@ -30,12 +32,6 @@ function HamburgerButton() {
       return currentMember;
     },
   });
-
-  useEffect(() => {
-    (async () => {
-      console.log(currentMember);
-    })();
-  }, [currentMember]);
 
   function handleToggle() {
     setIsOpen((val) => !val);

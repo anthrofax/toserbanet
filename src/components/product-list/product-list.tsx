@@ -60,6 +60,8 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
     };
   });
 
+  console.log(productItems);
+
   return (
     <div className="mt-3 min-h-[30rem]">
       {productItems && productItems.length > 0 && (

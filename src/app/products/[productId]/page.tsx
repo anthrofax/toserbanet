@@ -12,12 +12,15 @@ async function SinglePage({
     productId: string;
   }>;
 }) {
-  const productId = (await params).productId;
+  const productId = decodeURIComponent((await params).productId);
   const wixClient = await wixClientServer();
+  console.log(productId);
   const { items } = await wixClient.products
     .queryProducts()
     .eq("slug", productId)
     .find();
+
+  console.log(items);
 
   const product = items[0];
 
@@ -49,7 +52,13 @@ async function SinglePage({
       {/* Texts */}
       <div className="w-full lg:w-1/2 flex flex-col gap-6">
         <h1 className="text-4xl font-medium">{product.name}</h1>
-        <p className="text-gray-500">{product.description}</p>
+        <div
+          className="text-gray-500"
+          dangerouslySetInnerHTML={{
+            __html: product?.description || "",
+          }}
+        ></div>
+
         <div className="h-[2px] bg-gray-100" />
 
         <div className="flex items-center gap-4">
