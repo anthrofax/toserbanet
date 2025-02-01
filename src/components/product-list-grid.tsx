@@ -5,7 +5,7 @@ function ProductListGrid({ productItems }: { productItems: ProductItemType[] }) 
   if (!productItems) return null;
 
   return (
-    <div className="grid max-[250px]:grid-cols-1 max-lg:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 place-items-center gap-x-2 md:gap-x-5 gap-y-5 container mx-auto px-2">
+    <div className="grid max-[315px]:grid-cols-1 max-lg:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 place-items-center gap-x-2 md:gap-x-5 gap-y-5 container mx-auto px-1">
       {productItems.map((product, i) => (
         <ProductItem
           imageObj={product.imageObj}

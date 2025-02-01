@@ -4,16 +4,16 @@ import Image from "next/image";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { MdOutlineContentCopy } from "react-icons/md";
 async function UserPage() {
-  const wixClient = await wixClientServer();
+  // const wixClient = await wixClientServer();
 
-  const member = await wixClient.members.getCurrentMember({
-    fieldsets: [members.Set.EXTENDED],
-  });
+  // const member = await wixClient.members.getCurrentMember({
+  //   fieldsets: [members.Set.EXTENDED],
+  // });
 
-  console.log(member);
+  // console.log(member);
 
   return (
-    <div className="mt-5  flex flex-col items-center">
+    <div className="mt-5 flex flex-col items-center">
       <div className="flex flex-col items-center py-3 w-full">
         <Image
           src={

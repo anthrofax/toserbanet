@@ -89,7 +89,7 @@ function OpenedModal({
     : createPortal(
         <div
           className={cn(
-            `overflow-hidden p-3 bg-slate-50 shadow min-w-8 rounded-lg absolute top-[103%] right-0 delay-75 ease-out transition-all ${
+            `cursor-default overflow-hidden p-3 bg-slate-50 shadow min-w-8 rounded-lg absolute top-[103%] right-0 delay-75 ease-out transition-all ${
               isOpen
                 ? "translate-y-0 opacity-100"
                 : "-translate-y-5 opacity-0 -z-10"

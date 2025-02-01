@@ -15,7 +15,7 @@ async function NewReleaseProduct() {
   // Temporary
   const productQuery = await wixClient.products
     .queryProducts()
-    .ascending("lastUpdated")
+    .descending("lastUpdated")
     .limit(10)
     .find();
 

@@ -43,7 +43,7 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
       res = await productQuery.descending(sortBy).find();
     }
   } else {
-    res = await productQuery.find();
+    res = await productQuery.descending('lastUpdated').find();
   }
 
   if (!res!) return null;
@@ -59,8 +59,6 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
       slug: prod.slug || "",
     };
   });
-
-  console.log(productItems);
 
   return (
     <div className="mt-3 min-h-[30rem]">

@@ -40,7 +40,7 @@ export default function Home() {
       </div>
 
       {/* Artikel */}
-      <ArticleList />
+      {/* <ArticleList /> */}
 
       {/* Testimoni Pelanggan */}
       <CustomerTestimoni />

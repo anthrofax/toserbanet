@@ -12,7 +12,7 @@ import LoginElements from "./login-elements";
 
 function Navbar() {
   return (
-    <nav className="min-h-20 py-5 px-5 md:px-10 lg:px-20 bg-slate-50/50 flex flex-col gap-3 fixed top-0 w-full z-10">
+    <nav className="min-h-20 py-5 px-5 md:px-10 lg:px-20 bg-slate-50/50 flex flex-col gap-3 fixed top-0 w-full z-10 shadow">
       <div className="flex-shrink-0 basis-full flex justify-between gap-3">
         <Link
           href={"/"}

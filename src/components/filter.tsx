@@ -28,22 +28,22 @@ function Filter() {
           className="py-2 px-4 rounded-2xl text-xs font-medium bg-slate-200 shrink-0 flex gap-2 items-center transition-colors hover:bg-slate-300 text-slate-700"
           onClick={toggleCategorySheet}
         >
-          Category <IoIosArrowDown className="text-xl" />
+          Kategori <IoIosArrowDown className="text-xl" />
         </button>
 
         <input
           type="text"
           name="min"
-          placeholder="min price"
-          className="text-xs rounded-2xl pl-2 w-24 h-8 ring-1 ring-gray-400 shrink-0"
+          placeholder="Harga Minimum"
+          className="text-[0.6rem] rounded-2xl pl-2 w-24 h-8 ring-1 ring-gray-400 shrink-0"
           onChange={handleChange}
         />
 
         <input
           type="text"
           name="max"
-          placeholder="max price"
-          className="text-xs rounded-2xl pl-2 w-24 h-8 ring-1 ring-gray-400 shrink-0"
+          placeholder="Harga Maksimum"
+          className="text-[0.6rem] rounded-2xl pl-2 w-24 h-8 ring-1 ring-gray-400 shrink-0"
           onChange={handleChange}
         />
       </div>
@@ -54,11 +54,11 @@ function Filter() {
           className="py-2 px-4 rounded-2xl text-xs font-medium bg-slate-200 transition-colors hover:bg-slate-300 text-slate-700 cursor-pointer"
           onChange={handleChange}
         >
-          <option value="">Sort By</option>
-          <option value="asc price">Price (low to high)</option>
-          <option value="desc price">Price (high to low)</option>
-          <option value="asc lastUpdated">Newest</option>
-          <option value="desc lastUpdated">Oldest</option>
+          <option value="">Pengurutan</option>
+          <option value="asc price">Harga (Rendah ke tinggi)</option>
+          <option value="desc price">Harga (Tinggi ke rendah)</option>
+          <option value="desc lastUpdated">Terbaru</option>
+          <option value="asc lastUpdated">Terlama</option>
         </select>
       </div>
     </div>
