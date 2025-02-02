@@ -47,10 +47,10 @@ function ProductImages({
       </div>
 
       {/* Thumbnail Images */}
-      <div className="flex justify-between gap-4 mt-1 lg:mt-8 overflow-auto">
+      <div className="flex justify-between gap-1 mt-1 lg:mt-3 overflow-auto">
         {imageItems.map((imageObj: any, i: number) => (
           <div
-            className="w-1/4 aspect-square relative gap-4 mt-8 cursor-pointer shrink-0"
+            className="w-1/5 aspect-square relative gap-4 mt-3 cursor-pointer shrink-0"
             key={imageObj._id}
             onClick={() => setIndex(i)}
           >

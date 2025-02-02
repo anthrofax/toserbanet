@@ -12,16 +12,6 @@ interface PropsType {
   stockQuantity: number;
 }
 
-interface OrderWhatsAppProductData {
-  name: string;
-  slug: string;
-  price: number;
-  currency: string;
-  stock: number;
-  description: string;
-  productPageUrl: string;
-}
-
 function Add({ stockQuantity, productData, variantId }: PropsType) {
   const [quantity, setQuantity] = useState(1);
 
@@ -34,17 +24,10 @@ function Add({ stockQuantity, productData, variantId }: PropsType) {
     }
   }
 
-  function handleWhatsAppOrder(productData: OrderWhatsAppProductData) {
-    const message =
-      `Halo, saya ingin memesan produk berikut:\n\n` +
-      `*Nama Produk*: ${productData.name}\n` +
-      `*Harga*: ${productData.currency} ${productData.price}\n` +
-      `*Jumlah*: ${quantity}\n` +
-      `*Deskripsi*: ${productData.description}\n\n` +
-      `Detail produk dapat dilihat di: ${productData.productPageUrl}\n\n` +
-      `Terima kasih!`;
+  function handleWhatsAppOrder(productData: { name: string }) {
+    const message = `Halo, apakah "${productData.name}" ada?`;
 
-    const whatsappUrl = `https://wa.me/6285781484100?text=${encodeURIComponent(
+    const whatsappUrl = `https://wa.me/6285719129137?text=${encodeURIComponent(
       message
     )}`;
     window.open(whatsappUrl, "_blank");
@@ -105,14 +88,6 @@ function Add({ stockQuantity, productData, variantId }: PropsType) {
             onClick={() => {
               handleWhatsAppOrder({
                 name: productData.name!,
-                slug: productData.slug!,
-                price: productData.priceData!.price!,
-                currency: productData.priceData!.currency!,
-                stock: stockQuantity!,
-                description: productData.description!,
-                productPageUrl:
-                  productData.productPageUrl!.base +
-                  productData.productPageUrl!.path!,
               });
             }}
             disabled={!productData}
