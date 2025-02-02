@@ -44,28 +44,27 @@ function CustomerTestimoni() {
 
   // Fungsi untuk mengubah index setiap 3 detik, hanya jika diperlukan
   useEffect(() => {
-    setCurrentIndex(0);
+    setTotalDots(Math.ceil(testimonials.length / maxCard)); // Pastikan totalDots selalu diperbarui
+    setCurrentIndex(0); // Reset currentIndex saat lebar jendela berubah
 
+    const interval = setInterval(() => {
+      if (totalDots <= 1) return;
+
+      setCurrentIndex((prevIndex) => {
+        return prevIndex + 1 === totalDots ? 0 : prevIndex + 1;
+      });
+    }, 3000); // Ganti 3000 untuk mengatur interval dalam milidetik (3 detik)
+
+    return () => clearInterval(interval);
+  }, [maxCard, totalDots]); // Pastikan dependensi ter-update jika maxCard atau totalDots berubah
+
+  useEffect(() => {
     if (width >= 624) {
       setMaxCard(3);
     } else {
       setMaxCard(1);
     }
-
-    const interval = setInterval(() => {
-      if (totalDots <= 1) return;
-
-      setCurrentIndex((curIndex) =>
-        currentIndex + 1 === totalDots ? 0 : curIndex + 1
-      );
-    }, 3000); // Ganti 3000 untuk mengatur interval dalam milidetik (3 detik)
-
-    return () => clearInterval(interval);
-  }, [testimonials.length, width]);
-
-  useEffect(() => {
-    setTotalDots(Math.ceil(testimonials.length / maxCard));
-  }, [maxCard]);
+  }, [width]);
 
   return (
     <div className="py-5 flex flex-col gap-6">
