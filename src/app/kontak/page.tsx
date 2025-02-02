@@ -112,7 +112,7 @@ function Contact() {
                     <li>
                       <Link
                         className="mt-2 inline-flex items-center gap-x-2 text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-                        href="https://www.instagram.com/anthrofax"
+                        href="https://www.instagram.com/anthrofax" target="_blank"
                       >
                         {" "}
                         <FaInstagram className="w-[30px] h-[30px] font-medium" />{" "}
@@ -122,7 +122,7 @@ function Contact() {
                     <li>
                       <Link
                         className="mt-2 inline-flex items-center gap-x-2 text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-                        href="https://wa.me/6285719129137?text="
+                        href="https://wa.me/6285719129137?text=" target="_blank"
                       >
                         {" "}
                         <FaWhatsapp className="w-[30px] h-[30px] font-medium" />

@@ -1,7 +1,7 @@
 function UserTransactionPage() {
     return (
-        <div>
-            User Transaction Page
+        <div className="mt-5">
+           
         </div>
     )
 }

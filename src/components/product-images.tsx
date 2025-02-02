@@ -5,9 +5,12 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { useState, useEffect } from "react";
 import { products } from "@wix/stores";
 import { createPortal } from "react-dom";
-import { useOutsideClick } from "@/hooks/useOutsideClick";
 
-function ProductImages({ imageItems }: { imageItems: products.MediaItem[] | undefined }) {
+function ProductImages({
+  imageItems,
+}: {
+  imageItems: products.MediaItem[] | undefined;
+}) {
   const [index, setIndex] = useState(0);
   const [aspectRatio, setAspectRatio] = useState(1); // Default ratio 1:1
   const [imageOpenIndex, setImageOpenIndex] = useState<number | null>(null);
@@ -18,7 +21,7 @@ function ProductImages({ imageItems }: { imageItems: products.MediaItem[] | unde
       if (width && height) {
         setAspectRatio(width / height);
       }
-      console.log(aspectRatio)
+      console.log(aspectRatio);
     }
   }, [index, imageItems]);
 
@@ -27,9 +30,13 @@ function ProductImages({ imageItems }: { imageItems: products.MediaItem[] | unde
   return (
     <div>
       {/* Main Image - Dynamically Adjust Height */}
-      <div className="relative w-full cursor-pointer" style={{ paddingTop: `${100 / aspectRatio}%` }} onClick={() => {
-        setImageOpenIndex(index)
-      }}>
+      <div
+        className="relative w-full cursor-pointer"
+        style={{ paddingTop: `${100 / aspectRatio}%` }}
+        onClick={() => {
+          setImageOpenIndex(index);
+        }}
+      >
         <Image
           src={imageItems[index]?.image?.url || "/product.png"}
           alt="Main Product Image"
@@ -58,16 +65,22 @@ function ProductImages({ imageItems }: { imageItems: products.MediaItem[] | unde
         ))}
       </div>
 
-      {
-        typeof window !== 'undefined' && imageOpenIndex !== null &&
+      {typeof window !== "undefined" &&
+        imageOpenIndex !== null &&
         createPortal(
           <div className="fixed top-0 right-0 bottom-0 left-0">
-            <div className="w-full h-full bg-slate-900/50 cursor-pointer" onClick={() => setImageOpenIndex(null)} />
+            <div
+              className="w-full h-full bg-slate-900/50 cursor-pointer"
+              onClick={() => setImageOpenIndex(null)}
+            />
 
             <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center z-10">
-              <div className="relative w-[35rem] cursor-default" style={{ paddingTop: `${100 / aspectRatio}%` }}>
+              <div
+                className="relative w-[100vw] sm:w-[80vw] md:w-[35rem] cursor-default"
+                style={{ paddingTop: `${100 / aspectRatio}%` }}
+              >
                 <Image
-                  src={imageItems[index]?.image?.url || "/product.png"}
+                  src={imageItems[imageOpenIndex]?.image?.url || "/product.png"}
                   alt="Main Product Image"
                   fill
                   sizes="50vw"
@@ -76,13 +89,33 @@ function ProductImages({ imageItems }: { imageItems: products.MediaItem[] | unde
               </div>
             </div>
 
-            <button className="fixed cursor-default left-0 rounded-r-lg bg-slate-900/50 py-10 top-1/2 -translate-y-1/2">
+            <button
+              className={`fixed left-0 rounded-r-lg bg-slate-900/30 py-10 top-1/2 -translate-y-1/2 transition-all hover:bg-slate-900/100 ${
+                imageOpenIndex === 0 ? "cursor-not-allowed" : ""
+              } z-10`}
+              onClick={() => {
+                if (imageOpenIndex === 0) return;
+                setImageOpenIndex(imageOpenIndex - 1);
+              }}
+            >
               <IoIosArrowBack className="text-5xl text-slate-50" />
             </button>
-          </div>
-          ,
-          document.body)
-      }
+            <button
+              className={`fixed right-0 rounded-l-lg bg-slate-900/30 py-10 top-1/2 -translate-y-1/2 transition-all hover:bg-slate-900/100 ${
+                imageOpenIndex + 1 === imageItems.length
+                  ? "cursor-not-allowed"
+                  : ""
+              } z-10`}
+              onClick={() => {
+                if (imageOpenIndex + 1 === imageItems.length) return;
+                setImageOpenIndex(imageOpenIndex + 1);
+              }}
+            >
+              <IoIosArrowForward className="text-5xl text-slate-50" />
+            </button>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

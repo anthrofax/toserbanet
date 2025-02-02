@@ -5,29 +5,36 @@ import Link from "next/link";
 import { CgProfile } from "react-icons/cg";
 import { TbNotes } from "react-icons/tb";
 
-async function UserLayout({ children, params }: {
-  children: React.ReactNode, params: Promise<{
+async function UserLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{
     userId: string;
   }>;
 }) {
-  const paramss = await params
+  const paramss = await params;
   const wixClient = await wixClientServer();
-  
 
   return (
     <div className="grid grid-cols-12 relative">
-     <aside className="rounded-r-lg bg-slate-50/50 hidden lg:flex flex-col justify-between items-center shadow fixed top-0 min-h-screen w-[256px] pt-24 pb-28">
+      <aside className="rounded-r-lg bg-slate-50/50 hidden lg:flex flex-col justify-between items-center shadow fixed top-0 min-h-screen w-[15vw] pt-24 pb-28">
         <div className="w-full flex flex-col gap-2 items-center">
           <Link
             className={`w-full p-7 transition-all hover:bg-slate-200 flex gap-2 items-center`}
-            href={`/user/${''}`}
+            href={`/user/${""}`}
           >
             <CgProfile className="text-xl" /> Profil
           </Link>
-          <Link className={`w-full p-7 transition-all hover:bg-slate-200 flex gap-2 items-center`} href={""}><TbNotes className="text-xl" /> Transaksi</Link>
+          <Link
+            className={`w-full p-7 transition-all hover:bg-slate-200 flex gap-2 items-center`}
+            href={""}
+          >
+            <TbNotes className="text-xl" /> Transaksi
+          </Link>
+          <LogoutButton className="p-5 w-full" />
         </div>
-
-        <LogoutButton className="p-5 w-full" />
       </aside>
 
       <div className="col-start-3 col-end-12">{children}</div>

@@ -11,27 +11,12 @@ import { usePathname } from "next/navigation";
 import LogoutButton from "./logout-button";
 import LoginButton from "./login-button";
 import { useWixClientContext } from "@/contexts/wix-context";
-import { useQuery } from "@tanstack/react-query";
-import { members } from "@wix/members";
 
 function HamburgerButton() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const wixClient = useWixClientContext();
   const isLoggedIn = wixClient.auth.loggedIn();
-
-  const { data: currentMember } = useQuery({
-    queryKey: ["currentMember"],
-    queryFn: async () => {
-      if (!isLoggedIn) return null;
-      
-      const currentMember = await wixClient.members.getCurrentMember({
-        fieldsets: [members.Set.FULL],
-      });
-
-      return currentMember;
-    },
-  });
 
   function handleToggle() {
     setIsOpen((val) => !val);
