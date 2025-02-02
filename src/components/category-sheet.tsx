@@ -47,7 +47,7 @@ function CategorySheet() {
               <Link
                 className={`${
                   currentCategory === cat.slug ? "bg-slate-300" : "bg-slate-200"
-                } w-full text-base p-3 rounded-lg shrink-0`}
+                } w-full text-base p-3 rounded-lg shrink-0 transition-all hover:bg-slate-300`}
                 href={`/products?cat=${cat.slug || ""}`}
                 key={cat._id}
                 onClick={closeSheet}

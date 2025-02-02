@@ -19,7 +19,7 @@ function Contact() {
 
           <div className="mt-6 grid items-center lg:grid-cols-2 border border-gray-200 rounded-lg justify-items-center px-5">
             <div className="flex flex-col rounded-xl p-4 sm:p-6 lg:p-8 h-full w-full">
-              <h2 className="mb-5 text-xl font-medium text-black1 dark:text-grayborder-gray-200">
+              <h2 className="mb-5 text-lg font-medium text-black1 dark:text-grayborder-gray-200">
                 Sampaikan pesan melalui email disini.
               </h2>
 
@@ -63,8 +63,7 @@ function Contact() {
                     Lokasi:
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">
-                    Jalan Prof. Soedarto, SH, Tembalang, Semarang, Jawa Tengah,
-                    Indonesia. Kotak Pos 1269
+                    Pusat Grosir Senen Jaya Blok IV Lantai Dasar. SENEN, KOTA JAKARTA PUSAT, DKI JAKARTA, ID, 10460
                   </p>
                 </div>
               </div>
@@ -93,7 +92,7 @@ function Contact() {
                   </h3>
                   <ul>
                     <li className="mt-1 text-sm text-gray-500">
-                      +62 121-5248-160
+                      +62 57-1912-9137
                     </li>
                   </ul>
                 </div>
@@ -113,17 +112,17 @@ function Contact() {
                     <li>
                       <Link
                         className="mt-2 inline-flex items-center gap-x-2 text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-                        href="https://www.instagram.com/fierto.expedition"
+                        href="https://www.instagram.com/anthrofax"
                       >
                         {" "}
                         <FaInstagram className="w-[30px] h-[30px] font-medium" />{" "}
-                        <span>@fierto.expedition</span>
+                        <span>@anthrofax</span>
                       </Link>
                     </li>
                     <li>
                       <Link
                         className="mt-2 inline-flex items-center gap-x-2 text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-                        href="https://wa.link/gftgqv"
+                        href="https://wa.me/6285719129137?text="
                       >
                         {" "}
                         <FaWhatsapp className="w-[30px] h-[30px] font-medium" />
@@ -133,11 +132,10 @@ function Contact() {
                   </ul>
                 </div>
               </div>
-
               <div className="relative w-full h-96 mt-5 rounded-lg">
                 <iframe
                   className="absolute top-0 left-0 w-full h-full rounded-lg"
-                  src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Diponegoro%20University+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                  src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Pusat%20Grosir%20Senen%20Jaya+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
                   style={{ border: "0" }}
                   allowFullScreen={false}
                   aria-hidden="false"

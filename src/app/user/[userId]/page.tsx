@@ -3,6 +3,7 @@ import { members } from "@wix/members";
 import Image from "next/image";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { MdOutlineContentCopy } from "react-icons/md";
+
 async function UserPage() {
   // const wixClient = await wixClientServer();
 
@@ -13,7 +14,7 @@ async function UserPage() {
   // console.log(member);
 
   return (
-    <div className="mt-5 flex flex-col items-center">
+    <div className="mt-5 flex flex-col items-center w-full lg:w-[calc(100vw-256px)]">
       <div className="flex flex-col items-center py-3 w-full">
         <Image
           src={

@@ -1,16 +1,36 @@
+import LogoutButton from "@/components/logout-button";
+import { wixClientServer } from "@/lib/wix-client-server";
+import { members } from "@wix/members";
 import Link from "next/link";
+import { CgProfile } from "react-icons/cg";
+import { TbNotes } from "react-icons/tb";
 
-function UserLayout({ children }: { children: React.ReactNode }) {
+async function UserLayout({ children, params }: {
+  children: React.ReactNode, params: Promise<{
+    userId: string;
+  }>;
+}) {
+  const paramss = await params
+  const wixClient = await wixClientServer();
+  
+
   return (
-    <div className="">
-      <aside className="rounded-r-lg bg-slate-50/50 flex flex-col justify-between items-center w-1/5">
-        <div className="flex flex-col gap-2 items-center">
-          <Link href={""}>User</Link>
-          <Link href={""}>Transaksi</Link>
+    <div className="grid grid-cols-12 relative">
+     <aside className="rounded-r-lg bg-slate-50/50 hidden lg:flex flex-col justify-between items-center shadow fixed top-0 min-h-screen w-[256px] pt-24 pb-28">
+        <div className="w-full flex flex-col gap-2 items-center">
+          <Link
+            className={`w-full p-7 transition-all hover:bg-slate-200 flex gap-2 items-center`}
+            href={`/user/${''}`}
+          >
+            <CgProfile className="text-xl" /> Profil
+          </Link>
+          <Link className={`w-full p-7 transition-all hover:bg-slate-200 flex gap-2 items-center`} href={""}><TbNotes className="text-xl" /> Transaksi</Link>
         </div>
-        <Link href={""}>Logout</Link>
-        <div className="w-4/5">{children}</div>
+
+        <LogoutButton className="p-5 w-full" />
       </aside>
+
+      <div className="col-start-3 col-end-12">{children}</div>
     </div>
   );
 }

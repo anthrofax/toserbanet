@@ -43,7 +43,7 @@ async function SinglePage({
   console.log(marketplaceLinks);
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-16 py-5">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-8 lg:gap-16 py-5">
       {/* Image */}
       <div className="w-full lg:w-1/2 lg:sticky top-20 h-max">
         <ProductImages imageItems={product.media?.items} />
@@ -51,7 +51,7 @@ async function SinglePage({
 
       {/* Texts */}
       <div className="w-full lg:w-1/2 flex flex-col gap-6">
-        <h1 className="text-4xl font-medium">{product.name}</h1>
+        <h1 className="text-xl lg:text-2xl font-semibold">{product.name}</h1>
         <div
           className="text-gray-500"
           dangerouslySetInnerHTML={{

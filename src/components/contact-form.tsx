@@ -38,7 +38,7 @@ function ContactForm() {
   return (
     <form
       method="post"
-      action="https://formspree.io/f/xvgpblwl"
+      action="https://formspree.io/f/mwkgjnpj"
       onSubmit={handleSubmit}
     >
       <div className="grid gap-4 lg:gap-6">
@@ -117,7 +117,7 @@ function ContactForm() {
       <div className="mt-4 grid">
         <button
           type="submit"
-          className="inline-flex justify-center items-center gap-x-3 text-center bg-accent border-transparent text-sm lg:text-base text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4"
+          className="inline-flex justify-center items-center gap-x-3 text-center bg-blue-500 hover:bg-blue-600 border-transparent text-sm lg:text-base text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4"
         >
           Kirim pesan
         </button>

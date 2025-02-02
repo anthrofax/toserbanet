@@ -34,16 +34,16 @@ function Filter() {
         <input
           type="text"
           name="min"
-          placeholder="Harga Minimum"
-          className="text-[0.6rem] rounded-2xl pl-2 w-24 h-8 ring-1 ring-gray-400 shrink-0"
+          placeholder="Min Harga"
+          className="text-sm placeholder:text-xs rounded-2xl pl-2 w-24 h-8 ring-1 ring-gray-400 shrink-0"
           onChange={handleChange}
         />
 
         <input
           type="text"
           name="max"
-          placeholder="Harga Maksimum"
-          className="text-[0.6rem] rounded-2xl pl-2 w-24 h-8 ring-1 ring-gray-400 shrink-0"
+          placeholder="Maks Harga"
+          className="text-sm placeholder:text-xs rounded-2xl pl-2 w-24 h-8 ring-1 ring-gray-400 shrink-0"
           onChange={handleChange}
         />
       </div>

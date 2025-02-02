@@ -38,7 +38,7 @@ function CartModal() {
 
   return (
     <div className="h-max bg-slate-50/50 backdrop-blur-md w-full fixed bottom-0 left-0 flex justify-between items-center gap-5 flex-wrap p-5">
-      <div className="flex justify-between items-center gap-7">
+      <div className="flex justify-between items-center gap-5 lg:gap-7">
         <div className="relative ">
           <IoCartOutline className="text-3xl" />
 
@@ -47,9 +47,9 @@ function CartModal() {
           </div>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col ">
           <p>Total Belanja</p>
-          <p className="font-semibold text-red-500 text-xl">
+          <p className="font-semibold text-red-500">
             {rupiahFormatter.format(
               cart.lineItems.reduce((acc, item) => {
                 if (item.quantity && item.fullPrice?.amount)
@@ -64,7 +64,7 @@ function CartModal() {
 
       {isLoggedIn ? (
         <PrimaryButton
-          className="text-xl"
+          className="text-sm md:text-xl gap-1 lg:gap-3"
           onClick={() => setIsModalOpen(true)}
         >
           <IoCartOutline />
@@ -72,7 +72,7 @@ function CartModal() {
         </PrimaryButton>
       ) : (
         <SecondaryButton
-          className="text-xl"
+          className="text-sm md:text-xl gap-1 lg:gap-3"
           onClick={() => setIsModalOpen(true)}
         >
           <IoCartOutline />
