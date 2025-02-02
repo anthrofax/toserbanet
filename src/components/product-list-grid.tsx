@@ -13,7 +13,7 @@ function ProductListGrid({ productItems }: { productItems: ProductItemType[] }) 
           title={product.title}
           slug={product.slug}
           key={i}
-          className="w-full lg:h-[20rem]"
+          className="w-full"
         />
       ))}
     </div>

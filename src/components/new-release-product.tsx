@@ -25,6 +25,8 @@ async function NewReleaseProduct() {
       imageObj: {
         imageAlt: prod.name || "",
         imageUrl: prod.media?.mainMedia?.image?.url || "",
+        width: prod.media?.mainMedia?.image?.width || 0,
+        height: prod.media?.mainMedia?.image?.height || 0,
       },
       price: prod.priceData?.price || 0,
       slug: prod.slug || "",

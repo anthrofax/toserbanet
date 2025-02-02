@@ -17,11 +17,21 @@ function ProductItem({
     <Link
       href={`/products/${slug}`}
       className={cn(
-        `bg-slate-50 rounded-lg h-[15rem] shrink-0 overflow-hidden`,
+        `bg-slate-50 rounded-lg h-max shrink-0 overflow-hidden`,
         className
       )}
+    
     >
-      <div className="h-2/3 w-full relative">
+      <div
+        className="w-full relative shrink-0"
+        style={{
+          paddingTop: `${
+            imageObj.width && imageObj.height
+              ? 100 / (imageObj.width / imageObj?.height)
+              : 0
+          }%`,
+        }}
+      >
         {imageObj?.imageUrl && imageObj?.imageAlt && (
           <Image
             src={imageObj.imageUrl}
@@ -32,7 +42,7 @@ function ProductItem({
         )}
       </div>
 
-      <div className="p-2 h-[1/3] space-y-1">
+      <div className="p-2 space-y-1">
         <p className="text-xs">
           {title?.length > 45 ? `${title.slice(0, 46)}...` : title}
         </p>
