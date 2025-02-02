@@ -106,7 +106,7 @@ const CustomizeProducts = ({
                 </li>
               ) : (
                 <li
-                  className="ring-1 ring-blue-500 text-blue-500 rounded-md py-1 px-4 text-sm"
+                  className="ring-1 ring-blue-500 text-blue-500 rounded-md py-1 px-4 text-sm transition-colors"
                   style={{
                     cursor: disabled ? "not-allowed" : "pointer",
                     backgroundColor: selected

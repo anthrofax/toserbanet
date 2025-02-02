@@ -52,14 +52,14 @@ function Add({ stockQuantity, productData, variantId }: PropsType) {
 
   const wixClient = useWixClientContext();
 
-  const { cart, addItem, isLoading } = useCartStore();
+  const { addItem, isLoading } = useCartStore();
 
   return (
-    <div className="flex flex-col gap-4">
-      <h4 className="font-medium">Choose a Quantity</h4>
+    <div className="flex flex-col gap-1">
+      <h4 className="font-medium">Kuantitas</h4>
       <div className="flex justify-between flex-wrap gap-2">
         <div className="flex items-center gap-4">
-          <div className="bg-gray-100 py-2 px-4 rounded-3xl flex items-center justify-between w-32">
+          <div className="bg-gray-100 border-2 border-slate-700 py-2 px-4 rounded-3xl flex items-center justify-between w-32">
             <button
               className={`text-xl ${
                 quantity === 1 ? "cursor-not-allowed" : "cursor-pointer"
@@ -80,10 +80,15 @@ function Add({ stockQuantity, productData, variantId }: PropsType) {
               +
             </button>
           </div>
-          <div className="text-xs">
-            Only <span className="text-orange-500">{stockQuantity} items</span>{" "}
-            left!
-            <br /> {"Don't"} miss it
+          <div className="text-xs md:text-base lg:text-sm">
+            {stockQuantity < 10 ? (
+              <div>
+                Stok tersisa{" "}
+                <span className="text-orange-500">{stockQuantity}</span> lagi!
+              </div>
+            ) : (
+              `Stok tersedia ${stockQuantity} barang`
+            )}
           </div>
         </div>
         <div className="flex items-center gap-3 justify-between flex-wrap">
@@ -94,7 +99,7 @@ function Add({ stockQuantity, productData, variantId }: PropsType) {
             disabled={isLoading || stockQuantity < 1}
             className="w-36 text-sm rounded-3xl ring-1 ring-blue-500 text-blue-500 py-2 hover:bg-blue-500 hover:text-white disabled:cursor-not-allowed disabled:bg-blue-200 disabled:text-white disabled:ring-0"
           >
-            Add to Cart
+            Tambahkan ke keranjang
           </button>
           <button
             onClick={() => {

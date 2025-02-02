@@ -13,7 +13,7 @@ function SecondaryButton({
   return (
     <button
       className={cn(
-        "border-2 border-blue-500 px-5 py-3 flex justify-center items-center gap-3 rounded-full text-blue-500 transition-colors bg-slate-50 hover:bg-slate-200 h-max",
+        "border-2 border-blue-500 px-5 py-3 flex justify-center items-center gap-3 rounded-full text-blue-500 transition-colors bg-slate-50 hover:bg-blue-500 hover:text-slate-50 h-max",
         className
       )}
       {...props}

@@ -14,22 +14,19 @@ async function UserLayout({
     userId: string;
   }>;
 }) {
-  const paramss = await params;
-  const wixClient = await wixClientServer();
-
   return (
     <div className="grid grid-cols-12 relative">
       <aside className="rounded-r-lg bg-slate-50/50 hidden lg:flex flex-col justify-between items-center shadow fixed top-0 min-h-screen w-[15vw] pt-24 pb-28">
         <div className="w-full flex flex-col gap-2 items-center">
           <Link
             className={`w-full p-7 transition-all hover:bg-slate-200 flex gap-2 items-center`}
-            href={`/user/${""}`}
+            href={`/user/${"hiprofax"}`}
           >
             <CgProfile className="text-xl" /> Profil
           </Link>
           <Link
             className={`w-full p-7 transition-all hover:bg-slate-200 flex gap-2 items-center`}
-            href={""}
+            href={`/user/${'hiprofax'}/transactions`}
           >
             <TbNotes className="text-xl" /> Transaksi
           </Link>
@@ -37,7 +34,7 @@ async function UserLayout({
         </div>
       </aside>
 
-      <div className="col-start-3 col-end-12">{children}</div>
+      <div className="col-start-1 lg:col-start-3 col-span-12 lg:col-span-9">{children}</div>
     </div>
   );
 }

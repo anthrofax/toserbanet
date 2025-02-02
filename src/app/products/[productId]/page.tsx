@@ -50,10 +50,12 @@ async function SinglePage({
       </div>
 
       {/* Texts */}
-      <div className="w-full lg:w-1/2 flex flex-col gap-6">
-        <h1 className="text-xl lg:text-2xl font-semibold">{product.name}</h1>
+      <div className="w-full lg:w-1/2 flex flex-col gap-2 lg:gap-3">
+        <h1 className="text-lg md:text-xl lg:text-2xl font-semibold">
+          {product.name}
+        </h1>
         <div
-          className="text-gray-500"
+          className="text-gray-500 text-sm md:text-base"
           dangerouslySetInnerHTML={{
             __html: product?.description || "",
           }}
@@ -61,17 +63,17 @@ async function SinglePage({
 
         <div className="h-[2px] bg-gray-100" />
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 text-lg md:text-xl">
           {product.priceData?.discountedPrice === product.priceData?.price ? (
-            <h2 className="font-medium text-2xl">
+            <h2 className="font-medium text-xl">
               {product.priceData?.formatted?.price}
             </h2>
           ) : (
             <>
-              <h3 className="text-xl text-gray-500 line-through">
+              <h3 className="text-lg  text-gray-500 line-through">
                 {product.priceData?.formatted?.price}
               </h3>
-              <h2 className="font-medium text-2xl">
+              <h2 className="font-medium text-xl">
                 {product.priceData?.formatted?.discountedPrice}
               </h2>
             </>

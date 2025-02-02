@@ -16,9 +16,9 @@ function LogoutButton({
   onLogout?: () => void;
 }) {
   const wixClient = useWixClientContext();
-  const {member} = useCurrentMember();
+  const { member } = useCurrentMember();
 
-  console.log(member)
+  console.log(member);
 
   function handleLogout() {
     confirmAlert({

@@ -14,7 +14,7 @@ async function UserPage() {
   // console.log(member);
 
   return (
-    <div className="mt-5 flex flex-col items-center w-full lg:w-[calc(100vw-256px)]">
+    <div className="mb-5 lg:mb-0 lg:mt-5 flex flex-col items-center w-full lg:w-[calc(100vw-256px)]">
       <div className="flex flex-col items-center py-3 w-full">
         <Image
           src={
