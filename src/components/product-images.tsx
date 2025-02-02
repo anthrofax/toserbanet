@@ -31,23 +31,32 @@ function ProductImages({
     <div>
       {/* Main Image - Dynamically Adjust Height */}
       <div
-        className="relative w-full cursor-pointer"
-        style={{ paddingTop: `${100 / aspectRatio}%` }}
+        className={`relative w-full max-w-[400px] cursor-pointer mx-auto`}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
         onClick={() => {
           setImageOpenIndex(index);
         }}
       >
-        <Image
-          src={imageItems[index]?.image?.url || "/product.png"}
-          alt="Main Product Image"
-          fill
-          sizes="50vw"
-          className="shadow object-contain rounded-md"
-        />
+        <div
+          className="relative"
+          style={{ width: "100%", paddingBottom: `${100 / aspectRatio}%` }}
+        >
+          <Image
+            src={imageItems[index]?.image?.url || "/product.png"}
+            alt="Main Product Image"
+            fill
+            sizes="50vw"
+            className="shadow object-contain rounded-md"
+          />
+        </div>
       </div>
 
       {/* Thumbnail Images */}
-      <div className="flex justify-between gap-1 mt-1 lg:mt-3 overflow-auto">
+      <div className="flex justify-between gap-1 mt-1 lg:mt-3 overflow-auto w-full sm:w-[80%] mx-auto">
         {imageItems.map((imageObj: any, i: number) => (
           <div
             className="w-1/5 aspect-square relative gap-4 mt-3 cursor-pointer shrink-0"
