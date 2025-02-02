@@ -31,17 +31,25 @@ const testimonials = [
 function CustomerTestimoni() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { width } = useWindowDimensions();
-  const [maxCard, setMaxCard] = useState(1);
-  const [totalDots, setTotalDots] = useState(Math.ceil(testimonials.length / maxCard));
+  const [maxCard, setMaxCard] = useState(() => {
+    if (width >= 624) {
+      return 3;
+    } else {
+      return 1;
+    }
+  });
+  const [totalDots, setTotalDots] = useState(
+    Math.ceil(testimonials.length / maxCard)
+  );
 
   // Fungsi untuk mengubah index setiap 3 detik, hanya jika diperlukan
   useEffect(() => {
     setCurrentIndex(0);
 
     if (width >= 624) {
-      setMaxCard(3)
+      setMaxCard(3);
     } else {
-      setMaxCard(1)
+      setMaxCard(1);
     }
 
     const interval = setInterval(() => {
@@ -56,9 +64,8 @@ function CustomerTestimoni() {
   }, [testimonials.length, width]);
 
   useEffect(() => {
-    setTotalDots(Math.ceil(testimonials.length / maxCard))
-  }, [maxCard])
-
+    setTotalDots(Math.ceil(testimonials.length / maxCard));
+  }, [maxCard]);
 
   return (
     <div className="py-5 flex flex-col gap-6">
@@ -99,18 +106,19 @@ function CustomerTestimoni() {
       </div>
 
       {/* Optional: Dots pagination (Jika diperlukan) */}
-      {totalDots > 1 &&
+      {totalDots > 1 && (
         <div className="flex justify-center space-x-2">
           {Array.from({ length: totalDots }, (_, index) => (
             <div
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full ${currentIndex === index ? "bg-blue-500" : "bg-gray-300"
-                } cursor-pointer`}
+              className={`w-3 h-3 rounded-full ${
+                currentIndex === index ? "bg-blue-500" : "bg-gray-300"
+              } cursor-pointer`}
             ></div>
           ))}
         </div>
-      }
+      )}
     </div>
   );
 }
