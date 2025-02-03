@@ -34,7 +34,7 @@ async function UserLayout({
         </div>
       </aside>
 
-      <div className="col-start-1 lg:col-start-3 col-span-12 lg:col-span-9">{children}</div>
+      <div className="col-start-1 lg:col-start-3 col-span-12 lg:col-span-12 overflow-x-auto">{children}</div>
     </div>
   );
 }

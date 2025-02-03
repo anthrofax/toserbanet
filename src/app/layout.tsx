@@ -24,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scrollbar">
       <body
-        className={`${poppins.className} antialiased relative pb-[10rem] min-[360px]:pb-[5rem] min-[414px]:pb-[92px] bg-slate-100`}
+        className={`${poppins.className} antialiased relative pb-[10rem] min-[360px]:pb-[5rem] min-[414px]:pb-[92px] bg-slate-100 overflow-x-hidden`}
       >
         <Toaster />
         <WixClientConectProvider>

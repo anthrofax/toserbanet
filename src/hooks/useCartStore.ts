@@ -46,7 +46,6 @@ export const useCartStore = create<CartState>((set) => ({
       if (!isLoggedIn) throw new Error("Belum login");
 
       const cart = await wixClient.currentCart.getCurrentCart();
-      console.log(cart);
       set((prev) => {
         return {
           cart: cart || prev.cart,

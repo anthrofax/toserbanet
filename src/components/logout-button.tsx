@@ -18,8 +18,6 @@ function LogoutButton({
   const wixClient = useWixClientContext();
   const { member } = useCurrentMember();
 
-  console.log(member);
-
   function handleLogout() {
     confirmAlert({
       customUI: ({ onClose }: { onClose: () => void }) => {
