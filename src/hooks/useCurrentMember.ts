@@ -19,7 +19,7 @@ function useCurrentMember():
       if (!isLoggedIn) return null;
 
       const currentMember = await wixClient.members.getCurrentMember({
-        fieldsets: [members.Set.EXTENDED],
+        fieldsets: [members.Set.FULL],
       });
 
       return currentMember;

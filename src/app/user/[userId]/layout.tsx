@@ -7,12 +7,8 @@ import { TbNotes } from "react-icons/tb";
 
 async function UserLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{
-    userId: string;
-  }>;
 }) {
   return (
     <div className="grid grid-cols-12 relative">

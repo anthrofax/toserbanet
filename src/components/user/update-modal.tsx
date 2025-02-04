@@ -10,6 +10,8 @@ import toast from "react-hot-toast";
 
 function UpdateModal({
   modalTitle,
+  modalDescription,
+  inputError,
   handleClose,
   onSuccessTask,
   isOpen,
@@ -17,7 +19,9 @@ function UpdateModal({
   updatedField,
   children,
 }: {
+  inputError?: string | null;
   modalTitle: string;
+  modalDescription?: string;
   handleClose: () => void;
   onSuccessTask: () => void;
   isOpen: boolean;
@@ -39,13 +43,12 @@ function UpdateModal({
 
       console.log(err);
     },
-    onSuccess: () => {
+    onSuccess() {
       queryClient.invalidateQueries({
         queryKey: ["currentMember"],
       });
 
-      toast.success("Nama berhasil diperbarui");
-
+      toast.success("Data berhasil diperbarui");
       onSuccessTask();
     },
   });
@@ -64,22 +67,36 @@ function UpdateModal({
         }`}
         ref={modal}
       >
-        <h3 className="text-center lg:text-start text-base md:text-lg font-semibold mb-4">
+        <h3
+          className={`text-center lg:text-start text-base md:text-lg font-semibold ${
+            !modalDescription ? "mb-4" : ""
+          }`}
+        >
           {modalTitle}
         </h3>
+        {modalDescription && (
+          <p className="text-slate-700 mb-4 text-sm">{modalDescription}</p>
+        )}
         {children}
+        {inputError && (
+          <p className="text-sm text-red-500 mt-2">{inputError}</p>
+        )}
         <div className="flex justify-end gap-3 mt-4">
           <button
-            className="text-gray-500"
+            className="text-red-500 bg-red-300 p-2 rounded-md"
             onClick={handleClose} // Tutup modal
           >
             Batal
           </button>
           <button
             className={`${
-              isPending ? "cursor-not-allowed text-slate-500" : "text-blue-500"
-            }`}
-            onClick={() => handleSaveData()}
+              isPending || inputError ? "cursor-not-allowed text-slate-500 bg-slate-200" : "text-blue-500 bg-blue-300"
+            } p-3 rounded-md`}
+            onClick={() => {
+              if (inputError) return;
+              
+              handleSaveData();
+            }}
           >
             Simpan
           </button>

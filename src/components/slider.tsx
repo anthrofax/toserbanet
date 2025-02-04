@@ -3,21 +3,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useRef, MouseEvent, TouchEvent } from "react";
+import banner1 from "../../public/banner1.webp";
+import banner2 from "../../public/banner2.webp";
+import banner4 from "../../public/banner4.webp";
 
 const slides = [
   {
     id: 1,
-    img: "/banner4.webp",
+    img: banner4,
     url: "#",
   },
   {
     id: 2,
-    img: "/banner2.webp",
+    img: banner2,
     url: "https://www.tokopedia.com/toserbanet/oakley-badman-006020-03-polarized-fire-lenses-outdoor-sports-glasses",
   },
   {
     id: 3,
-    img: "/banner1.webp",
+    img: banner1,
     url: "https://www.tokopedia.com/toserbanet/tag-heuer-aquaracer-calibre-7-gmt-way201f-pepsi-mens",
   },
 ];
@@ -28,7 +31,7 @@ function Slider() {
   const [startX, setStartX] = useState(0);
   const [offsetX, setOffsetX] = useState(0);
   const sliderRef = useRef(null);
-  const intervalRef = useRef<null | NodeJS.Timeout>(null); // Reference to store the interval ID
+  const intervalRef = useRef<null | NodeJS.Timeout>(null);
 
   // Function to start interval for auto slide
   const startInterval = () => {
@@ -100,6 +103,8 @@ function Slider() {
     startInterval(); // Restart the interval after manual interaction
   };
 
+  // console.log(slides[0].img)
+
   return (
     <div
       className="h-56 md:h-[calc(50vh-80px)] lg:h-[calc(80vh-80px)] overflow-hidden relative"
@@ -116,18 +121,24 @@ function Slider() {
         style={{ transform: `translateX(-${current * 100}vw)` }}
       >
         {slides.map((slide) => (
-          <div className={`w-screen h-full flex gap-16`} key={slide.id}>
+          <div
+            className={`w-screen h-full flex justify-center items-center gap-16`}
+            key={slide.id}
+          >
             <Link
               href={slide.url}
-              className={`mx-auto aspect-video relative overflow-hidden lg:rounded-lg`}
+              className={`w-full relative lg:rounded-lg shrink-0`}
               draggable="false"
+              style={{
+                paddingBottom: `${100 / (slide.img.width / slide.img.height)}%`,
+              }}
             >
               <Image
                 src={slide.img}
                 alt=""
                 fill
-                className="object-cover overflow-hidden w-full h-full"
                 draggable="false"
+                layout="contain"
               />
             </Link>
           </div>
