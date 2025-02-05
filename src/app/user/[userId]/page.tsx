@@ -10,6 +10,11 @@ import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MdOutlineArrowForwardIos, MdOutlineContentCopy } from "react-icons/md";
+import {
+  getCldImageUrl,
+  CldUploadButton,
+  CloudinaryUploadWidgetResults,
+} from "next-cloudinary";
 
 function UserPage() {
   const [isModalNicknameOpen, setIsModalNicknameOpen] = useState(false);
@@ -38,14 +43,14 @@ function UserPage() {
 
   const { mutate: handleSaveNewPhoto, isPending } = useMutation({
     mutationKey: ["currentMember"],
-    mutationFn: async () => {
+    mutationFn: async ({ newProfilePhoto }: { newProfilePhoto: string }) => {
       if (newProfilePhoto) {
         if (!member?.contactId) throw new Error("Contact Id tidak valid");
 
         await wixClient.members.updateMember(member?.contactId, {
           profile: {
             photo: {
-              url: "https://lh3.googleusercontent.com/a/ACg8ocLNQr0MDJk2WxKAjHNKLq0HLIFvBC_1BF-fJH_AKfL14GDhN40=s96-c",
+              url: photoPreview || "",
             },
           },
         });
@@ -62,6 +67,7 @@ function UserPage() {
         queryKey: ["currentMember"],
       });
 
+      setPhotoPreview(null);
       toast.success("Foto profil berhasil diperbarui!");
     },
   });
@@ -74,7 +80,6 @@ function UserPage() {
   const [newPhone, setNewPhone] = useState(
     (member?.contact?.phones && member.contact.phones[0]) || "" // New phone number state
   );
-  const [newProfilePhoto, setNewProfilePhoto] = useState<string | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null); // Preview for new photo
 
   useEffect(() => {
@@ -142,22 +147,12 @@ function UserPage() {
     }
   };
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
+  const handlePhotoChange = (result: CloudinaryUploadWidgetResults) => {
+    if (typeof result.info !== "object")
+      return toast.error("Tidak ada gambar yang diunggah");
 
-    if (file) {
-      // Create preview of the selected image
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string); // Set photo preview for user
-      };
-      reader.readAsDataURL(file);
-
-      // Optionally, upload the file to a server or a cloud storage (here we simulate this step)
-      const newPhotoUrl = URL.createObjectURL(file); // Simulated upload (replace with actual upload logic)
-      console.log(newPhotoUrl);
-      setNewProfilePhoto(newPhotoUrl);
-    }
+    const newPhotoUrl = result.info.url || "";
+    setPhotoPreview(newPhotoUrl);
   };
 
   return (
@@ -166,7 +161,6 @@ function UserPage() {
         <Image
           src={
             photoPreview ||
-            newProfilePhoto ||
             member?.profile?.photo?.url ||
             "https://res.cloudinary.com/dmc0cvmf5/image/upload/v1721879584/empty-profile_d7fhjp.webp"
           }
@@ -176,30 +170,29 @@ function UserPage() {
           height={72}
         />
         <div className="mt-3">
-          <input
-            type="file"
-            onChange={handlePhotoChange}
-            className="hidden"
-            id="photo-upload"
-            accept="image/*"
-          />
-          <label
-            htmlFor="photo-upload"
-            className="text-blue-500 cursor-pointer"
+          {/* CldUploadButton untuk mengupload gambar ke Cloudinary */}
+          <CldUploadButton
+            uploadPreset={process.env.NEXT_PUBLIC_UPLOAD_PRESET!}
+            onSuccess={handlePhotoChange}
+            options={{ maxFiles: 1, cropping: true }}
           >
-            Ubah Foto Profil
-          </label>
+            <button className="text-blue-500 cursor-pointer">
+              Ubah Foto Profil
+            </button>
+          </CldUploadButton>
         </div>
+
         {photoPreview && (
           <div className="mt-3">
             <button
               onClick={() => {
-                handleSaveNewPhoto();
+                if (!photoPreview) return toast.error("Gambar belum diunggah");
+                handleSaveNewPhoto({ newProfilePhoto: photoPreview });
               }}
               className={`px-4 py-2 rounded-md ${
                 isPending
-                  ? "text-slate-700 bg-slate-300"
-                  : "text-white bg-blue-500"
+                  ? "text-slate-700 bg-slate-300 cursor-not-allowed"
+                  : "text-white bg-blue-500 cursor-pointer"
               }`}
               disabled={isPending}
             >

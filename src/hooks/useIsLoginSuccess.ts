@@ -40,7 +40,6 @@ export function useIsLoginSuccess() {
   }
 
   if (!isLoading && !isError) {
-    console.log(data);
     Cookies.set("refreshToken", JSON.stringify(data?.refreshToken || {}), {
       expires: 2,
     });
