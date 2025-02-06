@@ -2,7 +2,7 @@
 
 import { createClient, OAuthStrategy } from "@wix/sdk";
 import { products, collections } from "@wix/stores";
-import { currentCart } from "@wix/ecom";
+import { currentCart, orders } from "@wix/ecom";
 import { createContext, useContext } from "react";
 import Cookies from "js-cookie";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ const refreshToken = JSON.parse(Cookies.get("refreshToken") || "{}");
 const wixClient = createClient({
   modules: {
     products,
+    orders,
     collections,
     currentCart,
     members,

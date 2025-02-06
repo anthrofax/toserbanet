@@ -144,10 +144,10 @@ function Slider() {
           </div>
         ))}
       </div>
-      <div className="flex gap-4 absolute m-auto left-1/2 -translate-x-1/2 bottom-3 lg:bottom-8 z-50">
+      <div className="flex gap-4 absolute m-auto left-1/2 -translate-x-1/2 bottom-3 lg:bottom-8 z-10">
         {slides.map((slide, i) => (
           <div
-            className={`w-3 aspect-square rounded-full ring-1 ring-gray-600 cursor-pointer flex items-center justify-center z-50 ${
+            className={`w-3 aspect-square rounded-full ring-1 ring-gray-600 cursor-pointer flex items-center justify-center z-10 ${
               current === i ? "scale-150" : ""
             } relative`}
             key={slide.id}

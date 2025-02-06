@@ -39,9 +39,6 @@ async function SinglePage({
       return false;
     }) || [];
 
-  console.log(product);
-  console.log(marketplaceLinks);
-
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-8 lg:gap-16 py-5">
       {/* Image */}
@@ -97,12 +94,16 @@ async function SinglePage({
             variantId={null}
           />
         )}
-        <div className="h-[2px] bg-gray-200 rounded-full" />
         {marketplaceLinks.length > 0 && (
-          <div className="flex flex-col gap-3">
-            <h3 className="text-xl font-semibold">Belanja Via Marketplace:</h3>
-            <MarketplaceList marketplaceLinks={marketplaceLinks} />
-          </div>
+          <>
+            <div className="h-[2px] bg-gray-200 rounded-full" />
+            <div className="flex flex-col gap-3">
+              <h3 className="text-xl font-semibold">
+                Belanja Via Marketplace:
+              </h3>
+              <MarketplaceList marketplaceLinks={marketplaceLinks} />
+            </div>
+          </>
         )}
       </div>
     </div>
