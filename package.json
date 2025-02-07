@@ -19,6 +19,7 @@
     "@wix/site-members": "^1.18.0",
     "@wix/site-site": "^1.19.0",
     "@wix/stores": "^1.0.345",
+    "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "isomorphic-dompurify": "^2.20.0",
@@ -32,6 +33,7 @@
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.1",
     "react-icons": "^5.4.0",
+    "react-select": "^5.10.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^5.0.3"

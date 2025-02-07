@@ -3,7 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import CartModal from "@/components/cart-modal";
+import CartModal from "@/components/cart-modal/cart-modal";
 import { WixClientConectProvider } from "@/contexts/wix-context";
 import { Toaster } from "react-hot-toast";
 import "react-confirm-alert/src/react-confirm-alert.css";

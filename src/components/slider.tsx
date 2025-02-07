@@ -124,10 +124,11 @@ function Slider() {
           <div
             className={`w-screen h-full flex justify-center items-center gap-16`}
             key={slide.id}
+
           >
             <Link
               href={slide.url}
-              className={`w-full relative lg:rounded-lg shrink-0`}
+              className={`w-full h-full relative lg:rounded-lg shrink-0`}
               draggable="false"
               style={{
                 paddingBottom: `${100 / (slide.img.width / slide.img.height)}%`,
