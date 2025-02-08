@@ -13,13 +13,10 @@ import useCurrentMember from "@/hooks/useCurrentMember";
 import CartItem from "../cart-item";
 import { IoIosArrowBack } from "react-icons/io";
 import ProvinceSelect from "./dropdown-provinsi";
-import {
-  getCitiesByProvince,
-  getDistrictsByCity,
-} from "@/utils/location-utils";
 import DropdownCity from "./dropdown-city";
 import DropdownDistrict from "./dropdown-district";
 import DropdownKurir from "./dropdown-kurir";
+import DropdownPostcode from "./dropdown-postcode";
 
 enum ActionType {
   CLOSE_MODAL,
@@ -28,6 +25,11 @@ enum ActionType {
   TO_STEP_1,
   TO_STEP_2,
   PAY,
+  CHOOSE_PROVINCE,
+  CHOOSE_CITY,
+  CHOOSE_DISTRICT,
+  CHOOSE_POSTCODE,
+  CHOOSE_KURIR,
 }
 
 const initialState = {
@@ -41,6 +43,8 @@ const initialState = {
   kota: "",
   kecamatan: "",
   kurir: "",
+  kodepos: "",
+  ongkir: 0,
   totalCartItem: 0,
 };
 
@@ -49,8 +53,22 @@ function CartModal() {
   const wixClient = useWixClientContext();
   const isLoggedIn = wixClient.auth.loggedIn();
   const { member } = useCurrentMember();
-  const [cities, setCities] = useState<string[]>([]);
-  const [districts, setDistricts] = useState<string[]>([]);
+
+  useEffect(() => {
+    const snapScript = process.env.NEXT_PUBLIC_MIDTRANS_SNAP_URL as string;
+    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT as string;
+
+    const script = document.createElement("script");
+    script.src = snapScript;
+    script.setAttribute("data-client-key", clientKey);
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   useEffect(() => {
     getCart(wixClient);
@@ -83,9 +101,7 @@ function CartModal() {
         return prevState;
       case ActionType.TO_STEP_1:
         return {
-          ...initialState,
-          totalCartItem: prevState.totalCartItem,
-          isModalOpen: true,
+          ...prevState,
           step: 1,
         };
       case ActionType.TO_STEP_2:
@@ -100,6 +116,46 @@ function CartModal() {
               member.contact.addresses &&
               member.contact.addresses[0].addressLine) ||
             "",
+        };
+      case ActionType.CHOOSE_PROVINCE:
+        return {
+          ...prevState,
+          provinsi: action.payload,
+          kota: "",
+          kecamatan: "",
+          kodepos: "",
+          kurir: "",
+          ongkir: 0,
+        };
+      case ActionType.CHOOSE_CITY:
+        return {
+          ...prevState,
+          kota: action.payload,
+          kecamatan: "",
+          kodepos: "",
+          kurir: "",
+          ongkir: 0,
+        };
+      case ActionType.CHOOSE_DISTRICT:
+        return {
+          ...prevState,
+          kecamatan: action.payload,
+          kodepos: "",
+          kurir: "",
+          ongkir: 0,
+        };
+      case ActionType.CHOOSE_POSTCODE:
+        return {
+          ...prevState,
+          kodepos: action.payload,
+          kurir: "",
+          ongkir: 0,
+        };
+      case ActionType.CHOOSE_KURIR:
+        return {
+          ...prevState,
+          kurir: action.payload,
+          ongkir: 0,
         };
       case ActionType.PAY:
         return prevState;
@@ -121,6 +177,8 @@ function CartModal() {
       kota,
       kecamatan,
       kurir,
+      kodepos,
+      ongkir,
     },
     dispatch,
   ] = useReducer(cartReducer, initialState);
@@ -138,24 +196,6 @@ function CartModal() {
       payload: totaQty,
     });
   }, [cart]);
-
-  useEffect(() => {
-    if (provinsi) {
-      const fetchedCities = getCitiesByProvince(provinsi);
-      setCities(fetchedCities);
-    } else {
-      setCities([]);
-    }
-  }, [provinsi]);
-
-  useEffect(() => {
-    if (provinsi) {
-      const fetchedDistrict = getDistrictsByCity(kota);
-      setDistricts(fetchedDistrict);
-    } else {
-      setDistricts([]);
-    }
-  }, [kota]);
 
   return (
     <div className="shadow-lg h-max bg-slate-50/50 backdrop-blur-md w-full fixed bottom-0 left-0 flex justify-between items-center gap-5 flex-wrap p-5 z-10">
@@ -292,7 +332,7 @@ function CartModal() {
                     </div>
                   </>
                 ) : (
-                  <div className="my-16 flex flex-col gap-3 items-center">  
+                  <div className="my-16 flex flex-col gap-3 items-center">
                     <IoCartOutline className="text-[3rem] md:text-[7rem]" />
                     <h3 className=" md:text-xl text-center">
                       Keranjang Anda masih kosong
@@ -405,51 +445,63 @@ function CartModal() {
 
                   <ProvinceSelect
                     value={provinsi}
-                    onChange={(e) => {
+                    onChange={(val) => {
                       dispatch({
-                        type: ActionType.SET_STATE,
-                        changedStateAttr: "provinsi",
-                        payload: e.target.value,
+                        type: ActionType.CHOOSE_PROVINCE,
+                        payload: val,
                       });
                     }}
                   />
 
                   <DropdownCity
-                    city={cities}
                     value={kota}
-                    onChange={(e) => {
+                    onChange={(val) => {
                       dispatch({
-                        type: ActionType.SET_STATE,
-                        changedStateAttr: "kota",
-                        payload: e.target.value,
+                        type: ActionType.CHOOSE_CITY,
+                        payload: val,
                       });
                     }}
-                    provinsi={provinsi}
+                    idProvinsi={provinsi}
                   />
 
                   <DropdownDistrict
                     value={kecamatan}
-                    onChange={(e) => {
+                    onChange={(val) => {
                       dispatch({
-                        type: ActionType.SET_STATE,
-                        changedStateAttr: "kecamatan",
-                        payload: e.target.value,
+                        type: ActionType.CHOOSE_DISTRICT,
+                        payload: val,
                       });
                     }}
                     kota={kota}
-                    kecamatan={districts}
+                  />
+
+                  <DropdownPostcode
+                    value={kodepos}
+                    district={kecamatan}
+                    onChange={(val) => {
+                      dispatch({
+                        type: ActionType.CHOOSE_POSTCODE,
+                        payload: val,
+                      });
+                    }}
                   />
 
                   <DropdownKurir
-                    kecamatan={kecamatan}
-                    kota={kota}
-                    provinsi={provinsi}
-                    value={kurir}
-                    onChange={(e) => {
+                    isDisabled={!provinsi || !kota || !kecamatan}
+                    kurir={kurir}
+                    kodePosTujuan={kodepos}
+                    ongkir={ongkir}
+                    onChangeKurir={async (val) => {
+                      dispatch({
+                        type: ActionType.CHOOSE_KURIR,
+                        payload: val,
+                      });
+                    }}
+                    onChangeLayananKurir={async (val: string) => {
                       dispatch({
                         type: ActionType.SET_STATE,
-                        changedStateAttr: "kurir",
-                        payload: e.target.value,
+                        changedStateAttr: "ongkir",
+                        payload: +val,
                       });
                     }}
                   />

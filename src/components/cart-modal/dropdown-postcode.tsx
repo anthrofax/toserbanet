@@ -1,5 +1,5 @@
-import { useGetCitiesByProvince } from "@/utils/location-utils";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useGetPostcodesByDistrict } from "../../utils/location-utils";
 import {
   Select,
   SelectContent,
@@ -10,17 +10,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-function DropdownCity({
-  value,
-  onChange,
-  idProvinsi,
-}: {
+interface DropdownPostcodeProps {
   value: string;
   onChange: (e: string) => void;
-  idProvinsi: string;
-}) {
+  district: string;
+}
+
+function DropdownPostcode({
+  value,
+  onChange,
+  district,
+}: DropdownPostcodeProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { kota, isLoading } = useGetCitiesByProvince(idProvinsi, isModalOpen);
+  const { isLoading, kodePos } = useGetPostcodesByDistrict(
+    district,
+    isModalOpen
+  );
 
   return (
     <div className="relative col-span-4">
@@ -28,16 +33,16 @@ function DropdownCity({
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
         onValueChange={onChange}
-        disabled={idProvinsi === ""}
+        disabled={district === ""}
       >
         <SelectTrigger
           className={`w-full h-full bg-transparent border-2 border-slate-300 pl-4 pb-3 flex items-center outline-none rounded-lg text-sm focus:border-slate-500 ${
             value ? "pt-6" : "pt-3"
-          } ${idProvinsi === "" ? "cursor-not-allowed" : "cursor-pointer"}`}
+          } ${district === "" ? "cursor-not-allowed" : "cursor-pointer"}`}
           id="provinsi"
           value={value}
         >
-          <SelectValue placeholder="Pilih Kota" />
+          <SelectValue placeholder="Pilih Kode Pos" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -45,9 +50,9 @@ function DropdownCity({
             {isLoading ? (
               <SelectItem value="loading ">Memuat...</SelectItem>
             ) : (
-              kota.map((kotaItem) => (
-                <SelectItem key={kotaItem.id} value={kotaItem.id}>
-                  {kotaItem.name}
+              kodePos.map((kodePos, i) => (
+                <SelectItem key={i} value={kodePos}>
+                  {kodePos}
                 </SelectItem>
               ))
             )}
@@ -55,15 +60,15 @@ function DropdownCity({
         </SelectContent>
       </Select>
       <label
-        htmlFor="kota"
+        htmlFor="postcode"
         className={`absolute transition-all duration-200 text-slate-400 ${
           value ? "text-xs top-1.5 left-4" : "hidden"
         }`}
       >
-        Pilih Kota
+        Pilih Kode Pos
       </label>
     </div>
   );
 }
 
-export default DropdownCity;
+export default DropdownPostcode;

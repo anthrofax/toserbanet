@@ -56,7 +56,7 @@ function ProductImages({
       </div>
 
       {/* Thumbnail Images */}
-      <div className="flex justify-between gap-1 mt-1 lg:mt-3 overflow-auto w-full sm:w-[80%] mx-auto">
+      <div className="flex justify-between gap-1 mt-1 lg:mt-3 overflow-auto w-full sm:w-[80%] mx-auto scrollbar">
         {imageItems.map((imageObj: any, i: number) => (
           <div
             className="w-1/5 aspect-square relative gap-4 mt-3 cursor-pointer shrink-0"

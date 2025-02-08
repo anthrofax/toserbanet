@@ -10,7 +10,7 @@ import Link from "next/link";
 
 function ProductCategory() {
   return (
-    <div className="flex gap-8 p-5 overflow-x-auto w-[80%] mx-auto">
+    <div className="flex gap-8 p-5 overflow-x-auto w-[80%] mx-auto scrollbar">
       <div className="flex flex-col items-center gap-2">
         <Link
           href=""

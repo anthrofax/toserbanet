@@ -1,43 +1,59 @@
-import React from "react";
-
-interface DropdownDistrictProps {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  kota: string;
-  kecamatan: string[];
-}
+import { useGetDistrictsByCity } from "@/utils/location-utils";
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function DropdownDistrict({
   value,
   onChange,
   kota,
-  kecamatan,
 }: {
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange: (e: string) => void;
   kota: string;
-  kecamatan: string[];
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { kecamatan, isLoading } = useGetDistrictsByCity(kota, isModalOpen);
+
   return (
     <div className="relative col-span-4">
-      <select
-        className={`w-full bg-transparent border-2 border-slate-300 pl-4 py-3 flex items-center outline-none rounded-lg text-sm focus:border-slate-500 ${
-          value ? "pt-5" : "pt-3"
-        } ${!kota ? "cursor-not-allowed" : ""}`}
-        id="district"
-        value={value}
-        onChange={onChange}
-        disabled={!kota}
+      <Select
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        onValueChange={onChange}
+        disabled={kota === ""}
       >
-        <option value="" disabled>
-          Pilih Kecamatan
-        </option>
-        {kecamatan.map((kecItem, index) => (
-          <option key={index} value={kecItem}>
-            {kecItem}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger
+          className={`w-full h-full bg-transparent border-2 border-slate-300 pl-4 pb-3 flex items-center outline-none rounded-lg text-sm focus:border-slate-500 ${
+            value ? "pt-6" : "pt-3"
+          } ${kota === "" ? "cursor-not-allowed" : "cursor-pointer"}`}
+          id="provinsi"
+          value={value}
+        >
+          <SelectValue placeholder="Pilih Provinsi" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Provinsi</SelectLabel>
+            {isLoading ? (
+              <SelectItem value="loading ">Memuat...</SelectItem>
+            ) : (
+              kecamatan.map((kecamatanItem) => (
+                <SelectItem key={kecamatanItem.id} value={kecamatanItem.name}>
+                  {kecamatanItem.name}
+                </SelectItem>
+              ))
+            )}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
       <label
         htmlFor="district"
         className={`absolute transition-all duration-200 text-slate-400 ${

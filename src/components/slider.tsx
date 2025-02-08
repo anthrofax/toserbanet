@@ -6,6 +6,7 @@ import { useEffect, useState, useRef, MouseEvent, TouchEvent } from "react";
 import banner1 from "../../public/banner1.webp";
 import banner2 from "../../public/banner2.webp";
 import banner4 from "../../public/banner4.webp";
+import { useWindowDimensions } from "@/hooks/useWindowDimention";
 
 const slides = [
   {
@@ -30,6 +31,7 @@ function Slider() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [offsetX, setOffsetX] = useState(0);
+  const { width } = useWindowDimensions();
   const sliderRef = useRef(null);
   const intervalRef = useRef<null | NodeJS.Timeout>(null);
 
@@ -94,9 +96,9 @@ function Slider() {
   const handleTouchEnd = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    if (offsetX > 100) {
+    if (offsetX > 50) {
       setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-    } else if (offsetX < -100) {
+    } else if (offsetX < -50) {
       setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }
     setOffsetX(0);
@@ -107,7 +109,7 @@ function Slider() {
 
   return (
     <div
-      className="h-56 md:h-[calc(50vh-80px)] lg:h-[calc(80vh-80px)] overflow-hidden relative"
+      className="max-w-[90vw] md:max-w-[85vw] rounded-lg mx-auto h-max overflow-hidden relative"
       ref={sliderRef}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -117,18 +119,21 @@ function Slider() {
       onTouchEnd={handleTouchEnd}
     >
       <div
-        className="w-max h-full flex transition-all ease-in-out duration-1000"
-        style={{ transform: `translateX(-${current * 100}vw)` }}
+        className={`w-max h-full flex transition-all ease-in-out duration-1000 translateX(-${
+          current * 90
+        }vw) md:translateX(-${current * 85}vw)`}
+        style={{
+          transform: `translateX(-${current * (width < 768 ? 90 : 85)}vw)`,
+        }}
       >
         {slides.map((slide) => (
           <div
-            className={`w-screen h-full flex justify-center items-center gap-16`}
+            className={`w-[90vw] md:w-[85vw] h-full flex justify-center items-center gap-16`}
             key={slide.id}
-
           >
             <Link
               href={slide.url}
-              className={`w-full h-full relative lg:rounded-lg shrink-0`}
+              className={`w-full relative lg:rounded-lg shrink-0`}
               draggable="false"
               style={{
                 paddingBottom: `${100 / (slide.img.width / slide.img.height)}%`,
