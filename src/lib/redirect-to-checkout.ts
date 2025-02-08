@@ -1,21 +1,21 @@
+import { orderTokenizer } from "@/actions";
+import { CheckoutDataType } from "@/types/checkout-types";
+import { orders } from "@wix/ecom";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const redirectToCheckout = async (checkoutData: any) => {
+export const redirectToCheckout = async (checkoutData: CheckoutDataType, userId: string) => {
   console.log(checkoutData);
   try {
-    const response = await axios.post(
-      "/api/package-order-tokenizer",
-      checkoutData
-    );
+    const response = await orderTokenizer(checkoutData);
 
-    const requestData = response.data;
+    console.log(response)
 
     // @ts-ignore
-    await window!.snap.pay(requestData.token, {
+    await window!.snap.pay(response.token, {
       onSuccess: function (result: any) {
         // Pembayaran berhasil, arahkan ke halaman /orders
-        window.location.href = "/orders";
+        window.location.href = `/user/${userId}/transactions`;
       },
       onPending: function (result: any) {
         // Pembayaran dalam status pending

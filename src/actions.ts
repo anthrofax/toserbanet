@@ -3,6 +3,7 @@
 import axios from "axios";
 import { randomUUID } from "crypto";
 import { MidtransClient } from "midtrans-node-client";
+import { CheckoutDataType } from "./types/checkout-types";
 
 interface RajaOngkirDomesticLocationType {
   meta: {
@@ -121,26 +122,64 @@ const snap = new MidtransClient.Snap({
   serverKey: process.env.MIDTRANS_ID_SECRET,
 });
 
-export async function orderTokenizer({}) {
+export async function orderTokenizer({
+  alamat,
+  email,
+  lineItems,
+  nama,
+  nomorHp,
+  catatan,
+  ongkir,
+}: CheckoutDataType) {
   try {
+    const item_details = lineItems.map((item) => {
+      return {
+        price: item.price,
+        quantity: item.quantity,
+        name:
+          item.productName.length > 45
+            ? `${item.productName.slice(0, 22)}...${item.productName.slice(
+                -22
+              )}`
+            : item.productName,
+      };
+    });
+
+    item_details.push({
+      price: ongkir,
+      quantity: 1,
+      name: "Ongkos Kirim",
+    });
+
+    console.log(
+      lineItems.reduce((acc, item) => acc + item.price * item.quantity, 0) +
+        ongkir,
+      "gross_amount"
+    );
+
+    console.log(
+      item_details.reduce((acc, item) => acc + item.price * item.quantity, 0),
+      "item details"
+    );
+
     const parameter = {
-      item_details: {
-        price: 0,
-        quantity: "",
-        name: `Pesanan #123132`,
-      },
+      item_details,
       customer_details: {
-        first_name: "",
-        last_name: "",
-        email: "",
-        phone: "",
+        first_name: nama.trim().split(" ")[0],
+        last_name: nama.trim().split(" ").slice(1).join(" "),
+        email,
+        phone: nomorHp,
       },
       transaction_details: {
         order_id: randomUUID(),
-        gross_amount: 0,
+        gross_amount:
+          lineItems.reduce((acc, item) => acc + item.price * item.quantity, 0) +
+          ongkir,
       },
       metadata: {
-        test: "",
+        lineItems,
+        catatan,
+        alamat,
       },
     };
 
@@ -156,6 +195,6 @@ export async function orderTokenizer({}) {
   } catch (error) {
     console.error("Midtrans Error: ", error);
 
-    return { error };
+    throw new Error("Midtrans Error: " + error);
   }
 }

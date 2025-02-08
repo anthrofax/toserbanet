@@ -15,7 +15,7 @@ function CartItem({ cartItem }: { cartItem: currentCart.LineItem }) {
 
   return (
     <div className="flex-1 flex flex-col md:flex-row gap-5 items-center relative bg-slate-200 rounded-lg px-3 py-2">
-      <div className="relative w-[50%] max-w-32 aspect-square rounded-xl overflow-hidden shrink-0">
+      <div className="relative w-[25%] max-w-32 aspect-square rounded-xl overflow-hidden shrink-0">
         {cartItem.image && (
           <Image
             fill
@@ -26,19 +26,24 @@ function CartItem({ cartItem }: { cartItem: currentCart.LineItem }) {
       </div>
 
       <div className="flex flex-col items-center md:items-start text-center md:text-start gap-1 ">
-        <h3 className="font-bold text-sm md:text-base"> {cartItem.productName?.original}</h3>
-        <h4 className="font-medium text-xs md:text-sm">Size 39, Warna Kuning</h4>
+        <h3 className="font-bold text-sm md:text-sm">
+          {" "}
+          {cartItem.productName?.original}
+        </h3>
+        <h4 className="font-medium text-[7px] md:text-xs">
+          Size 39, Warna Kuning
+        </h4>
 
         <div className="flex justify-between items-center gap-2 w-max">
           <div
-            className={`rounded-full p-3 w-3 h-3 border flex justify-center items-center ${
+            className={`rounded-full p-2 w-3 h-3 border flex justify-center items-center ${
               isLoading
                 ? "cursor-not-allowed text-slate-200"
                 : "cursor-pointer border-slate-400"
             }`}
           >
             <FaMinus
-              className={`shrink-0 text-sm ${
+              className={`shrink-0 text-xs ${
                 isLoading ? "text-slate-200" : "text-slate-400"
               }`}
               onClick={() => {
@@ -55,14 +60,14 @@ function CartItem({ cartItem }: { cartItem: currentCart.LineItem }) {
           </div>
           <p>{cartItem.quantity}</p>
           <div
-            className={`rounded-full p-3 w-3 h-3 border flex justify-center items-center ${
+            className={`rounded-full p-2 w-3 h-3 border flex justify-center items-center ${
               isLoading
                 ? "cursor-not-allowed text-slate-200"
                 : "cursor-pointer border-slate-400"
             }`}
           >
             <FaPlus
-              className={`shrink-0 text-sm ${
+              className={`shrink-0 text-xs ${
                 isLoading ? "text-slate-200" : "text-slate-400"
               }`}
               onClick={() =>
@@ -78,9 +83,13 @@ function CartItem({ cartItem }: { cartItem: currentCart.LineItem }) {
 
         <p className="text-xs md:text-sm">
           Berat:{" "}
-          {gramFormatter.format(cartItem?.physicalProperties?.weight || 0)}
+          {gramFormatter.format(
+            cartItem?.physicalProperties?.weight
+              ? cartItem.physicalProperties.weight * 1000
+              : 0
+          )}
         </p>
-        <p className="text-green-500 text-sm sm:text-lg font-semibold">
+        <p className="text-green-500 text-sm sm:text-sm font-medium">
           Sub Total{" "}
           {cartItem.price?.amount
             ? rupiahFormatter.format(+cartItem.price.amount)

@@ -17,6 +17,8 @@ import DropdownCity from "./dropdown-city";
 import DropdownDistrict from "./dropdown-district";
 import DropdownKurir from "./dropdown-kurir";
 import DropdownPostcode from "./dropdown-postcode";
+import { redirectToCheckout } from "@/lib/redirect-to-checkout";
+import { orders } from "@wix/ecom";
 
 enum ActionType {
   CLOSE_MODAL,
@@ -197,6 +199,8 @@ function CartModal() {
     });
   }, [cart]);
 
+  console.log(cart.lineItems);
+
   return (
     <div className="shadow-lg h-max bg-slate-50/50 backdrop-blur-md w-full fixed bottom-0 left-0 flex justify-between items-center gap-5 flex-wrap p-5 z-10">
       <div className="flex justify-between items-center gap-5 lg:gap-7">
@@ -253,7 +257,7 @@ function CartModal() {
               }}
             />
             <div
-              className={`bg-slate-50 px-3 md:px-10 pb-5 py-16 min-[325px]:pt-10 md:pt-16 w-[90%] max-w-[535px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 rounded-xl flex flex-col gap-3 justify-center items-center ${
+              className={`bg-slate-50 px-3 md:px-10 pb-5 py-16 min-[325px]:pt-10 md:pt-16 w-[90%] max-w-[535px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 rounded-xl flex flex-col gap-3 justify-center items-center max-h-[90vh] ${
                 isModalOpen
                   ? "-translate-y-1/2 opacity-100 z-30 duration-500 delay-75"
                   : "-translate-y-1/4 opacity-0 -z-10"
@@ -267,82 +271,18 @@ function CartModal() {
                   </p>
                 </div>
 
-                <div className="flex gap-3 items-center">
-                  {step === 2 && (
-                    <button
-                      className="rounded-full p-1 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-slate-400 hover:bg-slate-500"
-                      onClick={() => {
-                        dispatch({ type: ActionType.TO_STEP_1 });
-                      }}
-                    >
-                      <IoIosArrowBack className="text-slate-50 text-5xl" />
-                    </button>
-                  )}
-                  <button
-                    className="rounded-full p-1 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-slate-400 hover:bg-slate-500"
-                    onClick={() => {
-                      dispatch({ type: ActionType.CLOSE_MODAL });
-                    }}
-                  >
-                    <IoClose className="text-slate-50 text-5xl" />
-                  </button>
-                </div>
+                <button
+                  className="rounded-full p-1 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-slate-400 hover:bg-slate-500"
+                  onClick={() => {
+                    dispatch({ type: ActionType.CLOSE_MODAL });
+                  }}
+                >
+                  <IoClose className="text-slate-50 text-5xl" />
+                </button>
               </div>
-              {step === 1 ? (
-                cart.lineItems && cart.lineItems.length > 0 ? (
-                  <>
-                    <div className="flex flex-col gap-3 max-h-96 overflow-y-auto scrollbar pr-1 mt-3 w-full">
-                      {cart.lineItems.map((item, i) => (
-                        <CartItem cartItem={item} key={i} />
-                      ))}
-                    </div>
-
-                    <div className="flex flex-col gap-3 justify-center text-center md:text-start">
-                      <p className="text-base md:text-base mt-3">
-                        Total Harga ({totalCartItem} Produk){" "}
-                        <span className="text-green-500 font-bold text-lg">
-                          {cart.subtotal?.amount
-                            ? rupiahFormatter.format(+cart.subtotal?.amount)
-                            : 0}
-                        </span>
-                      </p>
-
-                      <hr className="h-0.5 bg-slate-200 rounded-full" />
-
-                      <div className="flex gap-3 flex-col md:flex-row items-center justify-between text-xs lg:text-sm">
-                        <button
-                          className="border-2 border-slate-300 w-full p-3 rounded-lg"
-                          onClick={() =>
-                            dispatch({ type: ActionType.CLOSE_MODAL })
-                          }
-                        >
-                          Belanja Lagi
-                        </button>
-                        <button
-                          className={`bg-blue-500 hover:bg-blue-600 transition-all p-3 rounded-lg w-full text-slate-50 ${
-                            isLoading ? "cursor-not-allowed" : ""
-                          }`}
-                          onClick={() =>
-                            dispatch({ type: ActionType.TO_STEP_2 })
-                          }
-                        >
-                          Lanjut
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="my-16 flex flex-col gap-3 items-center">
-                    <IoCartOutline className="text-[3rem] md:text-[7rem]" />
-                    <h3 className=" md:text-xl text-center">
-                      Keranjang Anda masih kosong
-                    </h3>
-                  </div>
-                )
-              ) : null}
 
               {step === 2 && (
-                <div className="mt-16 min-[320px]:mt-8  md:mt-0 grid grid-cols-8 gap-x-2 gap-y-3 overflow-x-auto text-xs min-[500px]:text-sm sm:text-base">
+                <div className="mt-16 min-[320px]:mt-8 md:mt-3 grid grid-cols-8 gap-x-2 gap-y-3 overflow-x-auto text-xs min-[500px]:text-sm sm:text-base w-full scrollbar px-1">
                   <div className="relative col-span-4">
                     <input
                       type="text"
@@ -531,12 +471,112 @@ function CartModal() {
                       Catatan
                     </label>
                   </div>
-
-                  <button className="bg-blue-500 rounded-lg p-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600 md:mt-3">
-                    Bayar Sekarang
-                  </button>
                 </div>
               )}
+
+              {cart.lineItems && cart.lineItems.length > 0 ? (
+                <>
+                  <div
+                    className={`flex flex-col gap-3 overflow-y-auto scrollbar pr-1 mt-3 w-full ${
+                      step === 2 ? "max-h-40" : "max-h-96"
+                    }`}
+                  >
+                    {cart.lineItems.map((item, i) => (
+                      <CartItem cartItem={item} key={i} />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="my-16 flex flex-col gap-3 items-center">
+                  <IoCartOutline className="text-[3rem] md:text-[7rem]" />
+                  <h3 className=" md:text-xl text-center">
+                    Keranjang Anda masih kosong
+                  </h3>
+                </div>
+              )}
+
+              <div className="flex flex-col gap-3 justify-center text-center md:text-start">
+                <p className="text-base md:text-base mt-3">
+                  Total Harga ({totalCartItem} Produk){" "}
+                  <span className="text-green-500 font-bold text-lg">
+                    {cart.subtotal?.amount
+                      ? rupiahFormatter.format(+cart.subtotal?.amount)
+                      : 0}
+                  </span>
+                </p>
+
+                <hr className="h-0.5 bg-slate-200 rounded-full" />
+
+                <div className="flex gap-3 flex-col md:flex-row items-center justify-between text-xs lg:text-sm">
+                  {step === 1 && (
+                    <>
+                      <button
+                        className="border-2 border-slate-300 w-full p-3 rounded-lg"
+                        onClick={() =>
+                          dispatch({ type: ActionType.CLOSE_MODAL })
+                        }
+                      >
+                        Belanja Lagi
+                      </button>
+                      <button
+                        className={`bg-blue-500 hover:bg-blue-600 transition-all p-3 rounded-lg w-full text-slate-50 ${
+                          isLoading ? "cursor-not-allowed" : ""
+                        }`}
+                        onClick={() => dispatch({ type: ActionType.TO_STEP_2 })}
+                      >
+                        Lanjut
+                      </button>
+                    </>
+                  )}
+                  {step === 2 && (
+                    <>
+                      <button
+                        className="border-2 border-slate-300 w-full p-3 rounded-lg"
+                        onClick={() => dispatch({ type: ActionType.TO_STEP_1 })}
+                      >
+                        Kembali
+                      </button>
+                      <button
+                        className={`w-full bg-blue-500 rounded-lg p-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600 md:mt-3`}
+                        onClick={async () => {
+                          console.log("test");
+                          await redirectToCheckout(
+                            {
+                              nama: member?.profile?.nickname || "",
+                              nomorHp:
+                                (member?.contact?.phones &&
+                                  member?.contact?.phones[0]) ||
+                                "",
+                              email: member?.loginEmail || "",
+                              alamat,
+                              catatan,
+                              lineItems: cart.lineItems.map((item) => {
+                                return {
+                                  id: item?._id || "",
+                                  itemType: orders.ItemTypeItemType.PHYSICAL,
+                                  price: item.price?.amount
+                                    ? +item.price.amount
+                                    : 0,
+                                  productName: item.productName?.original || "",
+                                  quantity: item.quantity || 0,
+                                  image: item.image || "",
+                                  weight: item.physicalProperties?.weight
+                                    ? item.physicalProperties.weight * 1000
+                                    : 0,
+                                };
+                              }),
+                              ongkir,
+                            },
+                            member?.contactId || ""
+                          );
+                        }}
+                      >
+                        Bayar Sekarang
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           </>,
           document.body
