@@ -15,7 +15,7 @@ function CartItem({ cartItem }: { cartItem: currentCart.LineItem }) {
 
   return (
     <div className="flex-1 flex flex-col md:flex-row gap-5 items-center relative bg-slate-200 rounded-lg px-3 py-2">
-      <div className="relative w-[25%] max-w-32 aspect-square rounded-xl overflow-hidden shrink-0">
+      <div className="relative w-[50%] md:w-[25%] max-w-32 aspect-square rounded-xl overflow-hidden shrink-0">
         {cartItem.image && (
           <Image
             fill
@@ -30,7 +30,7 @@ function CartItem({ cartItem }: { cartItem: currentCart.LineItem }) {
           {" "}
           {cartItem.productName?.original}
         </h3>
-        <h4 className="font-medium text-[7px] md:text-xs">
+        <h4 className="font-medium text-xs">
           Size 39, Warna Kuning
         </h4>
 
