@@ -32,7 +32,7 @@ function CustomerTestimoni() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { width } = useWindowDimensions();
   const [maxCard, setMaxCard] = useState(() => {
-    if (width >= 624) {
+    if (width >= 640) {
       return 3;
     } else {
       return 1;
@@ -59,7 +59,7 @@ function CustomerTestimoni() {
   }, [maxCard, totalDots]); // Pastikan dependensi ter-update jika maxCard atau totalDots berubah
 
   useEffect(() => {
-    if (width >= 624) {
+    if (width >= 640) {
       setMaxCard(3);
     } else {
       setMaxCard(1);
@@ -68,37 +68,34 @@ function CustomerTestimoni() {
 
   return (
     <div className="py-5 flex flex-col gap-6">
-      <div className="px-3">
-        <h3 className="ml-2 font-bold text-xl">Testimoni Customer</h3>
+      <div className="px-3 flex items-center justify-center gap-2">
+        <div className="h-1 rounded-full flex-grow bg-slate-400" />
+        <h3 className="ml-2 font-bold text-lg sm:text-xl shrink-0">Testimoni Customer</h3>
+        <div className="h-1 rounded-full flex-grow bg-slate-400" />
       </div>
 
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden w-[90vw] mx-auto flex justify-center items-center">
         <div
-          className="flex transition-transform duration-700"
+          className="flex justify-center sm:gap-3 transition-transform duration-700 w-full"
           style={{
             transform: `translateX(-${currentIndex * (100 / maxCard)}%)`,
           }}
         >
           {testimonials.map((testimonial) => (
-            <div
-              key={testimonial.id}
-              className="min-w-full sm:min-w-[33.3333%] lg:min-w-[33.3333%] xl:min-w-[33.3333%] px-6"
-            >
-              <div className="flex flex-col items-center bg-white shadow-lg rounded-lg p-4">
-                <div className="mb-4">
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    width={100}
-                    height={100}
-                    className="rounded-full"
-                  />
-                </div>
-                <h4 className="font-semibold text-lg">{testimonial.name}</h4>
-                <p className="text-center text-gray-600 mt-2 text-sm lg:text-base">
-                  {testimonial.testimonial}
-                </p>
+            <div className="w-full sm:w-[33%] sm:max-w-[27rem] shrink-0 flex flex-col items-center bg-white shadow-lg rounded-lg p-4" key={testimonial.id}>
+              <div className="mb-4">
+                <Image
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  width={100}
+                  height={100}
+                  className="rounded-full"
+                />
               </div>
+              <h4 className="font-semibold text-lg">{testimonial.name}</h4>
+              <p className="text-center text-gray-600 mt-2 text-sm lg:text-base">
+                {testimonial.testimonial}
+              </p>
             </div>
           ))}
         </div>

@@ -5,6 +5,7 @@ import { CiSearch } from "react-icons/ci";
 import { IoMdHelpCircle } from "react-icons/io";
 import { RiShoppingBagFill } from "react-icons/ri";
 import { media as wixMedia } from "@wix/sdk";
+import Link from "next/link";
 
 async function UserTransactionPage() {
   const wixClient = await wixClientServer();
@@ -68,16 +69,17 @@ async function UserTransactionPage() {
 
       <div className="flex flex-col gap-3 text-xs lg:max-h-[38rem] my-5 px-3 overflow-y-auto scrollbar">
         {orders.orders.map((order) => (
-          <div
-            className="flex flex-col gap-2 bg-slate-50 shadow p-3 rounded-lg"
+          <Link
+            href={`/user/${currentMember.member?.contactId}/transactions/${order._id}`}
             key={order._id}
+            className="flex flex-col gap-2 bg-slate-50 shadow p-3 rounded-lg"
           >
             <div className="flex justify-between gap-3 flex-wrap">
               <div className="flex gap-2 items-center">
                 <RiShoppingBagFill className="text-2xl" />
 
                 <div>
-                  <p className="font-semibold text-lg">
+                  <p className="font-semibold text-xs sm:text-base">
                     Pesanan #{order.number}
                   </p>
                   <p className="text-slate-500 ">
@@ -144,7 +146,7 @@ async function UserTransactionPage() {
                 {order.priceSummary?.total?.formattedAmount}
               </p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

@@ -5,8 +5,10 @@ import { RiLuggageCartLine } from "react-icons/ri";
 function ShopService() {
   return (
     <div className="pt-5 flex flex-col gap-1">
-      <div className="px-3">
-        <h3 className="ml-2 font-bold text-xl">Layanan Toko Kami</h3>
+      <div className="px-3 flex items-center justify-center gap-2">
+        <div className="h-1 rounded-full flex-grow bg-slate-400" />
+        <h3 className="ml-2 font-bold text-lg sm:text-xl shrink-0">Layanan Toko Kami</h3>
+        <div className="h-1 rounded-full flex-grow bg-slate-400" />
       </div>
 
       <div className="h-[16rem] relative">

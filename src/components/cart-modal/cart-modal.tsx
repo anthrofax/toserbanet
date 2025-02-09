@@ -11,7 +11,6 @@ import PrimaryButton from "../primary-button";
 import SecondaryButton from "../secondary-botton";
 import useCurrentMember from "@/hooks/useCurrentMember";
 import CartItem from "../cart-item";
-import { IoIosArrowBack } from "react-icons/io";
 import ProvinceSelect from "./dropdown-provinsi";
 import DropdownCity from "./dropdown-city";
 import DropdownDistrict from "./dropdown-district";
@@ -19,6 +18,8 @@ import DropdownKurir from "./dropdown-kurir";
 import DropdownPostcode from "./dropdown-postcode";
 import { redirectToCheckout } from "@/lib/redirect-to-checkout";
 import { orders } from "@wix/ecom";
+import toast from "react-hot-toast";
+import { usePathname } from "next/navigation";
 
 enum ActionType {
   CLOSE_MODAL,
@@ -55,26 +56,27 @@ function CartModal() {
   const wixClient = useWixClientContext();
   const isLoggedIn = wixClient.auth.loggedIn();
   const { member } = useCurrentMember();
+  const pathname = usePathname();
 
-  useEffect(() => {
-    const snapScript = process.env.NEXT_PUBLIC_MIDTRANS_SNAP_URL as string;
-    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT as string;
+    useEffect(() => {
+      const snapScript = process.env.NEXT_PUBLIC_MIDTRANS_SNAP_URL as string;
+      const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT as string;
 
-    const script = document.createElement("script");
-    script.src = snapScript;
-    script.setAttribute("data-client-key", clientKey);
-    script.async = true;
+      const script = document.createElement("script");
+      script.src = snapScript;
+      script.setAttribute("data-client-key", clientKey);
+      script.async = true;
 
-    document.body.appendChild(script);
+      document.body.appendChild(script);
 
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+      return () => {
+        document.body.removeChild(script);
+      };
+    }, []);
 
   useEffect(() => {
     getCart(wixClient);
-  }, [getCart, wixClient]);
+  }, [getCart, wixClient, isLoggedIn]);
 
   function cartReducer(
     prevState: typeof initialState,
@@ -107,6 +109,11 @@ function CartModal() {
           step: 1,
         };
       case ActionType.TO_STEP_2:
+        if (prevState.totalCartItem === 0) {
+          toast.error("Keranjang Anda masih kosong");
+          return prevState;
+        }
+
         return {
           ...prevState,
           step: 2,
@@ -199,6 +206,16 @@ function CartModal() {
     });
   }, [cart]);
 
+  useEffect(() => {
+    if (totalCartItem === 0) {
+      dispatch({ type: ActionType.TO_STEP_1 });
+    }
+  }, [totalCartItem]);
+
+  if (/^\/user\/[^\/]+\/transactions\/[^\/]+$/.test(pathname)) {
+    return null;
+  }
+
   return (
     <div className="shadow-lg h-max bg-slate-50/50 backdrop-blur-md w-full fixed bottom-0 left-0 flex justify-between items-center gap-5 flex-wrap p-5 z-10">
       <div className="flex justify-between items-center gap-5 lg:gap-7">
@@ -280,7 +297,7 @@ function CartModal() {
               </div>
 
               {step === 2 && (
-                <div className="mt-16 min-[320px]:mt-8 md:mt-3 grid grid-cols-8 gap-x-2 gap-y-3 overflow-x-auto text-xs min-[500px]:text-sm sm:text-base w-full scrollbar px-1">
+                <div className="mt-16 min-[320px]:mt-8 md:mt-3 grid grid-cols-8 gap-x-2 gap-y-3 overflow-x-auto text-xs min-[500px]:text-sm sm:text-base w-full scrollbar px-1 h-max">
                   <div className="relative col-span-4">
                     <input
                       type="text"
@@ -486,7 +503,7 @@ function CartModal() {
                 </>
               ) : (
                 <div className="my-16 flex flex-col gap-3 items-center">
-                  <IoCartOutline className="text-[3rem] md:text-[7rem]" />
+                  <IoCartOutline className="text-[5rem] md:text-[7rem]" />
                   <h3 className=" md:text-xl text-center">
                     Keranjang Anda masih kosong
                   </h3>
@@ -499,7 +516,7 @@ function CartModal() {
                   <span className="text-green-500 font-bold text-lg">
                     {cart.subtotal?.amount
                       ? rupiahFormatter.format(+cart.subtotal?.amount)
-                      : 0}
+                      : rupiahFormatter.format(0)}
                   </span>
                 </p>
 
@@ -537,7 +554,11 @@ function CartModal() {
                       <button
                         className={`w-full bg-blue-500 rounded-lg p-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600 md:mt-3`}
                         onClick={async () => {
-                          console.log("test");
+                          if (!isLoggedIn)
+                            return toast.error(
+                              "Untuk melanjutkan, silahkan login terlebih dahulu"
+                            );
+
                           await redirectToCheckout(
                             {
                               nama: member?.profile?.nickname || "",

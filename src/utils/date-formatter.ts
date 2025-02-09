@@ -1,14 +1,20 @@
-const options: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "short", 
-  day: "numeric",
-};
-
-export function formatDate(date: Date | number) {
+export function formatDate(
+  date: Date | number | null,
+  options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  },
+  timeZone: "Asia/Jakarta" | "Asia/Makassar" | "Asia/Jayapura" = "Asia/Jakarta"
+) {
+  console.log(date);
+  if (!date) {
+    return "null";
+  }
   const formattedDateWithOptions = new Intl.DateTimeFormat(
     "id-ID",
-    options
-  ).format(date);
+    { ...options, timeZone, timeZoneName: "short" }
+  ).format(new Date(date));
 
   return formattedDateWithOptions;
 }

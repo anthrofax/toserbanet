@@ -43,7 +43,7 @@ export default function Home() {
       {/* <ArticleList /> */}
 
       {/* Testimoni Pelanggan */}
-      <CustomerTestimoni />
+      {/* <CustomerTestimoni /> */}
 
       {/* Layanan Toko Kami */}
       <ShopService />
