@@ -85,10 +85,10 @@ function HamburgerButton() {
                         />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold">
+                        <h3 className="text-base font-bold line-clamp-1">
                           {currentMember?.member?.profile?.nickname}
                         </h3>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-slate-500 line-clamp-1">
                           {currentMember?.member?.loginEmail}
                         </p>
                       </div>

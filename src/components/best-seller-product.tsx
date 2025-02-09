@@ -23,7 +23,10 @@ async function BestSellerProduct() {
         width: prod.media?.mainMedia?.image?.width || 0,
         height: prod.media?.mainMedia?.image?.height || 0,
       },
-      price: prod.priceData?.price || 0,
+      price: {
+        discountPrice: prod.priceData?.discountedPrice || 0,
+        normalPrice: prod.priceData?.price || 0,
+      },
       slug: prod.slug || "",
     };
   });

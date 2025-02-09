@@ -217,7 +217,7 @@ function CartModal() {
   }
 
   return (
-    <div className="shadow-lg h-max bg-slate-50/50 backdrop-blur-md w-full fixed bottom-0 left-0 flex justify-between items-center gap-5 flex-wrap p-5 z-10">
+    <div className="shadow-lg h-max bg-slate-50/50 backdrop-blur-md w-full sticky bottom-0 left-0 flex justify-between items-center gap-5 flex-wrap p-5 z-10">
       <div className="flex justify-between items-center gap-5 lg:gap-7">
         <div className="relative ">
           <IoCartOutline className="text-3xl" />

@@ -11,7 +11,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MdOutlineArrowForwardIos, MdOutlineContentCopy } from "react-icons/md";
 import {
-  getCldImageUrl,
   CldUploadButton,
   CloudinaryUploadWidgetResults,
 } from "next-cloudinary";

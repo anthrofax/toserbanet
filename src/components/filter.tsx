@@ -22,7 +22,7 @@ function Filter() {
   }
 
   return (
-    <div className="mt-12 flex flex-col md:flex-row items-center md:justify-between gap-3">
+    <div className="flex flex-col md:flex-row items-center md:justify-between gap-3">
       <div className="flex justify-center md:justify-start gap-6 flex-wrap">
         <button
           className="py-2 px-4 rounded-2xl text-xs font-medium bg-slate-200 shrink-0 flex gap-2 items-center transition-colors hover:bg-slate-300 text-slate-700"

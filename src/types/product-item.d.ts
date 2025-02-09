@@ -8,7 +8,10 @@ export type ProductItemType = {
     height?: number;
   };
   title: string;
-  price: number;
+  price: {
+    normalPrice: number;
+    discountPrice: number;
+  };
   slug: string;
   description?: string;
 };

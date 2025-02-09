@@ -43,7 +43,7 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
       res = await productQuery.descending(sortBy).find();
     }
   } else {
-    res = await productQuery.descending('lastUpdated').find();
+    res = await productQuery.descending("lastUpdated").find();
   }
 
   if (!res!) return null;
@@ -57,15 +57,18 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
         width: prod.media?.mainMedia?.image?.width || 0,
         height: prod.media?.mainMedia?.image?.height || 0,
       },
-      price: prod.priceData?.price || 0,
+      price: {
+        discountPrice: prod.priceData?.discountedPrice || 0,
+        normalPrice: prod.priceData?.price || 0,
+      },
       slug: prod.slug || "",
     };
   });
 
   return (
-    <div className="mt-3 min-h-[30rem]">
+    <div className="min-h-[30rem]">
       {productItems && productItems.length > 0 && (
-        <div className="ml-2 mt-12 mb-3 flex items-center gap-2">
+        <div className="ml-2 my-5 flex items-center gap-2">
           <CiSearch className="text-3xl font-semibold" />
           <h1 className="text-xl font-semibold">Hasil Pencarian</h1>
         </div>

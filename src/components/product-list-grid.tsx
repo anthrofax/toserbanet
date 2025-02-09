@@ -9,7 +9,10 @@ function ProductListGrid({ productItems }: { productItems: ProductItemType[] }) 
       {productItems.map((product, i) => (
         <ProductItem
           imageObj={product.imageObj}
-          price={product.price}
+          price={{
+            discountPrice: product.price.discountPrice,
+            normalPrice: product.price.normalPrice
+          }}
           title={product.title}
           slug={product.slug}
           key={i}
