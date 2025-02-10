@@ -50,7 +50,7 @@ function ProductImages({
             alt="Main Product Image"
             fill
             sizes="50vw"
-            className="shadow object-contain rounded-md border-red-500 border-2"
+            className="shadow object-contain rounded-md"
           />
         </div>
       </div>

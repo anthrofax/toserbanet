@@ -18,12 +18,14 @@ const PRODUCT_PER_PAGE = 8;
 async function ProductList({ categoryId, limit, searchParams }: PropsType) {
   const wixClient = await wixClientServer();
 
+  console.log(String(searchParams.name).toLowerCase())
+
   const productQuery = wixClient.products
     .queryProducts()
-    .startsWith("name", searchParams?.name || "")
+    .startsWith("name", String(searchParams?.name || '').toLowerCase())
     .eq("collectionIds", categoryId)
     .gt("priceData.price", searchParams?.min || 0)
-    .lt("priceData.price", searchParams?.max || 999999)
+    .lt("priceData.price", searchParams?.max || 999999999)
     .limit(limit || PRODUCT_PER_PAGE)
     .skip(
       searchParams?.page
@@ -66,7 +68,7 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
   });
 
   return (
-    <div className="min-h-[30rem]">
+    <div className="min-h-[30rem]" id="daftar-produk">
       {productItems && productItems.length > 0 && (
         <div className="ml-2 my-5 flex items-center gap-2">
           <CiSearch className="text-3xl font-semibold" />

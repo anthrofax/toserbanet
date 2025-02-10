@@ -40,7 +40,7 @@ async function SinglePage({
     }) || [];
 
   return (
-  <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-8 lg:gap-16 pt-6 pb-12">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-8 lg:gap-16 pt-6 pb-12">
       {/* Image */}
       <div className="w-full lg:w-1/2 lg:sticky top-28 h-max">
         <ProductImages imageItems={product.media?.items} />
@@ -52,7 +52,12 @@ async function SinglePage({
           {product.name}
         </h1>
         <div
-          className="text-gray-500 text-sm md:text-base"
+          className="text-gray-700 text-sm md:text-base flex flex-col w-full"
+          style={{
+            overflowWrap: "break-word",
+            wordWrap: "break-word",
+            wordBreak: "break-word",
+          }}
           dangerouslySetInnerHTML={{
             __html: product?.description || "",
           }}

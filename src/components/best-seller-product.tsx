@@ -12,7 +12,6 @@ async function BestSellerProduct() {
   const productQuery = await wixClient.products
     .queryProducts()
     .limit(10)
-    .descending("lastUpdated")
     .find();
 
   const productItem: ProductItemType[] = productQuery.items.map((prod) => {
