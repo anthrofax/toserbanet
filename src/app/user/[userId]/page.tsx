@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { members } from "@wix/members";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { MdOutlineArrowForwardIos, MdOutlineContentCopy } from "react-icons/md";
 import {
   CldUploadButton,

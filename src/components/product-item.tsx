@@ -11,6 +11,7 @@ function ProductItem({
   price,
   title,
   slug,
+  identifier
 }: {
   className?: string;
 } & ProductItemType) {
@@ -18,7 +19,7 @@ function ProductItem({
     <Link
       href={`/products/${slug}`}
       className={cn(
-        `bg-slate-50 rounded-lg h-[275px] shrink-0 overflow-hidden`,
+        `bg-slate-50 rounded-lg h-[17rem] shrink-0 overflow-hidden`,
         className
       )}
     >
@@ -34,7 +35,7 @@ function ProductItem({
       </div>
 
       <div className="p-2 space-y-1">
-        <p className="text-xs line-clamp-2">{title}</p>
+        <p className={`text-xs ${identifier === 'list-scroll' ? 'line-clamp-1' : 'line-clamp-2'}`}>{title}</p>
         {price.normalPrice === price.discountPrice ? (
           <p className="text-xs line-clamp-1 font-bold">
             {rupiahFormatter.format(price.discountPrice)}

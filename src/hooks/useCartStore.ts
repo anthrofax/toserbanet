@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { currentCart } from "@wix/ecom";
 import { WixClient } from "@/contexts/wix-context";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 type CartState = {
   cart: currentCart.Cart &

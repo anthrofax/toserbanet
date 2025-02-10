@@ -37,7 +37,7 @@ async function NewReleaseProduct() {
   });
 
   return (
-    <div className="py-5 flex flex-col gap-3">
+    <div className="pb-3 flex flex-col gap-3">
       <div className="flex items-center">
         <div className="bg-blue-600 flex gap-1 items-center justify-center rounded-r-full p-2 pr-4 text-white w-max shrink-0 grow-0 text-xs md:text-sm">
           <MdOutlineNewReleases className="text-xl" />
@@ -63,7 +63,7 @@ async function NewReleaseProduct() {
 
       <Link
         href="/products"
-        className="border-2 text-slate-700 border-blue-500 rounded-full px-5 py-2 w-max flex items-center gap-2 text-md mx-auto my-5 transition-all hover:bg-blue-500 hover:text-slate-50"
+        className="border-2 text-slate-700 border-blue-500 rounded-full px-5 py-2 w-max flex items-center gap-2 text-md mx-auto mt-2 lg:mt-5 transition-all hover:bg-blue-500 hover:text-slate-50"
       >
         Produk Lainnya <MdKeyboardDoubleArrowDown />
       </Link>

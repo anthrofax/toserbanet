@@ -5,7 +5,8 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CartModal from "@/components/cart-modal/cart-modal";
 import { WixClientConectProvider } from "@/contexts/wix-context";
-import { Toaster } from "react-hot-toast";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import HelpModal from "@/components/help-modal";
 
@@ -29,7 +30,18 @@ export default function RootLayout({
       <body
         className={`${poppins.className} antialiased relative bg-slate-100 overflow-x-hidden`}
       >
-        <Toaster />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          draggablePercent={60} // Adjust the swipe threshold percentage
+        />
         <WixClientConectProvider>
           <Navbar />
           <div className="relative">{children}</div>

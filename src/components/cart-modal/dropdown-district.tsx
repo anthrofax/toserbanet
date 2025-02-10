@@ -37,11 +37,11 @@ function DropdownDistrict({
           id="provinsi"
           value={value}
         >
-          <SelectValue placeholder="Pilih Provinsi" />
+          <SelectValue placeholder="Pilih Kecamatan" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Provinsi</SelectLabel>
+            <SelectLabel>Kecamatan</SelectLabel>
             {isLoading ? (
               <SelectItem value="loading ">Memuat...</SelectItem>
             ) : (

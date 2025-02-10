@@ -2,7 +2,7 @@
 
 import { useWixClientContext } from "@/contexts/wix-context";
 import { cn } from "@/utils/cn";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { IoMdLogIn } from "react-icons/io";
 import PrimaryButton from "./primary-button";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 function ContactForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);

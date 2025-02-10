@@ -1,6 +1,6 @@
 "use client";
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { MdOutlineContentCopy } from "react-icons/md";
 
 function UserIdSection({ userId }: { userId: string }) {

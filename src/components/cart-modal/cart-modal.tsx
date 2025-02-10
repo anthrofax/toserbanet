@@ -18,7 +18,7 @@ import DropdownKurir from "./dropdown-kurir";
 import DropdownPostcode from "./dropdown-postcode";
 import { redirectToCheckout } from "@/lib/redirect-to-checkout";
 import { orders } from "@wix/ecom";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
 
 enum ActionType {
@@ -510,7 +510,7 @@ function CartModal() {
                 </div>
               )}
 
-              <div className="flex flex-col gap-3 justify-center text-center md:text-start">
+              <div className="flex flex-col gap-3 justify-center items-center text-center md:text-start w-full">
                 <p className="text-base md:text-base mt-3">
                   Total Harga ({totalCartItem} Produk){" "}
                   <span className="text-green-500 font-bold text-lg">
@@ -522,7 +522,7 @@ function CartModal() {
 
                 <hr className="h-0.5 bg-slate-200 rounded-full" />
 
-                <div className="flex gap-3 flex-col md:flex-row items-center justify-between text-xs lg:text-sm">
+                <div className="flex gap-3 flex-col md:flex-row items-center justify-between text-xs lg:text-sm w-full">
                   {step === 1 && (
                     <>
                       <button

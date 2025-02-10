@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { members } from "@wix/members";
 import React from "react";
 import { createPortal } from "react-dom";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 function UpdateModal({
   modalTitle,

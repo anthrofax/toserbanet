@@ -2,7 +2,7 @@ import { orderTokenizer } from "@/actions";
 import { CheckoutDataType } from "@/types/checkout-types";
 import { orders } from "@wix/ecom";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 export const redirectToCheckout = async (checkoutData: CheckoutDataType, userId: string) => {
   console.log(checkoutData);

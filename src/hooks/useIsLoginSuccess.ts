@@ -2,7 +2,7 @@
 
 import { useWixClientContext } from "@/contexts/wix-context";
 import { useQuery } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
 export function useIsLoginSuccess() {

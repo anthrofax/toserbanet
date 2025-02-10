@@ -90,16 +90,16 @@ function DropdownKurir({
         <Select
           open={isLayananKurirModalOpen}
           onOpenChange={setIsLayananKurirModalOpen}
-          disabled={isDisabled}
+          disabled={kurir === ''}
           onValueChange={onChangeLayananKurir}
         >
           <SelectTrigger
             className={`w-full bg-transparent border-2 border-slate-300 pl-4 pb-4 flex items-center outline-none rounded-lg text-sm focus:border-slate-500 ${
               ongkir !== 0 ? "pt-8" : "pt-4"
-            } ${isDisabled ? "cursor-not-allowed" : ""}`}
+            } ${kurir === '' ? "cursor-not-allowed" : ""}`}
             id="kurir"
             value={ongkir}
-            disabled={isDisabled}
+            disabled={kurir === ''}
           >
             <SelectValue placeholder={`Pilih Layanan Kurir`} />
           </SelectTrigger>
