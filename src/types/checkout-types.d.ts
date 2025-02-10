@@ -16,4 +16,5 @@ export interface CheckoutDataType {
   lineItems: CheckoutLineItemType[];
   catatan?: string;
   ongkir: number;
+  layananKurir: string;
 }

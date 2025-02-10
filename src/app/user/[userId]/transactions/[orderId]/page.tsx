@@ -26,7 +26,7 @@ async function OrderDetailPage({
   console.log(order);
 
   return (
-    <div className="overflow-y-auto flex flex-col gap-3 text-xs py-3 pr-1 lg:pr-3 lg:min-h-[80vh]">
+    <div className="overflow-y-auto flex flex-col gap-3 text-xs py-3 pr-1 lg:pr-3 min-h-[80vh]">
       <div className="bg-slate-50 p-3 flex flex-col gap-2">
         <h1 className="text-base font-semibold">Detail Pesanan</h1>
         <hr className="w-full border-2" />
@@ -84,7 +84,7 @@ async function OrderDetailPage({
         {order.lineItems.length > 1 &&
           order.lineItems.slice(1).map((item) => {
             return (
-              <div key={item._id}>
+              <>
                 <OrderItem
                   key={item._id}
                   itemImage={item.image || "/product.png"}
@@ -95,7 +95,7 @@ async function OrderDetailPage({
                   quantity={item.quantity || 0}
                 />
                 <hr className="w-full border-2" />
-              </div>
+              </>
             );
           })}
 
@@ -156,6 +156,8 @@ async function OrderDetailPage({
           <p className="text-base font-semibold text-end">Rp.11.312</p>
         </div>
       </div>
+
+
     </div>
   );
 }

@@ -42,7 +42,7 @@ function ProductImages({
         }}
       >
         <div
-          className="relative"
+          className="relative shadow-lg"
           style={{ width: "100%", paddingBottom: `${100 / aspectRatio}%` }}
         >
           <Image
@@ -50,7 +50,7 @@ function ProductImages({
             alt="Main Product Image"
             fill
             sizes="50vw"
-            className="shadow object-contain rounded-md"
+            className="shadow object-contain rounded-md border-red-500 border-2"
           />
         </div>
       </div>

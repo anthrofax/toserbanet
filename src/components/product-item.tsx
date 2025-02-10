@@ -18,26 +18,17 @@ function ProductItem({
     <Link
       href={`/products/${slug}`}
       className={cn(
-        `bg-slate-50 rounded-lg h-max shrink-0 overflow-hidden`,
+        `bg-slate-50 rounded-lg h-[275px] shrink-0 overflow-hidden`,
         className
       )}
     >
-      <div
-        className="w-full relative shrink-0"
-        style={{
-          paddingTop: `${
-            imageObj.width && imageObj.height
-              ? 100 / (imageObj.width / imageObj?.height)
-              : 0
-          }%`,
-        }}
-      >
+      <div className="w-full h-3/4 relative shrink-0">
         {imageObj?.imageUrl && imageObj?.imageAlt && (
           <Image
             src={imageObj.imageUrl}
             alt={imageObj.imageAlt}
             fill
-            className="object-cover h-1/3 w-full"
+            className="object-contain h-1/3 w-full"
           />
         )}
       </div>

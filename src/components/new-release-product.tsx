@@ -39,7 +39,7 @@ async function NewReleaseProduct() {
   return (
     <div className="py-5 flex flex-col gap-3">
       <div className="flex items-center">
-        <div className="bg-blue-600 flex gap-2 items-center justify-center rounded-r-full p-3 text-white w-max shrink-0 grow-0">
+        <div className="bg-blue-600 flex gap-1 items-center justify-center rounded-r-full p-2 pr-4 text-white w-max shrink-0 grow-0 text-xs md:text-sm">
           <MdOutlineNewReleases className="text-xl" />
           Produk Terbaru
         </div>

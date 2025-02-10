@@ -58,21 +58,21 @@ function CartModal() {
   const { member } = useCurrentMember();
   const pathname = usePathname();
 
-    useEffect(() => {
-      const snapScript = process.env.NEXT_PUBLIC_MIDTRANS_SNAP_URL as string;
-      const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT as string;
+  useEffect(() => {
+    const snapScript = process.env.NEXT_PUBLIC_MIDTRANS_SNAP_URL as string;
+    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT as string;
 
-      const script = document.createElement("script");
-      script.src = snapScript;
-      script.setAttribute("data-client-key", clientKey);
-      script.async = true;
+    const script = document.createElement("script");
+    script.src = snapScript;
+    script.setAttribute("data-client-key", clientKey);
+    script.async = true;
 
-      document.body.appendChild(script);
+    document.body.appendChild(script);
 
-      return () => {
-        document.body.removeChild(script);
-      };
-    }, []);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   useEffect(() => {
     getCart(wixClient);
@@ -585,6 +585,7 @@ function CartModal() {
                                 };
                               }),
                               ongkir,
+                              layananKurir: "",
                             },
                             member?.contactId || ""
                           );

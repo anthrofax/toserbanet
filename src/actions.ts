@@ -151,17 +151,6 @@ export async function orderTokenizer({
       name: "Ongkos Kirim",
     });
 
-    console.log(
-      lineItems.reduce((acc, item) => acc + item.price * item.quantity, 0) +
-        ongkir,
-      "gross_amount"
-    );
-
-    console.log(
-      item_details.reduce((acc, item) => acc + item.price * item.quantity, 0),
-      "item details"
-    );
-
     const parameter = {
       item_details,
       customer_details: {

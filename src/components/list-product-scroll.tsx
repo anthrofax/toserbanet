@@ -12,7 +12,7 @@ function ListProductScroll({
     <div className="px-2 overflow-x-auto flex gap-2 scrollbar-hide">
       {productItem.map((product, i) => (
         <ProductItem
-          className="w-40 md:w-52"
+          className="w-40"
           imageObj={product.imageObj}
           price={product.price}
           title={product.title}
