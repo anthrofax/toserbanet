@@ -9,6 +9,11 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const wixClient = await wixClientServer();
+
+    console.log(req)
+    if (!req.body) {
+      throw new Error("Request body is empty");
+    }
     const body = await req.json();
 
     console.log(body.metadata);
@@ -38,7 +43,7 @@ export async function POST(req: NextRequest) {
         layananKurir,
       } = body.metadata as MidtransNotificationMetadata;
 
-      await wixClient.orders.createOrder({
+      const order = await wixClient.orders.createOrder({
         channelInfo: {},
         lineItems: lineItems.map((item: CheckoutLineItemType) => ({
           _id: item.id,
@@ -58,7 +63,7 @@ export async function POST(req: NextRequest) {
             amount: ongkir.toString(),
           },
           total: {
-            amount: body.gross_amount,
+            amount: body.gross_amount.toString(),
           },
         },
         currency: "IDR",
@@ -91,16 +96,19 @@ export async function POST(req: NextRequest) {
           },
         },
         paymentStatus: orders.PaymentStatus.PAID,
-        purchasedDate: body.transaction_time,
+        purchasedDate: new Date(body.transaction_time),
         weightUnit: orders.WeightUnit.KG,
       });
+
+      console.log("order");
+      console.log(order);
 
       return NextResponse.json({ message: "Pembayaran Berhasil" });
     }
 
     return NextResponse.json({ message: "Pembayaran Berhasil" });
   } catch (error) {
-    console.log(error);
+    console.dir(error, { depth: null, colors: true });
     return NextResponse.json({ error });
   }
 }
