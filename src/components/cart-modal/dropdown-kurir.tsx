@@ -10,18 +10,18 @@ import {
 } from "@/components/ui/select";
 import { useCartStore } from "@/hooks/useCartStore";
 import { useQuery } from "@tanstack/react-query";
-import { getOngkir } from "@/actions";
+import { getOngkir, getRajaOngkirLocationsData } from "@/actions";
 
 function DropdownKurir({
   kurir,
-  kodePosTujuan,
+  kecamatan,
   ongkir,
   onChangeKurir,
   onChangeLayananKurir,
   isDisabled = false,
 }: {
   kurir: string;
-  kodePosTujuan: string;
+  kecamatan: string;
   ongkir: number;
   onChangeKurir: (e: string) => void;
   onChangeLayananKurir: (e: string) => void;
@@ -40,12 +40,20 @@ function DropdownKurir({
   const { data: daftarLayananKurir, isLoading } = useQuery({
     queryKey: ["layananKurir", kurir],
     queryFn: async () => {
+      const districtId = await getRajaOngkirLocationsData(kecamatan);
+
+      console.log(districtId.data);
+
+      if (!districtId || !districtId.data) return null;
+
       const layananKurir = await getOngkir({
-        destination: kodePosTujuan,
+        destination: String(districtId.data),
         weight: productsWeight,
         courier: kurir,
         price: "lowest",
       });
+
+      console.log(layananKurir);
 
       if ("error" in layananKurir) return [];
 
@@ -56,7 +64,7 @@ function DropdownKurir({
 
   return (
     <>
-      <div className="relative col-span-8">
+      <div className="relative col-span-4">
         <Select disabled={isDisabled} onValueChange={onChangeKurir}>
           <SelectTrigger
             className={`w-full bg-transparent border-2 border-slate-300 pl-4 pb-4 flex items-center outline-none rounded-lg text-sm focus:border-slate-500 ${
@@ -90,16 +98,16 @@ function DropdownKurir({
         <Select
           open={isLayananKurirModalOpen}
           onOpenChange={setIsLayananKurirModalOpen}
-          disabled={kurir === ''}
+          disabled={kurir === ""}
           onValueChange={onChangeLayananKurir}
         >
           <SelectTrigger
             className={`w-full bg-transparent border-2 border-slate-300 pl-4 pb-4 flex items-center outline-none rounded-lg text-sm focus:border-slate-500 ${
               ongkir !== 0 ? "pt-8" : "pt-4"
-            } ${kurir === '' ? "cursor-not-allowed" : ""}`}
+            } ${kurir === "" ? "cursor-not-allowed" : ""}`}
             id="kurir"
             value={ongkir}
-            disabled={kurir === ''}
+            disabled={kurir === ""}
           >
             <SelectValue placeholder={`Pilih Layanan Kurir`} />
           </SelectTrigger>
@@ -112,7 +120,10 @@ function DropdownKurir({
                 daftarLayananKurir &&
                 daftarLayananKurir.map((layanan, i) => {
                   return (
-                    <SelectItem key={i} value={String(layanan.cost)}>
+                    <SelectItem
+                      key={i}
+                      value={`${layanan.name} | ${layanan.description} | ${layanan.cost}`}
+                    >
                       {`${layanan.name} - ${layanan.service} - ${layanan.cost}`}
                     </SelectItem>
                   );

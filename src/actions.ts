@@ -3,7 +3,10 @@
 import axios from "axios";
 import { randomUUID } from "crypto";
 import { MidtransClient } from "midtrans-node-client";
-import { CheckoutDataType } from "./types/checkout-types";
+import {
+  CheckoutDataType,
+  MidtransNotificationMetadata,
+} from "./types/checkout-types";
 
 interface RajaOngkirDomesticLocationType {
   meta: {
@@ -59,7 +62,7 @@ export async function getOngkir({
   price: "lowest" | "highest";
 }): Promise<GetOngkirReturnType | { error: string }> {
   const formData = new URLSearchParams();
-  formData.append("origin", "17423");
+  formData.append("origin", "6542");
   formData.append("destination", destination);
   formData.append("weight", String(weight));
   formData.append("courier", courier);
@@ -82,6 +85,7 @@ export async function getOngkir({
 
     return response.data.data;
   } catch (error) {
+    console.log(error);
     return {
       error: "Terjadi kesalahan internal",
     };
@@ -102,11 +106,9 @@ export async function getRajaOngkirLocationsData(district: string) {
     if (!response.data.data || response.data.data.length < 1)
       throw new Error("Data tidak ditemukan.");
 
-    const data = response.data.data.map((item) => item.zip_code);
-
     return {
       message: "Lokasi berhasil diakses.",
-      data: [...new Set(data)],
+      data: response.data.data[0].id,
     };
   } catch (error) {
     console.log(error);
@@ -124,12 +126,11 @@ const snap = new MidtransClient.Snap({
 
 export async function orderTokenizer({
   alamat,
-  email,
   lineItems,
-  nama,
-  nomorHp,
   catatan,
   ongkir,
+  informasiPembeli: { email, nama, nomorHp, contactId },
+  layananKurir,
 }: CheckoutDataType) {
   try {
     const item_details = lineItems.map((item) => {
@@ -167,9 +168,20 @@ export async function orderTokenizer({
       },
       metadata: {
         lineItems,
-        catatan,
-        alamat,
-      },
+        buyerInfo: {
+          contactId,
+          email,
+          phone: nomorHp,
+          fullName: nama,
+        },
+        alamat: {
+          alamatUtama: alamat.alamatUtama,
+          kota: alamat.kota, // You need to provide the city name here
+        },
+        catatan: catatan || "",
+        ongkir,
+        layananKurir,
+      } as MidtransNotificationMetadata,
     };
 
     console.log(

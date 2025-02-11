@@ -26,7 +26,7 @@ async function OrderDetailPage({
   console.log(order);
 
   return (
-    <div className="overflow-y-auto flex flex-col gap-3 text-xs py-3 pr-1 lg:pr-3 min-h-[80vh]">
+    <div className="overflow-y-auto flex flex-col gap-3 text-xs py-3 pr-1 lg:pr-3">
       <div className="bg-slate-50 p-3 flex flex-col gap-2">
         <h1 className="text-base font-semibold">Detail Pesanan</h1>
         <hr className="w-full border-2" />

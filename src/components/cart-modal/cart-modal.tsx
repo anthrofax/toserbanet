@@ -15,7 +15,6 @@ import ProvinceSelect from "./dropdown-provinsi";
 import DropdownCity from "./dropdown-city";
 import DropdownDistrict from "./dropdown-district";
 import DropdownKurir from "./dropdown-kurir";
-import DropdownPostcode from "./dropdown-postcode";
 import { redirectToCheckout } from "@/lib/redirect-to-checkout";
 import { orders } from "@wix/ecom";
 import { toast } from "react-toastify";
@@ -33,6 +32,7 @@ enum ActionType {
   CHOOSE_DISTRICT,
   CHOOSE_POSTCODE,
   CHOOSE_KURIR,
+  CHOOSE_COURIER_SERVICE,
 }
 
 const initialState = {
@@ -46,7 +46,7 @@ const initialState = {
   kota: "",
   kecamatan: "",
   kurir: "",
-  kodepos: "",
+  layananKurir: "",
   ongkir: 0,
   totalCartItem: 0,
 };
@@ -122,8 +122,8 @@ function CartModal() {
             (member?.contact?.phones && member?.contact?.phones[0]) || "",
           alamat:
             (member?.contact &&
-              member.contact.addresses &&
-              member.contact.addresses[0].addressLine) ||
+              member.contact?.addresses &&
+              member.contact.addresses[0]?.addressLine) ||
             "",
         };
       case ActionType.CHOOSE_PROVINCE:
@@ -132,7 +132,6 @@ function CartModal() {
           provinsi: action.payload,
           kota: "",
           kecamatan: "",
-          kodepos: "",
           kurir: "",
           ongkir: 0,
         };
@@ -141,7 +140,6 @@ function CartModal() {
           ...prevState,
           kota: action.payload,
           kecamatan: "",
-          kodepos: "",
           kurir: "",
           ongkir: 0,
         };
@@ -149,14 +147,6 @@ function CartModal() {
         return {
           ...prevState,
           kecamatan: action.payload,
-          kodepos: "",
-          kurir: "",
-          ongkir: 0,
-        };
-      case ActionType.CHOOSE_POSTCODE:
-        return {
-          ...prevState,
-          kodepos: action.payload,
           kurir: "",
           ongkir: 0,
         };
@@ -165,6 +155,16 @@ function CartModal() {
           ...prevState,
           kurir: action.payload,
           ongkir: 0,
+        };
+      case ActionType.CHOOSE_COURIER_SERVICE:
+        console.log(action.payload);
+        console.log(action.payload.split(" | "));
+        console.log(Number(action.payload.split(" | ")[2]));
+
+        return {
+          ...prevState,
+          layananKurir: action.payload,
+          ongkir: Number(action.payload?.split(" | ")[2] || "0"),
         };
       case ActionType.PAY:
         return prevState;
@@ -186,8 +186,8 @@ function CartModal() {
       kota,
       kecamatan,
       kurir,
-      kodepos,
       ongkir,
+      layananKurir,
     },
     dispatch,
   ] = useReducer(cartReducer, initialState);
@@ -212,9 +212,15 @@ function CartModal() {
     }
   }, [totalCartItem]);
 
+  useEffect(() => {
+    console.log(layananKurir);
+    console.log(layananKurir?.split(" | ") || null);
+  }, [layananKurir]);
+  
   if (/^\/user\/[^\/]+\/transactions\/[^\/]+$/.test(pathname)) {
     return null;
   }
+
 
   return (
     <div className="shadow-lg h-max bg-slate-50/50 backdrop-blur-md w-full sticky bottom-0 left-0 flex justify-between items-center gap-5 flex-wrap p-5 z-10">
@@ -430,21 +436,10 @@ function CartModal() {
                     kota={kota}
                   />
 
-                  <DropdownPostcode
-                    value={kodepos}
-                    district={kecamatan}
-                    onChange={(val) => {
-                      dispatch({
-                        type: ActionType.CHOOSE_POSTCODE,
-                        payload: val,
-                      });
-                    }}
-                  />
-
                   <DropdownKurir
                     isDisabled={!provinsi || !kota || !kecamatan}
                     kurir={kurir}
-                    kodePosTujuan={kodepos}
+                    kecamatan={kecamatan}
                     ongkir={ongkir}
                     onChangeKurir={async (val) => {
                       dispatch({
@@ -454,9 +449,8 @@ function CartModal() {
                     }}
                     onChangeLayananKurir={async (val: string) => {
                       dispatch({
-                        type: ActionType.SET_STATE,
-                        changedStateAttr: "ongkir",
-                        payload: +val,
+                        type: ActionType.CHOOSE_COURIER_SERVICE,
+                        payload: val,
                       });
                     }}
                   />
@@ -511,15 +505,36 @@ function CartModal() {
               )}
 
               <div className="flex flex-col gap-3 justify-center items-center text-center md:text-start w-full">
-                <p className="text-base md:text-base mt-3">
-                  Total Harga ({totalCartItem} Produk){" "}
-                  <span className="text-green-500 font-bold text-lg">
-                    {cart.subtotal?.amount
-                      ? rupiahFormatter.format(+cart.subtotal?.amount)
-                      : rupiahFormatter.format(0)}
-                  </span>
-                </p>
+                <div className="text-center space-y-2 divide-y-2 divide-slate-300">
+                  <div className="space-y-1">
+                    <p className="text-sm md:text-base">
+                      Sub Total Harga ({totalCartItem} Produk){" "}
+                      <span className="text-green-500 font-bold text-sm">
+                        {cart.subtotal?.amount
+                          ? rupiahFormatter.format(+cart.subtotal?.amount)
+                          : rupiahFormatter.format(0)}
+                      </span>
+                    </p>
+                    <p className="text-sm md:text-base">
+                      Ongkos Kirim{" "}
+                      <span className="text-green-500 font-bold text-sm">
+                        {rupiahFormatter.format(ongkir)}
+                      </span>
+                    </p>
+                  </div>
 
+                  {cart.subtotal?.amount && ongkir ? (
+                    <p className="text-base md:text-base">
+                      Total{" "}
+                      <span className="text-green-500 font-bold text-lg">
+                        {rupiahFormatter.format(
+                          +cart.subtotal?.amount + ongkir
+                        )}
+                      </span>
+                    </p>
+                  ) : null}
+                </div>
+                
                 <hr className="h-0.5 bg-slate-200 rounded-full" />
 
                 <div className="flex gap-3 flex-col md:flex-row items-center justify-between text-xs lg:text-sm w-full">
@@ -561,13 +576,19 @@ function CartModal() {
 
                           await redirectToCheckout(
                             {
-                              nama: member?.profile?.nickname || "",
-                              nomorHp:
-                                (member?.contact?.phones &&
-                                  member?.contact?.phones[0]) ||
-                                "",
-                              email: member?.loginEmail || "",
-                              alamat,
+                              informasiPembeli: {
+                                contactId: member?.contactId || "",
+                                nama: member?.profile?.nickname || "",
+                                nomorHp:
+                                  (member?.contact?.phones &&
+                                    member?.contact?.phones[0]) ||
+                                  "",
+                                email: member?.loginEmail || "",
+                              },
+                              alamat: {
+                                alamatUtama: alamat,
+                                kota,
+                              },
                               catatan,
                               lineItems: cart.lineItems.map((item) => {
                                 return {
@@ -580,12 +601,12 @@ function CartModal() {
                                   quantity: item.quantity || 0,
                                   image: item.image || "",
                                   weight: item.physicalProperties?.weight
-                                    ? item.physicalProperties.weight * 1000
+                                    ? item.physicalProperties.weight
                                     : 0,
                                 };
                               }),
                               ongkir,
-                              layananKurir: "",
+                              layananKurir,
                             },
                             member?.contactId || ""
                           );

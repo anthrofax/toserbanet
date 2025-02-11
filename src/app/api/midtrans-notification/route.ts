@@ -1,5 +1,8 @@
 import { wixClientServer } from "@/lib/wix-client-server";
-import { CheckoutLineItemType } from "@/types/checkout-types";
+import {
+  CheckoutLineItemType,
+  MidtransNotificationMetadata,
+} from "@/types/checkout-types";
 import { orders } from "@wix/ecom";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -26,7 +29,14 @@ export async function POST(req: NextRequest) {
         transaction_status === "capture") &&
       transaction_status !== "pending"
     ) {
-      const { lineItems } = body.metadata;
+      const {
+        lineItems,
+        buyerInfo: { contactId, email, phone, fullName },
+        alamat: { alamatUtama, kota },
+        catatan,
+        ongkir,
+        layananKurir,
+      } = body.metadata as MidtransNotificationMetadata;
 
       await wixClient.orders.createOrder({
         channelInfo: {},
@@ -44,11 +54,45 @@ export async function POST(req: NextRequest) {
           quantity: item.quantity,
         })),
         priceSummary: {
+          shipping: {
+            amount: ongkir.toString(),
+          },
           total: {
-            amount: body.gross_amount.toString(),
+            amount: body.gross_amount,
           },
         },
         currency: "IDR",
+        buyerInfo: {
+          contactId,
+          email,
+        },
+        customFields: [
+          {
+            title: "catatan",
+            value: catatan,
+          },
+          {
+            title: "layananKurir",
+            value: layananKurir,
+          },
+        ],
+        billingInfo: {
+          address: {
+            addressLine1: alamatUtama,
+            city: kota,
+          },
+          contactDetails: {
+            firstName:
+              fullName.split(" ").length < 2
+                ? fullName
+                : fullName.split(" ")[0],
+            lastName: fullName.split(" ").slice(1).join(" "),
+            phone,
+          },
+        },
+        paymentStatus: orders.PaymentStatus.PAID,
+        purchasedDate: body.transaction_time,
+        weightUnit: orders.WeightUnit.KG,
       });
 
       return NextResponse.json({ message: "Pembayaran Berhasil" });

@@ -20,6 +20,8 @@ function NotFoundInfo({
         src={customIconUrl || NotFoundIcon}
         alt={`${object} is not found`}
         className="w-24 h-24"
+        width={0}
+        height={0}
       />
       <div className="text-center space-y-2">
         <h3 className="text-xl font-semibold">

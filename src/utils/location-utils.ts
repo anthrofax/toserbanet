@@ -85,31 +85,3 @@ export function useGetDistrictsByCity(
 
   return { kecamatan: dataKecamatan, isLoading };
 }
-
-export function useGetPostcodesByDistrict(
-  district: string,
-  isModalOpen: boolean
-): {
-  isLoading: boolean;
-  kodePos: string[];
-} {
-  const { data: dataKodePos, isLoading } = useQuery({
-    queryKey: ["kota", district],
-    queryFn: async () => {
-      if (district === "") return null;
-
-      const response = await getRajaOngkirLocationsData(district);
-
-      console.log(response)
-
-      if (!response.data || response.data.length < 1) return [];
-
-      return response.data.map((zip_code) => zip_code);
-    },
-    enabled: isModalOpen,
-  });
-
-  if (!dataKodePos) return { kodePos: [], isLoading: true };
-
-  return { kodePos: dataKodePos, isLoading };
-}
