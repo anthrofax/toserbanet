@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 export const redirectToCheckout = async (checkoutData: CheckoutDataType, userId: string) => {
   console.log(checkoutData);
   try {
+    // const response = await orderTokenizer(checkoutData);
     const response = await orderTokenizer(checkoutData);
 
     console.log(response)

@@ -13,13 +13,14 @@ import {
 function DropdownCity({
   value,
   onChange,
-  idProvinsi,
+  provinsi,
 }: {
   value: string;
   onChange: (e: string) => void;
-  idProvinsi: string;
+  provinsi: string;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const idProvinsi = provinsi.split(';')[0]
   const { kota, isLoading } = useGetCitiesByProvince(idProvinsi, isModalOpen);
 
   return (
@@ -46,7 +47,10 @@ function DropdownCity({
               <SelectItem value="loading ">Memuat...</SelectItem>
             ) : (
               kota.map((kotaItem) => (
-                <SelectItem key={kotaItem.id} value={kotaItem.id}>
+                <SelectItem
+                  key={kotaItem.id}
+                  value={`${kotaItem.id};${kotaItem.name}`}
+                >
                   {kotaItem.name}
                 </SelectItem>
               ))

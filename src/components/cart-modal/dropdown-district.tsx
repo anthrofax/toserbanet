@@ -20,7 +20,8 @@ function DropdownDistrict({
   kota: string;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { kecamatan, isLoading } = useGetDistrictsByCity(kota, isModalOpen);
+  const kotaId = kota.split(';')[0]
+  const { kecamatan, isLoading } = useGetDistrictsByCity(kotaId, isModalOpen);
 
   return (
     <div className="relative col-span-4">
@@ -46,7 +47,7 @@ function DropdownDistrict({
               <SelectItem value="loading ">Memuat...</SelectItem>
             ) : (
               kecamatan.map((kecamatanItem) => (
-                <SelectItem key={kecamatanItem.id} value={kecamatanItem.name}>
+                <SelectItem key={kecamatanItem.id} value={`${kecamatanItem.name}`}>
                   {kecamatanItem.name}
                 </SelectItem>
               ))

@@ -1,4 +1,4 @@
-import { wixClientServer } from "@/lib/wix-client-server";
+import { wixAdminServer } from "@/lib/wix-admin-server";
 import {
   CheckoutLineItemType,
   MidtransNotificationMetadata,
@@ -8,15 +8,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const wixClient = await wixClientServer();
+    const wixClient = await wixAdminServer();
 
-    console.log(req)
+    console.log(req);
     if (!req.body) {
       throw new Error("Request body is empty");
     }
     const body = await req.json();
 
-    console.log(body.metadata);
+    console.log("metadata", body.metadata);
+    body.payment_type as "gopay" | "qris" | "shopeepay" | "bank_transfer";
 
     const { transaction_status, order_id } = body;
 
@@ -36,8 +37,8 @@ export async function POST(req: NextRequest) {
     ) {
       const {
         lineItems,
-        buyerInfo: { contactId, email, phone, fullName },
-        alamat: { alamatUtama, kota },
+        buyerInfo: { contactId, email, memberId, nama, nomorHp },
+        alamat,
         catatan,
         ongkir,
         layananKurir,
@@ -45,31 +46,124 @@ export async function POST(req: NextRequest) {
 
       const order = await wixClient.orders.createOrder({
         channelInfo: {},
-        lineItems: lineItems.map((item: CheckoutLineItemType) => ({
-          _id: item.id,
-          itemType: {
-            preset: orders.ItemTypeItemType.PHYSICAL,
-          },
-          price: {
-            amount: item.price.toString(),
-          },
-          productName: {
-            original: item.productName,
-          },
-          quantity: item.quantity,
-        })),
-        priceSummary: {
-          shipping: {
-            amount: ongkir.toString(),
-          },
-          total: {
-            amount: body.gross_amount.toString(),
-          },
-        },
-        currency: "IDR",
+        lineItems: lineItems.map(
+          ({
+            id,
+            image,
+            itemType,
+            price,
+            productName,
+            quantity,
+            weight,
+            catalogReference: { appId, catalogItemId, options },
+          }: CheckoutLineItemType) => ({
+            id: id,
+            image,
+            productName: {
+              original: productName,
+            },
+            quantity: quantity,
+            itemType: {
+              preset: itemType,
+            },
+            price: {
+              amount: price.toFixed(2),
+            },
+            paymentOption: orders.PaymentOptionType.FULL_PAYMENT_ONLINE,
+            physicalProperties: {
+              weight: weight,
+            },
+            catalogReference: {
+              appId,
+              catalogItemId,
+              options,
+            },
+            taxInfo: {
+              taxIncludedInPrice: false,
+              taxPercentage: 0,
+            },
+          })
+        ),
         buyerInfo: {
           contactId,
           email,
+          memberId,
+        },
+        paymentStatus: orders.PaymentStatus.PAID,
+        weightUnit: orders.WeightUnit.KG,
+        currency: "IDR",
+        taxIncludedInPrices: false,
+        priceSummary: {
+          subtotal: {
+            amount: lineItems
+              .reduce((acc, item) => acc + item.price * item.quantity, 0)
+              .toFixed(2)
+              .toString(),
+          },
+          shipping: {
+            amount: ongkir.toFixed(2).toString(),
+          },
+          total: {
+            amount: (
+              lineItems.reduce(
+                (acc, item) => acc + item.price * item.quantity,
+                0
+              ) + ongkir
+            ).toString(),
+            formattedAmount: `$${(
+              lineItems.reduce(
+                (acc, item) => acc + item.price * item.quantity,
+                0
+              ) + ongkir
+            ).toFixed(2)}`,
+          },
+        },
+        billingInfo: {
+          address: {
+            country: "ID",
+            addressLine1: alamat,
+            countryFullname: "Indonesia",
+          },
+          contactDetails: {
+            firstName: nama.split(" ").length < 2 ? nama : nama.split(" ")[0],
+            lastName:
+              nama.split(" ").length < 2
+                ? ""
+                : nama.split(" ").slice(1).join(" "),
+            phone: nomorHp,
+            company: "",
+          },
+        },
+        shippingInfo: {
+          title: layananKurir,
+          logistics: {
+            shippingDestination: {
+              address: {
+                country: "ID",
+                addressLine1: alamat,
+                countryFullname: "Indonesia",
+              },
+              contactDetails: {
+                firstName:
+                  nama.split(" ").length < 2 ? nama : nama.split(" ")[0],
+                lastName:
+                  nama.split(" ").length < 2
+                    ? ""
+                    : nama.split(" ").slice(1).join(" "),
+                phone: nomorHp,
+              },
+            },
+          },
+          cost: {
+            price: {
+              amount: ongkir.toString(),
+            },
+          },
+        },
+        status: orders.OrderStatus.APPROVED,
+        archived: false,
+        createdBy: {
+          userId: memberId,
         },
         customFields: [
           {
@@ -80,28 +174,19 @@ export async function POST(req: NextRequest) {
             title: "layananKurir",
             value: layananKurir,
           },
+          {
+            title: "metodePembayaran",
+            value:
+              body.payment_type === "bank_transfer"
+                ? body.va_numbers[0].bank
+                : body.payment_type,
+          },
         ],
-        billingInfo: {
-          address: {
-            addressLine1: alamatUtama,
-            city: kota,
-          },
-          contactDetails: {
-            firstName:
-              fullName.split(" ").length < 2
-                ? fullName
-                : fullName.split(" ")[0],
-            lastName: fullName.split(" ").slice(1).join(" "),
-            phone,
-          },
-        },
-        paymentStatus: orders.PaymentStatus.PAID,
         purchasedDate: new Date(body.transaction_time),
-        weightUnit: orders.WeightUnit.KG,
       });
 
       console.log("order");
-      console.log(order);
+      console.dir(order, { depth: null });
 
       return NextResponse.json({ message: "Pembayaran Berhasil" });
     }

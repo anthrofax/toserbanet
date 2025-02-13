@@ -14,6 +14,7 @@ import {
   CldUploadButton,
   CloudinaryUploadWidgetResults,
 } from "next-cloudinary";
+import { handleCopy } from "@/utils/handle-copy";
 
 function UserPage() {
   const [isModalNicknameOpen, setIsModalNicknameOpen] = useState(false);
@@ -92,19 +93,6 @@ function UserPage() {
   function handleCloseModal(setIsOpenModal: Dispatch<SetStateAction<boolean>>) {
     setIsOpenModal(false);
   }
-
-  const handleCopy = (id: string) => {
-    if (id) {
-      navigator.clipboard
-        .writeText(id)
-        .then(() => {
-          toast.success("Id berhasil dicopy ke clipboard mu");
-        })
-        .catch((err) => {
-          console.error("Gagal saat copy userId: ", err);
-        });
-    }
-  };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
@@ -256,7 +244,7 @@ function UserPage() {
           <button
             className="col-span-4 flex justify-between gap-3 text-start"
             onClick={() => {
-              handleCopy(member?.contactId || "");
+              handleCopy(member?.contactId, "Id User");
             }}
           >
             <span>{member?.contactId}</span>

@@ -43,7 +43,7 @@ const ProvinceSelect = ({
               <SelectItem value="loading ">Memuat...</SelectItem>
             ) : (
               provinsi.map((provinsiItem) => (
-                <SelectItem key={provinsiItem.id} value={provinsiItem.id}>
+                <SelectItem key={provinsiItem.id} value={`${provinsiItem.id};${provinsiItem.name}`}>
                   {provinsiItem.name}
                 </SelectItem>
               ))

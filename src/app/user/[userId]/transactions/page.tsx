@@ -17,9 +17,12 @@ async function UserTransactionPage() {
     search: {
       filter: {
         "buyerInfo.contactId": { $eq: currentMember.member?.contactId },
+        archived: false,
       },
     },
   });
+
+  console.dir(orders, { depth: null });
 
   return (
     <div className="mt-5 px-3 overflow-hidden h-full">
@@ -78,7 +81,7 @@ async function UserTransactionPage() {
           <div className="flex flex-col gap-3 text-xs lg:max-h-[38rem] my-5 px-3 overflow-y-auto scrollbar">
             {orders.orders.map((order) => (
               <Link
-                href={`/user/${currentMember.member?.contactId}/transactions/${order._id}`}
+                href={`/user/${currentMember.member?.profile?.slug}/transactions/${order._id}`}
                 key={order._id}
                 className="flex flex-col gap-2 bg-slate-50 shadow p-3 rounded-lg"
               >
@@ -133,7 +136,7 @@ async function UserTransactionPage() {
                   <div>
                     <p className="font-semibold ">
                       {(order.lineItems &&
-                        order.lineItems[0].productName?.translated) ||
+                        order.lineItems[0].productName?.original) ||
                         ""}
                     </p>
                     <p className="text-slate-500">

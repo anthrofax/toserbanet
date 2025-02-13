@@ -20,7 +20,8 @@ type CartState = {
     wixClient: WixClient,
     productId: string,
     variantId: string,
-    quantity: number
+    quantity: number,
+    productLink: string
   ) => void;
   updateQuantity: (
     wixClient: WixClient,
@@ -46,6 +47,7 @@ export const useCartStore = create<CartState>((set) => ({
       if (!isLoggedIn) throw new Error("Belum login");
 
       const cart = await wixClient.currentCart.getCurrentCart();
+
       set((prev) => {
         return {
           cart: cart || prev.cart,
@@ -58,15 +60,29 @@ export const useCartStore = create<CartState>((set) => ({
       set((prev) => ({ ...prev, isLoading: false }));
     }
   },
-  addItem: async (wixClient, productId, variantId, quantity) => {
+  addItem: async (wixClient, productId, variantId, quantity, productLink) => {
     set((state) => ({ ...state, isLoading: true }));
+
+    let variant = null;
+
+    if (!!variantId)
+      variant = await wixClient.products.getStoreVariant(
+        `${productId}-${variantId}`
+      );
+
     const response = await wixClient.currentCart.addToCurrentCart({
       lineItems: [
         {
           catalogReference: {
             appId: process.env.NEXT_PUBLIC_WIX_APP_ID!,
             catalogItemId: productId,
-            ...(variantId && { options: { variantId } }),
+            options: {
+              productLink,
+              ...(variant && {
+                variantId: variant.variant?.variantId,
+                variantName: variant.variant?.variantName,
+              }),
+            },
           },
           quantity: quantity,
         },

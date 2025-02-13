@@ -3,7 +3,6 @@ import { ProductItemType } from "@/types/product-item";
 import { wixClientServer } from "@/lib/wix-client-server";
 import { products } from "@wix/stores";
 import Pagination from "../pagination";
-import Image from "next/image";
 import { CiSearch } from "react-icons/ci";
 import NotFoundInfo from "../not-found-info";
 
@@ -18,26 +17,18 @@ const PRODUCT_PER_PAGE = 8;
 async function ProductList({ categoryId, limit, searchParams }: PropsType) {
   const wixClient = await wixClientServer();
 
-  console.log(String(searchParams.name).toLowerCase())
-
+  // Buat query dasar untuk mendapatkan produk
   const productQuery = wixClient.products
     .queryProducts()
-    .startsWith("name", String(searchParams?.name || '').toLowerCase())
     .eq("collectionIds", categoryId)
     .gt("priceData.price", searchParams?.min || 0)
-    .lt("priceData.price", searchParams?.max || 999999999)
-    .limit(limit || PRODUCT_PER_PAGE)
-    .skip(
-      searchParams?.page
-        ? (parseInt(searchParams.page) - 1) * (limit || PRODUCT_PER_PAGE)
-        : 0
-    );
+    .lt("priceData.price", searchParams?.max || 999999999);
 
   let res: products.ProductsQueryResult;
 
+  // Menambahkan pengurutan jika ada parameter sort
   if (searchParams?.sort) {
     const [sortType, sortBy] = searchParams.sort.split(" ");
-
     if (sortType === "asc") {
       res = await productQuery.ascending(sortBy).find();
     }
@@ -45,12 +36,13 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
       res = await productQuery.descending(sortBy).find();
     }
   } else {
+    // Default pengurutan berdasarkan waktu pembaruan produk
     res = await productQuery.descending("lastUpdated").find();
   }
 
   if (!res!) return null;
 
-  const productItems: ProductItemType[] = res.items.map((prod) => {
+  let productItems: ProductItemType[] = res.items.map((prod) => {
     return {
       title: prod.name || "",
       imageObj: {
@@ -67,23 +59,47 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
     };
   });
 
+  // Filter berdasarkan pencarian nama produk jika ada
+  if (searchParams?.name) {
+    productItems = productItems.filter((item) => {
+      return String(searchParams.name)
+        .toLowerCase()
+        .split(" ")
+        .some((queryWord) => {
+          console.log(queryWord, item.title);
+          console.log(item.title.toLowerCase().includes(queryWord));
+          return item.title.toLowerCase().includes(queryWord);
+        });
+    });
+  }
+
+  // Paginasi secara manual setelah filter
+  const currentPage = searchParams?.page ? parseInt(searchParams.page) : 1;
+  const startIndex = (currentPage - 1) * (limit || PRODUCT_PER_PAGE);
+  const paginatedItems = productItems.slice(
+    startIndex,
+    startIndex + (limit || PRODUCT_PER_PAGE)
+  );
+
   return (
     <div className="min-h-[30rem]" id="daftar-produk">
-      {productItems && productItems.length > 0 && (
+      {productItems.length > 0 && (
         <div className="ml-2 my-5 flex items-center gap-2">
           <CiSearch className="text-3xl font-semibold" />
           <h1 className="text-xl font-semibold">Hasil Pencarian</h1>
         </div>
       )}
-      {productItems.length > 0 ? (
+      {paginatedItems.length > 0 ? (
         <>
-          {" "}
-          <ProductListGrid productItems={productItems} />
+          <ProductListGrid productItems={paginatedItems} />
           <Pagination
             className="mt-5"
-            currentPage={(res.currentPage || 0) + 1}
-            hasPrev={res.hasPrev()}
-            hasNext={res.hasNext()}
+            currentPage={currentPage}
+            hasPrev={currentPage > 1}
+            hasNext={
+              currentPage <
+              Math.ceil(productItems.length / (limit || PRODUCT_PER_PAGE))
+            }
           />
         </>
       ) : (

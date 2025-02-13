@@ -1,5 +1,11 @@
 import { orders } from "@wix/ecom";
 
+export interface ItemOptions {
+  variantName?: string | null;
+  variantId?: string | null;
+  productLink?: string | null;
+}
+
 export interface CheckoutLineItemType {
   id: string;
   itemType: orders.ItemTypeItemType;
@@ -8,19 +14,24 @@ export interface CheckoutLineItemType {
   quantity: number;
   image: string;
   weight: number;
+  catalogReference: {
+    appId: string;
+    catalogItemId: string;
+    options?: ItemOptions;
+  };
+}
+
+export interface BuyerInfoType {
+  memberId: string;
+  contactId: string;
+  nama: string;
+  nomorHp: string;
+  email: string;
 }
 
 export interface CheckoutDataType {
-  informasiPembeli: {
-    contactId: string;
-    nama: string;
-    nomorHp: string;
-    email: string;
-  };
-  alamat: {
-    alamatUtama: string;
-    kota: string
-  };
+  informasiPembeli: BuyerInfoType;
+  alamat: string;
   catatan?: string;
   lineItems: CheckoutLineItemType[];
   ongkir: number;
@@ -29,17 +40,9 @@ export interface CheckoutDataType {
 
 export interface MidtransNotificationMetadata {
   lineItems: CheckoutLineItemType[];
-  buyerInfo: {
-    contactId: string;
-    email: string;
-    phone: string;
-    fullName: string;
-  };
-  alamat: {
-    alamatUtama: string;
-    kota: string;
-  };
-  layananKurir: string
+  buyerInfo: BuyerInfoType;
+  alamat: string;
+  layananKurir: string;
   catatan: string;
   ongkir: number;
 }

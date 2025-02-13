@@ -5,8 +5,12 @@ import { randomUUID } from "crypto";
 import { MidtransClient } from "midtrans-node-client";
 import {
   CheckoutDataType,
+  CheckoutLineItemType,
   MidtransNotificationMetadata,
 } from "./types/checkout-types";
+import { wixClientServer } from "./lib/wix-client-server";
+import { orders } from "@wix/ecom";
+import { wixAdminServer } from "./lib/wix-admin-server";
 
 interface RajaOngkirDomesticLocationType {
   meta: {
@@ -129,7 +133,7 @@ export async function orderTokenizer({
   lineItems,
   catatan,
   ongkir,
-  informasiPembeli: { email, nama, nomorHp, contactId },
+  informasiPembeli: { email, nama, nomorHp, contactId, memberId },
   layananKurir,
 }: CheckoutDataType) {
   try {
@@ -171,13 +175,11 @@ export async function orderTokenizer({
         buyerInfo: {
           contactId,
           email,
-          phone: nomorHp,
-          fullName: nama,
+          memberId,
+          nama,
+          nomorHp,
         },
-        alamat: {
-          alamatUtama: alamat.alamatUtama,
-          kota: alamat.kota, // You need to provide the city name here
-        },
+        alamat,
         catatan: catatan || "",
         ongkir,
         layananKurir,

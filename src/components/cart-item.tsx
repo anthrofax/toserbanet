@@ -29,7 +29,12 @@ function CartItem({ cartItem }: { cartItem: currentCart.LineItem }) {
         <p className="text-xs sm:text-sm line-clamp-2 font-semibold">
           {cartItem.productName?.original}
         </p>
-        <h4 className="font-medium text-xs sm:text-sm">Size 39, Warna Kuning</h4>
+        {cartItem.catalogReference?.options &&
+          cartItem.catalogReference?.options?.variantName && (
+            <h4 className="font-medium text-xs sm:text-sm">
+              Varian: {cartItem.catalogReference.options?.variantName}
+            </h4>
+          )}
 
         <div className="flex justify-between items-center gap-2 w-max">
           <div

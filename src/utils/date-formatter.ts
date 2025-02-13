@@ -7,7 +7,6 @@ export function formatDate(
   },
   timeZone: "Asia/Jakarta" | "Asia/Makassar" | "Asia/Jayapura" = "Asia/Jakarta"
 ) {
-  console.log(date);
   if (!date) {
     return "null";
   }

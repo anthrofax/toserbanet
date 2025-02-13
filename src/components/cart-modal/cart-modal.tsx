@@ -19,6 +19,7 @@ import { redirectToCheckout } from "@/lib/redirect-to-checkout";
 import { orders } from "@wix/ecom";
 import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
+import { CheckoutLineItemType } from "@/types/checkout-types";
 
 enum ActionType {
   CLOSE_MODAL,
@@ -157,10 +158,6 @@ function CartModal() {
           ongkir: 0,
         };
       case ActionType.CHOOSE_COURIER_SERVICE:
-        console.log(action.payload);
-        console.log(action.payload.split(" | "));
-        console.log(Number(action.payload.split(" | ")[2]));
-
         return {
           ...prevState,
           layananKurir: action.payload,
@@ -212,15 +209,9 @@ function CartModal() {
     }
   }, [totalCartItem]);
 
-  useEffect(() => {
-    console.log(layananKurir);
-    console.log(layananKurir?.split(" | ") || null);
-  }, [layananKurir]);
-  
   if (/^\/user\/[^\/]+\/transactions\/[^\/]+$/.test(pathname)) {
     return null;
   }
-
 
   return (
     <div className="shadow-lg h-max bg-slate-50/50 backdrop-blur-md w-full sticky bottom-0 left-0 flex justify-between items-center gap-5 flex-wrap p-5 z-10">
@@ -359,15 +350,12 @@ function CartModal() {
                             changedStateAttr: "nomorHp",
                             payload: formatPhoneNumber(cleanedPhone),
                           });
-                          console.log(formatPhoneNumber(cleanedPhone));
-                          console.log(nomorHp);
                         } else {
                           dispatch({
                             type: ActionType.SET_STATE,
                             changedStateAttr: "nomorHp",
                             payload: cleanedPhone,
                           });
-                          console.log("test");
                         }
                       }}
                     />
@@ -422,7 +410,7 @@ function CartModal() {
                         payload: val,
                       });
                     }}
-                    idProvinsi={provinsi}
+                    provinsi={provinsi}
                   />
 
                   <DropdownDistrict
@@ -491,7 +479,7 @@ function CartModal() {
                     }`}
                   >
                     {cart.lineItems.map((item, i) => (
-                      <CartItem cartItem={item} key={i} />
+                      <CartItem cartItem={cart.lineItems[i]} key={i} />
                     ))}
                   </div>
                 </>
@@ -515,12 +503,14 @@ function CartModal() {
                           : rupiahFormatter.format(0)}
                       </span>
                     </p>
-                    <p className="text-sm md:text-base">
-                      Ongkos Kirim{" "}
-                      <span className="text-green-500 font-bold text-sm">
-                        {rupiahFormatter.format(ongkir)}
-                      </span>
-                    </p>
+                    {ongkir > 0 && (
+                      <p className="text-sm md:text-base">
+                        Ongkos Kirim{" "}
+                        <span className="text-green-500 font-bold text-sm">
+                          {rupiahFormatter.format(ongkir)}
+                        </span>
+                      </p>
+                    )}
                   </div>
 
                   {cart.subtotal?.amount && ongkir ? (
@@ -534,7 +524,7 @@ function CartModal() {
                     </p>
                   ) : null}
                 </div>
-                
+
                 <hr className="h-0.5 bg-slate-200 rounded-full" />
 
                 <div className="flex gap-3 flex-col md:flex-row items-center justify-between text-xs lg:text-sm w-full">
@@ -577,23 +567,25 @@ function CartModal() {
                           await redirectToCheckout(
                             {
                               informasiPembeli: {
+                                memberId: member?._id || "",
                                 contactId: member?.contactId || "",
                                 nama: member?.profile?.nickname || "",
                                 nomorHp:
                                   (member?.contact?.phones &&
                                     member?.contact?.phones[0]) ||
-                                  "",
+                                  nomorHp,
                                 email: member?.loginEmail || "",
                               },
-                              alamat: {
-                                alamatUtama: alamat,
-                                kota,
-                              },
+                              alamat: `${alamat}, ${kecamatan}, ${
+                                kota.split(";")[1]
+                              }, ${provinsi.split(";")[1]}.`,
                               catatan,
-                              lineItems: cart.lineItems.map((item) => {
-                                return {
+                              lineItems: cart.lineItems.map((item, i) => {
+                                const sentItem: CheckoutLineItemType = {
                                   id: item?._id || "",
-                                  itemType: orders.ItemTypeItemType.PHYSICAL,
+                                  itemType:
+                                    item.itemType?.preset ||
+                                    orders.ItemTypeItemType.PHYSICAL,
                                   price: item.price?.amount
                                     ? +item.price.amount
                                     : 0,
@@ -603,7 +595,35 @@ function CartModal() {
                                   weight: item.physicalProperties?.weight
                                     ? item.physicalProperties.weight
                                     : 0,
+                                  catalogReference: {
+                                    appId: item.catalogReference?.appId || "",
+                                    catalogItemId:
+                                      item.catalogReference?.catalogItemId ||
+                                      "",
+                                    options: {
+                                      productLink:
+                                        item.catalogReference?.options
+                                          ?.productLink || null,
+                                    },
+                                  },
                                 };
+
+                                if (
+                                  item.catalogReference?.options &&
+                                  item.catalogReference?.options?.variantId
+                                ) {
+                                  sentItem.catalogReference.options = {
+                                    ...sentItem.catalogReference.options,
+                                    variantId:
+                                      item.catalogReference?.options
+                                        .variantId || null,
+                                    variantName:
+                                      item.catalogReference?.options
+                                        .variantName || null,
+                                  };
+                                }
+
+                                return sentItem;
                               }),
                               ongkir,
                               layananKurir,

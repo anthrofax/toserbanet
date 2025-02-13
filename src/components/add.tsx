@@ -3,7 +3,7 @@
 import { useWixClientContext } from "@/contexts/wix-context";
 import { useCartStore } from "@/hooks/useCartStore";
 import { products } from "@wix/stores";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 
 interface PropsType {
@@ -77,7 +77,13 @@ function Add({ stockQuantity, productData, variantId }: PropsType) {
         <div className="flex items-center gap-3 justify-between flex-wrap">
           <button
             onClick={() =>
-              addItem(wixClient, productData._id!, variantId!, quantity)
+              addItem(
+                wixClient,
+                productData._id!,
+                variantId!,
+                quantity,
+                `${window.location.origin}/products/${productData.slug}`
+              )
             }
             disabled={isLoading || stockQuantity < 1}
             className="w-36 text-sm rounded-3xl ring-1 ring-blue-500 text-blue-500 py-2 hover:bg-blue-500 hover:text-white disabled:cursor-not-allowed disabled:bg-blue-200 disabled:text-white disabled:ring-0"

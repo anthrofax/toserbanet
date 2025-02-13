@@ -20,7 +20,7 @@ async function SinglePage({
     .eq("slug", productId)
     .find();
 
-  console.log(items);
+  console.dir(items, { depth: null });
 
   const product = items[0];
 
@@ -40,7 +40,7 @@ async function SinglePage({
     }) || [];
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-8 lg:gap-16 pt-6 pb-12">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-8 lg:gap-16 pt-6 pb-12 min-h-[70vh]">
       {/* Image */}
       <div className="w-full lg:w-1/2 lg:sticky top-28 h-max">
         <ProductImages imageItems={product.media?.items} />
