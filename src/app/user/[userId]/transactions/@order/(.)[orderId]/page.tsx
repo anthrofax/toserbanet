@@ -68,7 +68,7 @@ async function OrderDetailPage({
           <OrderItemList order={order} />
         </div>
 
-        <div className="flex flex-col gap-2 bg-slate-50 shadow p-3">
+        <div className="flex flex-col gap-2 bg-slate-100 shadow p-3">
           <h3 className="text-base font-semibold">Info Pengiriman</h3>
 
           <div
@@ -107,7 +107,7 @@ async function OrderDetailPage({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 bg-slate-50 shadow p-3">
+        <div className="flex flex-col gap-2 bg-slate-100 shadow p-3">
           <h3 className="text-base font-semibold">Rincian Pembayaran</h3>
 
           <div className="grid grid-cols-2 gap-y-2">
