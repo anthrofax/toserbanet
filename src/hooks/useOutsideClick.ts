@@ -2,19 +2,25 @@
 
 import { MouseEvent, useEffect, useRef } from "react";
 
-export function useOutsideClick(handleClose: () => void, handleCapture = true) {
+export function useOutsideClick(
+  handleClose: () => void,
+  handleCapture = true,
+  isForModal?: boolean
+) {
   const modal = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOverlay(e: MouseEvent<HTMLDivElement>) {
-      if (modal.current && !modal.current.contains(e.target as Node)) {
+      if (isForModal) {
         if (
-          (e.target as HTMLElement).tagName.toLowerCase() === "html" ||
-          (e.target as HTMLElement).closest(".Toastify__toast") ||
-          (e.target as HTMLElement).closest(".confirmation-box")
+          (e.target as Element).classList.contains("modal-overlay") ||
+          (e.target as Element).closest(".modal-close")
         )
-          return;
-        handleClose();
+          handleClose();
+      } else {
+        if (modal.current && !modal.current.contains(e.target as Node)) {
+          handleClose();
+        }
       }
     }
     const listener: EventListener =

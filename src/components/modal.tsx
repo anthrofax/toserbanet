@@ -78,16 +78,17 @@ function OpenedModal({
   [key: string]: any;
 }) {
   const { isOpen, handleClose } = useContext(ModalContext);
-  let modal = useOutsideClick(handleClose);
+  let modal = useOutsideClick(handleClose, true, true);
 
   if (typeof window === "undefined") return null;
 
   return createPortal(
-    <div
-      className={`bg-slate-900/50 fixed left-0 top-0 right-0 bottom-0 cursor-pointer transition-all ${
-        isOpen ? "opacity-100 z-20" : "opacity-0 -z-10"
-      }`}
-    >
+    <>
+      <div
+        className={`bg-slate-900/50 fixed left-0 top-0 right-0 bottom-0 cursor-pointer transition-all ${
+          isOpen ? "opacity-100 z-20" : "opacity-0 -z-10"
+        } modal-overlay`}
+      />
       <div
         className={cn(
           `cursor-default bg-slate-50 px-3 md:px-10 pb-8 pt-16 min-[361px]:pt-10 md:pt-16 w-[90%] max-w-[535px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 rounded-xl flex flex-col gap-3 justify-center items-center max-h-[90vh] ${
@@ -106,16 +107,13 @@ function OpenedModal({
             <p className="font-medium text-base md:text-xl">{modalTitle}</p>
           </div>
 
-          <button
-            className="rounded-full p-1 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-slate-400 hover:bg-slate-500"
-            onClick={handleClose}
-          >
+          <button className="rounded-full p-1 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-slate-400 hover:bg-slate-500 modal-close">
             {customCloseIcon || <IoClose className="text-slate-50 text-5xl" />}
           </button>
         </div>
         {children}
       </div>
-    </div>,
+    </>,
     window.document.body
   );
 }
