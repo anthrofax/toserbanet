@@ -1,8 +1,8 @@
 import { ApiKeyStrategy, OAuthStrategy, createClient } from "@wix/sdk";
 import { collections, products } from "@wix/stores";
 import { members } from "@wix/members";
-import { cookies } from "next/headers";
 import { orders } from "@wix/ecom";
+import { collections as wixCollections } from "@wix/data";
 
 export async function wixAdminServer() {
   const wixClient = createClient({
@@ -11,6 +11,7 @@ export async function wixAdminServer() {
       collections,
       members,
       orders,
+      wixCollections,
     },
     auth: ApiKeyStrategy({
       apiKey: process.env.WIX_SECRET_API_KEY!,

@@ -5,6 +5,7 @@ import { rupiahFormatter } from "@/utils/number-formatter";
 import { metodePembayaran } from "../[orderId]/page";
 import CopyButton from "@/components/copy-button";
 import OrderItemList from "@/components/order-detail/order-item-list";
+import PayButton from "@/components/buttons/pay-button";
 
 async function OrderDetailPage({
   params,
@@ -142,6 +143,14 @@ async function OrderDetailPage({
             )}
           </p>
         </div>
+
+        {order.paymentStatus !== "PAID" && (
+          <PayButton
+            orderId={order._id || ""}
+            buttonText="Bayar"
+            className="w-full rounded-lg"
+          />
+        )}
       </div>
     </div>
   );

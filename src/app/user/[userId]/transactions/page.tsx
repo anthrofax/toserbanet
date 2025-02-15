@@ -2,13 +2,12 @@ import { wixClientServer } from "@/lib/wix-client-server";
 import { formatDate } from "@/utils/date-formatter";
 import Image from "next/image";
 import { CiSearch } from "react-icons/ci";
-import { IoMdHelpCircle } from "react-icons/io";
 import { RiShoppingBagFill } from "react-icons/ri";
 import { media as wixMedia } from "@wix/sdk";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import NotFoundInfo from "@/components/not-found-info";
 import HelpButton from "@/components/buttons/help-button";
+import PayButton from "@/components/buttons/pay-button";
 
 async function UserTransactionPage() {
   const wixClient = await wixClientServer();
@@ -102,17 +101,20 @@ async function UserTransactionPage() {
                   </div>
 
                   <div className="flex justify-between items-center gap-2">
-                    <div
-                      className={`rounded-lg p-2 ${
-                        order.paymentStatus === "PAID"
-                          ? "bg-green-300 text-green-700"
-                          : "bg-red-300 text-red-500"
-                      }`}
-                    >
-                      {order.paymentStatus === "PAID"
-                        ? "Sudah Bayar"
-                        : "Belum Bayar"}
-                    </div>
+                    {order.paymentStatus === "PAID" ? (
+                      <div
+                        className={`rounded-lg p-2 bg-green-300 text-green-700 cursor-default`}
+                      >
+                        Sudah Bayar
+                      </div>
+                    ) : (
+                      <PayButton
+                        orderId={order._id || ""}
+                        buttonText="Belum Bayar"
+                        className="rounded-lg p-2 bg-red-300 text-red-500 cursor-pointer z-10"
+                      />
+                    )}
+
                     <HelpButton />
                   </div>
                 </div>

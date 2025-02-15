@@ -4,8 +4,15 @@ import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
 import ModalOverlay from "./modal-overlay";
+import PayButton from "./buttons/pay-button";
 
-function OrderDetailModal({ children }: { children: React.ReactNode }) {
+function OrderDetailModal({
+  children,
+  data,
+}: {
+  children: React.ReactNode;
+  data?: any;
+}) {
   const router = useRouter();
 
   return (
@@ -29,6 +36,15 @@ function OrderDetailModal({ children }: { children: React.ReactNode }) {
             <hr className="basis-[90%] justify-self-center shrink-0 border-2 mx-auto" />
           </div>
           {children}
+          <div className="w-full">
+            {data.paymentStatus !== "PAID" && (
+              <PayButton
+                orderId={data.orderId || ""}
+                buttonText="Bayar"
+                className="w-full rounded-lg"
+              />
+            )}
+          </div>
         </div>
       </>,
       document.body

@@ -43,25 +43,29 @@ function Modal({
   );
 }
 
-function Open({
+Modal.Open = ({
   children,
   className,
 }: {
   children?: React.ReactNode;
   className?: string;
-}) {
+}) => {
   const { handleOpen } = useContext(ModalContext);
   return (
     <div
-      onClick={handleOpen}
-      className={cn("min-w-8 rounded-lg relative cursor-pointer", className)}
+      onClick={(e) => {
+        console.log('test')
+        // e.stopPropagation();
+        handleOpen();
+      }}
+      className={cn("min-w-8 rounded-lg relative ", className)}
     >
       {children}
     </div>
   );
-}
+};
 
-function OpenedModal({
+Modal.OpenedModal = ({
   children,
   className,
   modalButton,
@@ -76,7 +80,7 @@ function OpenedModal({
   modalTitle: string;
   customCloseIcon?: React.ReactNode;
   [key: string]: any;
-}) {
+}) => {
   const { isOpen, handleClose } = useContext(ModalContext);
   let modal = useOutsideClick(handleClose, true, true);
 
@@ -86,14 +90,14 @@ function OpenedModal({
     <>
       <div
         className={`bg-slate-900/50 fixed left-0 top-0 right-0 bottom-0 cursor-pointer transition-all ${
-          isOpen ? "opacity-100 z-20" : "opacity-0 -z-10"
+          isOpen ? "opacity-100 z-40" : "opacity-0 -z-10"
         } modal-overlay`}
       />
       <div
         className={cn(
-          `cursor-default bg-slate-50 px-3 md:px-10 pb-8 pt-16 min-[361px]:pt-10 md:pt-16 w-[90%] max-w-[535px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 rounded-xl flex flex-col gap-3 justify-center items-center max-h-[90vh] ${
+          `overflow-hidden cursor-default bg-slate-50 px-3 md:px-10 pb-8 pt-16 min-[361px]:pt-10 md:pt-16 w-[90%] max-w-[535px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 rounded-xl flex flex-col gap-3 justify-center items-center max-h-[90vh] ${
             isOpen
-              ? "-translate-y-1/2 opacity-100 z-30 duration-500 delay-75"
+              ? "-translate-y-1/2 opacity-100 z-50 duration-500 delay-75"
               : "-translate-y-1/4 opacity-0 -z-10"
           }`,
           className
@@ -116,9 +120,6 @@ function OpenedModal({
     </>,
     window.document.body
   );
-}
+};
 
-Modal.Open = Open;
-Modal.OpenedModal = OpenedModal;
-
-export default Modal;
+export { Modal };

@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/utils/cn";
+
 type Props = {
   onClose: () => void;
   icon: any;
@@ -9,6 +11,7 @@ type Props = {
   labelIya?: string;
   labelTidak?: string;
   onClickTidak?: () => void;
+  yesButtonClassName?: string;
 };
 
 function ConfirmationBox({
@@ -20,6 +23,7 @@ function ConfirmationBox({
   labelTidak,
   onClickIya,
   onClickTidak,
+  yesButtonClassName
 }: Props) {
   return (
     <div
@@ -38,7 +42,10 @@ function ConfirmationBox({
       <div className="text-center md:text-right mt-4 md:flex md:justify-end">
         <button
           id="confirm-delete-btn"
-          className="block w-full md:inline-block md:w-auto px-4 py-3 md:py-2 bg-red-200 text-red-700 rounded-lg font-semibold text-sm md:ml-2 md:order-2"
+          className={cn(
+            `block w-full md:inline-block md:w-auto px-4 py-3 md:py-2 bg-red-200 text-red-700 rounded-lg font-semibold text-sm md:ml-2 md:order-2`,
+            yesButtonClassName
+          )}
           onClick={onClickIya}
         >
           {labelIya || "Iya"}

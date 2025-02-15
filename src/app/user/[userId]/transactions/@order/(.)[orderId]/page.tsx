@@ -1,14 +1,12 @@
 import { wixClientServer } from "@/lib/wix-client-server";
 import { notFound } from "next/navigation";
-import { MdOutlineContentCopy } from "react-icons/md";
 import DateLabel from "@/components/date-label";
 import { rupiahFormatter } from "@/utils/number-formatter";
-import OrderItem from "@/components/order-detail/order-item";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import OrderDetailModal from "@/components/order-detail-modal";
 import CopyButton from "@/components/copy-button";
 import OrderItemList from "@/components/order-detail/order-item-list";
 import { metodePembayaran } from "../../[orderId]/page";
+import PayButton from "@/components/buttons/pay-button";
 
 async function OrderDetailPage({
   params,
@@ -23,7 +21,12 @@ async function OrderDetailPage({
   }
 
   return (
-    <OrderDetailModal>
+    <OrderDetailModal
+      data={{
+        orderId: order._id,
+        paymentStatus: order.paymentStatus,
+      }}
+    >
       <div
         className="overflow-y-auto flex flex-col gap-3 text-xs py-3 pr-1 lg:pr-3 scrollbar relative"
         id="order-modal-content"

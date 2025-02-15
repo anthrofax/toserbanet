@@ -4,9 +4,7 @@ import { useWixClientContext } from "@/contexts/wix-context";
 import { useCartStore } from "@/hooks/useCartStore";
 import { formatPhoneNumber, rupiahFormatter } from "@/utils/number-formatter";
 import React, { useEffect, useReducer, useState } from "react";
-import { createPortal } from "react-dom";
-import { IoCartOutline, IoClose } from "react-icons/io5";
-import { LuShoppingBag } from "react-icons/lu";
+import { IoCartOutline } from "react-icons/io5";
 import PrimaryButton from "../primary-button";
 import SecondaryButton from "../secondary-botton";
 import useCurrentMember from "@/hooks/useCurrentMember";
@@ -20,7 +18,7 @@ import { orders } from "@wix/ecom";
 import { toast } from "react-toastify";
 import { usePathname, useRouter } from "next/navigation";
 import { CheckoutLineItemType } from "@/types/checkout-types";
-import Modal from "../modal";
+import { Modal } from "../modal";
 import {
   ActionType,
   cartReducer,
@@ -32,8 +30,9 @@ import { useMidtransInit } from "@/hooks/useMidtransInit";
 import { confirmAlert } from "react-confirm-alert";
 import ConfirmationBox from "../confirmation.box";
 import { MdOutlineInfo } from "react-icons/md";
-import Image from "next/image";
-import CopyButton from "../copy-button";
+import { useMutation } from "@tanstack/react-query";
+import PaymentPage from "../payment-page";
+import { useMutatePaymentEvidence } from "@/hooks/useMutatePaymentEvidence";
 
 function CartModal() {
   const { cart, getCart, counter, isLoading } = useCartStore();
@@ -66,80 +65,98 @@ function CartModal() {
       layananKurir,
       errors,
       isValidToValidate,
+      buktiTf,
+      createdOrderId,
     },
     dispatch,
   ] = useReducer(cartReducer, initialState);
 
-  useEffect(() => {
-    async function paymentProcess() {
-      if (!isLoggedIn)
-        return toast.error("Untuk melanjutkan, silahkan login terlebih dahulu");
+  const { mutate: triggerCreateOrder, isPending: createOrderPending } =
+    useMutation({
+      mutationKey: ["newOrder"],
+      mutationFn: async () => {
+        if (!isLoggedIn)
+          return toast.error(
+            "Untuk melanjutkan, silahkan login terlebih dahulu"
+          );
 
-      if (Object.values(errors).some((error) => error))
-        return toast.error(
-          "Data yang anda masukkan masih ada yang tidak sesuai."
+        if (Object.values(errors).some((error) => error))
+          return toast.error(
+            "Data yang anda masukkan masih ada yang tidak sesuai."
+          );
+
+        const createdOrder = await redirectToCheckout(
+          {
+            informasiPembeli: {
+              memberId: member?._id || "",
+              contactId: member?.contactId || "",
+              nama: member?.profile?.nickname || "",
+              nomorHp:
+                (member?.contact?.phones && member?.contact?.phones[0]) ||
+                nomorHp,
+              email: member?.loginEmail || "",
+            },
+            alamat: `${alamat}, ${kecamatan}, ${kota.split(";")[1]}, ${
+              provinsi.split(";")[1]
+            }.`,
+            catatan,
+            lineItems: cart.lineItems.map((item, i) => {
+              const sentItem: CheckoutLineItemType = {
+                id: item?._id || "",
+                itemType:
+                  item.itemType?.preset || orders.ItemTypeItemType.PHYSICAL,
+                price: item.price?.amount ? +item.price.amount : 0,
+                productName: item.productName?.original || "",
+                quantity: item.quantity || 0,
+                image: item.image || "",
+                weight: item.physicalProperties?.weight
+                  ? item.physicalProperties.weight
+                  : 0,
+                catalogReference: {
+                  appId: item.catalogReference?.appId || "",
+                  catalogItemId: item.catalogReference?.catalogItemId || "",
+                  options: {
+                    productLink:
+                      item.catalogReference?.options?.productLink || null,
+                  },
+                },
+              };
+
+              if (
+                item.catalogReference?.options &&
+                item.catalogReference?.options?.variantId
+              ) {
+                sentItem.catalogReference.options = {
+                  ...sentItem.catalogReference.options,
+                  variantId: item.catalogReference?.options.variantId || null,
+                  variantName:
+                    item.catalogReference?.options.variantName || null,
+                };
+              }
+
+              return sentItem;
+            }),
+            ongkir,
+            layananKurir,
+          },
+          member?.contactId || "",
+          false
         );
 
-      dispatch({ type: ActionType.TO_STEP_3 });
+        console.log(createdOrder);
 
-      // await redirectToCheckout(
-      //   {
-      //     informasiPembeli: {
-      //       memberId: member?._id || "",
-      //       contactId: member?.contactId || "",
-      //       nama: member?.profile?.nickname || "",
-      //       nomorHp:
-      //         (member?.contact?.phones && member?.contact?.phones[0]) ||
-      //         nomorHp,
-      //       email: member?.loginEmail || "",
-      //     },
-      //     alamat: `${alamat}, ${kecamatan}, ${kota.split(";")[1]}, ${
-      //       provinsi.split(";")[1]
-      //     }.`,
-      //     catatan,
-      //     lineItems: cart.lineItems.map((item, i) => {
-      //       const sentItem: CheckoutLineItemType = {
-      //         id: item?._id || "",
-      //         itemType:
-      //           item.itemType?.preset || orders.ItemTypeItemType.PHYSICAL,
-      //         price: item.price?.amount ? +item.price.amount : 0,
-      //         productName: item.productName?.original || "",
-      //         quantity: item.quantity || 0,
-      //         image: item.image || "",
-      //         weight: item.physicalProperties?.weight
-      //           ? item.physicalProperties.weight
-      //           : 0,
-      //         catalogReference: {
-      //           appId: item.catalogReference?.appId || "",
-      //           catalogItemId: item.catalogReference?.catalogItemId || "",
-      //           options: {
-      //             productLink:
-      //               item.catalogReference?.options?.productLink || null,
-      //           },
-      //         },
-      //       };
+        dispatch({
+          type: ActionType.TO_STEP_3,
+          payload: { orderId: createdOrder?._id || "" },
+        });
 
-      //       if (
-      //         item.catalogReference?.options &&
-      //         item.catalogReference?.options?.variantId
-      //       ) {
-      //         sentItem.catalogReference.options = {
-      //           ...sentItem.catalogReference.options,
-      //           variantId: item.catalogReference?.options.variantId || null,
-      //           variantName: item.catalogReference?.options.variantName || null,
-      //         };
-      //       }
+        // clearcart
+      },
+    });
 
-      //       return sentItem;
-      //     }),
-      //     ongkir,
-      //     layananKurir,
-      //   },
-      //   member?.contactId || ""
-      // );
-    }
-
-    if (step === 2 && isValidToValidate) paymentProcess();
+  useEffect(() => {
+    console.log(step, isValidToValidate);
+    if (step === 2 && isValidToValidate) triggerCreateOrder();
   }, [isValidToValidate]);
 
   useEffect(() => {
@@ -175,6 +192,9 @@ function CartModal() {
       dispatch({ type: ActionType.TO_STEP_1 });
     }
   }, [totalCartItem]);
+
+  const { mutatePaymentEvidence, mutatePaymentEvidencePending } =
+    useMutatePaymentEvidence();
 
   if (/^\/user\/[^\/]+\/transactions\/[^\/]+$/.test(pathname)) {
     return null;
@@ -237,6 +257,11 @@ function CartModal() {
           })}
           modalTitle={modalTitleMap.get(step) || modalTitleMap.get(1)!}
         >
+          {mutatePaymentEvidencePending || createOrderPending ? (
+            <div className="absolute inset-0 flex items-center justify-center backdrop-blur-lg h-full top-0 bg-slate-50/50 z-10">
+              <div className="loader"></div>
+            </div>
+          ) : null}
           {step === 2 && (
             <div className="mt-16 min-[320px]:mt-8 md:mt-3 grid grid-cols-8 gap-x-2 gap-y-3 overflow-x-auto text-xs min-[500px]:text-sm sm:text-base w-full scrollbar px-1 h-max">
               <div className="input-data">
@@ -429,115 +454,7 @@ function CartModal() {
             </div>
           )}
 
-          {step === 3 && (
-            <div className="mt-3 space-y-3">
-              <div className="flex flex-col gap-3 max-h-52 overflow-y-auto scrollbar pr-1">
-                <div className="shrink-0 grid grid-cols-8 items-center gap-x-1 bg-slate-200/50 rounded-lg p-3 shadow-md">
-                  <Image
-                    width={0}
-                    height={0}
-                    className="row-span-3 col-span-2 place-self-center rounded-full border-2 border-slate-500 w-12 aspect-square"
-                    src={"/bca.png"}
-                    alt=""
-                    sizes="33vw"
-                  />
-                  <p className="col-span-5">BCA</p>
-                  <div className="col-span-5 flex gap-2 items-center">
-                    <p className="font-semibold text-sm">21220111010</p>
-                    <CopyButton
-                      copyObject="Rekening BCA"
-                      text={"21220111010"}
-                    />
-                  </div>
-                  <p className="col-span-5 font-semibold text-sm">
-                    an. Afridho Ikhsan
-                  </p>
-                </div>
-                <div className="shrink-0 grid grid-cols-8 items-center gap-x-1 bg-slate-200/50 rounded-lg p-3 shadow-md">
-                  <Image
-                    width={0}
-                    height={0}
-                    className="row-span-3 col-span-2 place-self-center rounded-full border-2 border-slate-500 w-12 aspect-square"
-                    src={"/bni.png"}
-                    alt=""
-                    sizes="33vw"
-                  />
-                  <p className="col-span-5">BNI</p>
-                  <div className="col-span-5 flex gap-2 items-center">
-                    <p className="font-semibold text-sm">21220111010</p>
-                    <CopyButton
-                      copyObject="Rekening BNI"
-                      text={"21220111010"}
-                    />
-                  </div>
-                  <p className="col-span-5 font-semibold text-sm">
-                    an. Ahmad Safuan
-                  </p>
-                </div>
-                <div className="shrink-0 grid grid-cols-8 items-center gap-x-1 bg-slate-200/50 rounded-lg p-3 shadow-md">
-                  <Image
-                    width={0}
-                    height={0}
-                    className="row-span-3 col-span-2 place-self-center rounded-full border-2 border-slate-500 w-12 aspect-square"
-                    src={"/mandiri.png"}
-                    alt=""
-                    sizes="33vw"
-                  />
-                  <p className="col-span-5">Mandiri</p>
-                  <div className="col-span-5 flex gap-2 items-center">
-                    <p className="font-semibold text-sm">21220111010</p>
-                    <CopyButton
-                      copyObject="Rekening Mandiri"
-                      text={"21220111010"}
-                    />
-                  </div>
-                  <p className="col-span-5 font-semibold text-sm">
-                    an. Ahmad Safuan
-                  </p>
-                </div>
-                <div className="shrink-0 grid grid-cols-8 items-center gap-x-1 bg-slate-200/50 rounded-lg p-3 shadow-md">
-                  <Image
-                    width={0}
-                    height={0}
-                    className="row-span-3 col-span-2 place-self-center rounded-full border-2 border-slate-500 w-12 aspect-square"
-                    src={"/bri.png"}
-                    alt=""
-                    sizes="33vw"
-                  />
-                  <p className="col-span-5">BRI</p>
-                  <div className="col-span-5 flex gap-2 items-center">
-                    <p className="font-semibold text-sm">21220111010</p>
-                    <CopyButton
-                      copyObject="Rekening BRI"
-                      text={"21220111010"}
-                    />
-                  </div>
-                  <p className="col-span-5 font-semibold text-sm">
-                    an. Ahmad Safuan
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col items-center text-center">
-                <div className="flex gap-2 items-center">
-                  <p>
-                    Total:{" "}
-                    <span className="text-green-700">
-                      {rupiahFormatter.format(12500999)}
-                    </span>
-                  </p>
-                  <CopyButton text={'12500999'} copyObject="Nominal Transfer"/>
-                </div>
-                <p className="text-xs font-semibold">
-                  Pastikan nominal transfer sesuai dengan yang tertera di atas
-                </p>
-              </div>
-
-              <div className="flex justify-center items-center p-16 border-2 border-dashed border-slate-700 rounded-lg bg-slate-200 cursor-pointer">
-                Upload Bukti Transfer
-              </div>
-            </div>
-          )}
+          {step === 3 && <PaymentPage orderId={createdOrderId} />}
 
           {step < 3 ? (
             cart.lineItems && cart.lineItems.length > 0 ? (
@@ -643,6 +560,8 @@ function CartModal() {
                   <button
                     className={`w-full bg-blue-500 rounded-lg p-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600`}
                     onClick={async () => {
+                      if (!!buktiTf) return dispatch({ type: ActionType.PAY });
+
                       confirmAlert({
                         customUI: ({ onClose }: { onClose: () => void }) => {
                           return (
@@ -656,6 +575,7 @@ function CartModal() {
                               }}
                               labelIya="Sudah"
                               labelTidak="Hmm, sebentar."
+                              yesButtonClassName="bg-blue-500 text-slate-50"
                             />
                           );
                         },
@@ -668,14 +588,6 @@ function CartModal() {
               )}
               {step === 3 && (
                 <>
-                  <button
-                    className="border-2 border-slate-300 w-full p-3 rounded-lg"
-                    onClick={() =>
-                      dispatch({ type: ActionType.TO_STEP_2_FROM_3 })
-                    }
-                  >
-                    Kembali
-                  </button>
                   <button
                     className={`w-full bg-blue-500 rounded-lg p-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600`}
                     onClick={async () => {

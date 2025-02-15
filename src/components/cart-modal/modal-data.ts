@@ -47,6 +47,7 @@ export const initialState = {
   layananKurir: "",
   ongkir: 0,
   totalCartItem: 0,
+  buktiTf: "",
   errors: {
     nama: "",
     nomorHp: "",
@@ -58,6 +59,7 @@ export const initialState = {
     layananKurir: "",
   },
   isValidToValidate: false,
+  createdOrderId: "",
 };
 
 export function validateForm(state: typeof initialState) {
@@ -108,12 +110,15 @@ export function cartReducer(
         ...initialState,
         totalCartItem: prevState.totalCartItem,
         isValidToValidate: false,
+        buktiTf: "",
+        createdOrderId: "",
       };
     case ActionType.OPEN_MODAL:
       return {
         ...prevState,
         isModalOpen: true,
         isValidToValidate: false,
+        createdOrderId: "",
       };
     case ActionType.SET_STATE:
       if (action.payload !== undefined && action.changedStateAttr) {
@@ -129,6 +134,7 @@ export function cartReducer(
         ...prevState,
         isValidToValidate: false,
         step: 1,
+        createdOrderId: "",
       };
     case ActionType.TO_STEP_2_FROM_1:
       if (prevState.totalCartItem === 0) {
@@ -149,11 +155,6 @@ export function cartReducer(
         step: 2,
       };
     case ActionType.TO_STEP_3:
-      if (prevState.totalCartItem === 0) {
-        toast.error("Keranjang Anda masih kosong");
-        return prevState;
-      }
-
       return {
         ...prevState,
         step: 3,
@@ -166,6 +167,7 @@ export function cartReducer(
         kecamatan: "",
         kurir: "",
         ongkir: 0,
+        layananKurir: "",
       };
     case ActionType.CHOOSE_CITY:
       return {
@@ -174,6 +176,7 @@ export function cartReducer(
         kecamatan: "",
         kurir: "",
         ongkir: 0,
+        layananKurir: "",
       };
     case ActionType.CHOOSE_DISTRICT:
       return {
@@ -181,12 +184,14 @@ export function cartReducer(
         kecamatan: action.payload,
         kurir: "",
         ongkir: 0,
+        layananKurir: "",
       };
     case ActionType.CHOOSE_KURIR:
       return {
         ...prevState,
         kurir: action.payload,
         ongkir: 0,
+        layananKurir: "",
       };
     case ActionType.CHOOSE_COURIER_SERVICE:
       return {
@@ -196,20 +201,26 @@ export function cartReducer(
       };
     case ActionType.PAY:
       const errors = validateForm(prevState);
-      if (Object.values(errors).some((error) => error)) {
-        return {
-          ...prevState,
-          errors: errors,
-          isValidToValidate: true,
-        };
-      }
-      return prevState;
+      return {
+        ...prevState,
+        errors: errors,
+        isValidToValidate: true,
+      };
     case ActionType.VALIDATE_FORM:
       const errorMessages = validateForm(prevState);
-      if (Object.values(errorMessages).some((error) => error)) {
-        return { ...prevState, errors: errorMessages };
+
+      if (!Object.values(errorMessages).some((error) => error)) {
+        return {
+          ...prevState,
+          isValidToValidate: false,
+          errors: errorMessages,
+        };
       }
-      return prevState;
+
+      return {
+        ...prevState,
+        errors: errorMessages,
+      };
     default:
       return prevState;
   }

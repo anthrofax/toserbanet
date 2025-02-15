@@ -13,6 +13,7 @@ import { createPortal } from "react-dom";
 import OrderItemList from "@/components/order-detail/order-item-list";
 import { handleCopy } from "@/utils/handle-copy";
 import CopyButton from "@/components/copy-button";
+import PayButton from "@/components/buttons/pay-button";
 
 export const metodePembayaran = new Map([
   ["gopay", "GO PAY"],
@@ -162,6 +163,10 @@ async function OrderDetailPage({
             )}
           </p>
         </div>
+
+        {order.paymentStatus !== "PAID" && (
+          <PayButton orderId={order._id || ""} buttonText="Bayar" className="w-full rounded-lg" />
+        )}
       </div>
     </div>
   );
