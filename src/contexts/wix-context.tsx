@@ -7,6 +7,7 @@ import { createContext, useContext } from "react";
 import Cookies from "js-cookie";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { members } from "@wix/members";
+import { useMidtransInit } from "@/hooks/useMidtransInit";
 
 const refreshToken = JSON.parse(Cookies.get("refreshToken") || "{}");
 

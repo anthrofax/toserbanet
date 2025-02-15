@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 function HelpModal() {
@@ -9,9 +10,12 @@ function HelpModal() {
 
   return (
     <div className="sticky lg:hidden bottom-0 p-3 shadow-sm z-30 bg-slate-50 w-[100vw]">
-      <button className="w-full p-2 text-lg text-slate-500 border-2 border-slate-400 rounded-lg font-semibold">
+      <Link
+        href={"https://wa.me/6285719129137?text="} target="_blank"
+        className="w-full p-2 text-lg text-slate-500 border-2 border-slate-400 rounded-lg font-semibold"
+      >
         Bantuan
-      </button>
+      </Link>
     </div>
   );
 }

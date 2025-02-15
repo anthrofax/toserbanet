@@ -8,20 +8,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {  useState } from "react";
+import { useState } from "react";
 
 const ProvinceSelect = ({
   value,
   onChange,
+  validationErrorMessage,
 }: {
   value: string;
   onChange: (value: string) => void;
+  validationErrorMessage: string;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { provinsi, isLoading } = useGetProvinces(isModalOpen);
 
   return (
-    <div className="relative col-span-4">
+    <div className="input-data">
       <Select
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
@@ -43,7 +45,10 @@ const ProvinceSelect = ({
               <SelectItem value="loading ">Memuat...</SelectItem>
             ) : (
               provinsi.map((provinsiItem) => (
-                <SelectItem key={provinsiItem.id} value={`${provinsiItem.id};${provinsiItem.name}`}>
+                <SelectItem
+                  key={provinsiItem.id}
+                  value={`${provinsiItem.id};${provinsiItem.name}`}
+                >
                   {provinsiItem.name}
                 </SelectItem>
               ))
@@ -59,6 +64,11 @@ const ProvinceSelect = ({
       >
         Pilih Provinsi
       </label>
+      {validationErrorMessage && (
+        <p className="validation-error-message">
+          {validationErrorMessage}
+        </p>
+      )}
     </div>
   );
 };

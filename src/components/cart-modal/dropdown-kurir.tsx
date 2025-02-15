@@ -19,6 +19,8 @@ function DropdownKurir({
   onChangeKurir,
   onChangeLayananKurir,
   isDisabled = false,
+  courierValidationErrorMessage,
+  courierServiceValidationErrorMessage,
 }: {
   kurir: string;
   kecamatan: string;
@@ -26,6 +28,8 @@ function DropdownKurir({
   onChangeKurir: (e: string) => void;
   onChangeLayananKurir: (e: string) => void;
   isDisabled?: boolean;
+  courierValidationErrorMessage: string;
+  courierServiceValidationErrorMessage: string;
 }) {
   const { cart } = useCartStore();
   const [isLayananKurirModalOpen, setIsLayananKurirModalOpen] = useState(false);
@@ -64,7 +68,7 @@ function DropdownKurir({
 
   return (
     <>
-      <div className="relative col-span-4">
+      <div className="input-data">
         <Select disabled={isDisabled} onValueChange={onChangeKurir}>
           <SelectTrigger
             className={`w-full bg-transparent border-2 border-slate-300 pl-4 pb-4 flex items-center outline-none rounded-lg text-sm focus:border-slate-500 ${
@@ -93,8 +97,11 @@ function DropdownKurir({
         >
           Pilih Kurir
         </label>
+        {courierValidationErrorMessage && (
+          <p className="validation-error-message">{courierValidationErrorMessage}</p>
+        )}
       </div>
-      <div className="relative col-span-8">
+      <div className="relative col-span-8 flex flex-col gap-2">
         <Select
           open={isLayananKurirModalOpen}
           onOpenChange={setIsLayananKurirModalOpen}
@@ -140,6 +147,9 @@ function DropdownKurir({
         >
           Pilih Layanan Kurir
         </label>
+        {courierServiceValidationErrorMessage && (
+          <p className="validation-error-message">{courierServiceValidationErrorMessage}</p>
+        )}
       </div>
     </>
   );

@@ -1,5 +1,6 @@
 import { OAuthStrategy, RefreshToken, createClient } from "@wix/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { wixClientServer } from "./lib/wix-client-server";
 
 export const middleware = async (request: NextRequest) => {
   const cookies = request.cookies;
@@ -7,9 +8,7 @@ export const middleware = async (request: NextRequest) => {
   const pathname = request.nextUrl.pathname;
   const urlOrigin = request.nextUrl.origin;
 
-  const wixClient = createClient({
-    auth: OAuthStrategy({ clientId: process.env.NEXT_PUBLIC_WIX_CLIENTID! }),
-  });
+  const wixClient = await wixClientServer()
 
   if (!cookies.get("refreshToken")) {
     const tokens = await wixClient.auth.generateVisitorTokens();

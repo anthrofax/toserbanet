@@ -15,7 +15,7 @@ function CopyButton({
 }) {
   return (
     <button
-      className={cn("flex justify-between items-center", className)}
+      className={cn("flex justify-between items-center shrink-0", className)}
       onClick={() => {
         handleCopy(text, copyObject);
       }}

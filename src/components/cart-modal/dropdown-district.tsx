@@ -14,17 +14,19 @@ function DropdownDistrict({
   value,
   onChange,
   kota,
+  validationErrorMessage,
 }: {
   value: string;
   onChange: (e: string) => void;
   kota: string;
+  validationErrorMessage: string;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const kotaId = kota.split(';')[0]
+  const kotaId = kota.split(";")[0];
   const { kecamatan, isLoading } = useGetDistrictsByCity(kotaId, isModalOpen);
 
   return (
-    <div className="relative col-span-4">
+    <div className="input-data">
       <Select
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
@@ -47,7 +49,10 @@ function DropdownDistrict({
               <SelectItem value="loading ">Memuat...</SelectItem>
             ) : (
               kecamatan.map((kecamatanItem) => (
-                <SelectItem key={kecamatanItem.id} value={`${kecamatanItem.name}`}>
+                <SelectItem
+                  key={kecamatanItem.id}
+                  value={`${kecamatanItem.name}`}
+                >
                   {kecamatanItem.name}
                 </SelectItem>
               ))
@@ -63,6 +68,11 @@ function DropdownDistrict({
       >
         Pilih Kecamatan
       </label>
+      {validationErrorMessage && (
+        <p className="validation-error-message">
+          {validationErrorMessage}
+        </p>
+      )}
     </div>
   );
 }

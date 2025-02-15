@@ -14,8 +14,8 @@ export async function wixAdminServer() {
     },
     auth: ApiKeyStrategy({
       apiKey: process.env.WIX_SECRET_API_KEY!,
-      siteId: process.env.NEXT_PUBLIC_SITE_ID!,
-      accountId: process.env.NEXT_PUBLIC_ACCOUNT_ID!,
+      siteId: process.env.SITE_ID!,
+      accountId: process.env.ACCOUNT_ID!,
     }),
   });
 

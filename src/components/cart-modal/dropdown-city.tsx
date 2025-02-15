@@ -14,17 +14,19 @@ function DropdownCity({
   value,
   onChange,
   provinsi,
+  validationErrorMessage,
 }: {
   value: string;
   onChange: (e: string) => void;
   provinsi: string;
+  validationErrorMessage: string;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const idProvinsi = provinsi.split(';')[0]
+  const idProvinsi = provinsi.split(";")[0];
   const { kota, isLoading } = useGetCitiesByProvince(idProvinsi, isModalOpen);
 
   return (
-    <div className="relative col-span-4">
+    <div className="input-data">
       <Select
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
@@ -66,6 +68,11 @@ function DropdownCity({
       >
         Pilih Kota
       </label>
+      {validationErrorMessage && (
+        <p className="validation-error-message">
+          {validationErrorMessage}
+        </p>
+      )}
     </div>
   );
 }

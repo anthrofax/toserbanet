@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
+import ModalOverlay from "./modal-overlay";
 
 function OrderDetailModal({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -11,12 +12,7 @@ function OrderDetailModal({ children }: { children: React.ReactNode }) {
     typeof window !== "undefined" &&
     createPortal(
       <>
-        <div
-          className={`bg-slate-900/50 fixed left-0 top-0 right-0 bottom-0 cursor-pointer transition-all opacity-100 z-20`}
-          onClick={() => {
-            router.back();
-          }}
-        />
+        <ModalOverlay handleClose={() => router.back()} />
         <div
           className={`bg-slate-50 px-3 md:px-10 pb-5 py-16 min-[361px]:pt-10 md:pt-16 w-[90%] max-w-[535px] h-fit fixed top-[45%] left-1/2 -translate-x-1/2 rounded-xl flex flex-col gap-3 justify-center items-center max-h-[80vh] -translate-y-1/2 opacity-100 z-30 duration-500 delay-75`}
         >

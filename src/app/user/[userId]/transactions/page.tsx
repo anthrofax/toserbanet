@@ -8,6 +8,7 @@ import { media as wixMedia } from "@wix/sdk";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import NotFoundInfo from "@/components/not-found-info";
+import HelpButton from "@/components/buttons/help-button";
 
 async function UserTransactionPage() {
   const wixClient = await wixClientServer();
@@ -22,7 +23,7 @@ async function UserTransactionPage() {
     },
   });
 
-  console.dir(orders, { depth: null });
+  // console.dir(orders, { depth: null });
 
   return (
     <div className="mt-5 px-3 overflow-hidden h-full">
@@ -112,8 +113,7 @@ async function UserTransactionPage() {
                         ? "Sudah Bayar"
                         : "Belum Bayar"}
                     </div>
-
-                    <IoMdHelpCircle className="text-2xl" />
+                    <HelpButton />
                   </div>
                 </div>
                 <div className="flex gap-2 items-center">

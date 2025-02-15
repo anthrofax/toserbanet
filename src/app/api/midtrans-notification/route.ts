@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     console.log("metadata", body.metadata);
     body.payment_type as "gopay" | "qris" | "shopeepay" | "bank_transfer";
 
-    const { transaction_status, order_id } = body;
+    const { transaction_status } = body;
 
     if (
       (transaction_status === "deny" ||
@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
         layananKurir,
       } = body.metadata as MidtransNotificationMetadata;
 
+      console.log("metadata", body.metadata);
       const order = await wixClient.orders.createOrder({
         channelInfo: {},
         lineItems: lineItems.map(
@@ -181,6 +182,10 @@ export async function POST(req: NextRequest) {
                 ? body.va_numbers[0].bank
                 : body.payment_type,
           },
+          {
+            title: "buktiPembayaran",
+            value: "",
+          },
         ],
         purchasedDate: new Date(body.transaction_time),
       });
@@ -193,6 +198,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ message: "Pembayaran Berhasil" });
   } catch (error) {
+    console.log("error midtrans");
     console.dir(error, { depth: null, colors: true });
     return NextResponse.json({ error });
   }

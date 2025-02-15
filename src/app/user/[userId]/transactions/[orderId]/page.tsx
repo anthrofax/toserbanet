@@ -38,7 +38,7 @@ async function OrderDetailPage({
 
   console.log(metodePembayaran.get(null));
 
-  // console.dir(order, { depth: null });
+  console.dir(order, { depth: null });
 
   return (
     <div className="overflow-y-auto flex flex-col gap-3 text-xs py-3 pr-1 lg:pr-3">

@@ -1,16 +1,10 @@
 "use client";
 
+import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { cn } from "@/utils/cn";
-import {
-  createContext,
-  Dispatch,
-  RefObject,
-  SetStateAction,
-  useContext,
-  useRef,
-  useState,
-} from "react";
+import React, { createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
+import { IoClose } from "react-icons/io5";
 
 interface ModalContextType {
   isOpen: boolean;
@@ -49,7 +43,7 @@ function Modal({
   );
 }
 
-function Button({
+function Open({
   children,
   className,
 }: {
@@ -70,33 +64,63 @@ function Button({
 function OpenedModal({
   children,
   className,
+  modalButton,
+  modalIcon,
+  modalTitle,
+  customCloseIcon,
   ...props
 }: {
   children?: React.ReactNode;
   className?: string;
+  modalIcon?: React.ReactNode;
+  modalTitle: string;
+  customCloseIcon?: React.ReactNode;
   [key: string]: any;
 }) {
-  const { isOpen } = useContext(ModalContext);
+  const { isOpen, handleClose } = useContext(ModalContext);
+  let modal = useOutsideClick(handleClose);
+
+  if (typeof window === "undefined") return null;
 
   return createPortal(
     <div
-      className={cn(
-        `overflow-hidden p-3 bg-slate-50 shadow min-w-8 rounded-lg absolute top-[103%] right-0 delay-75 ease-out transition-all ${
-          isOpen
-            ? "translate-y-0 opacity-100"
-            : "-translate-y-5 opacity-0 -z-10"
-        }`,
-        className
-      )}
-      {...props}
+      className={`bg-slate-900/50 fixed left-0 top-0 right-0 bottom-0 cursor-pointer transition-all ${
+        isOpen ? "opacity-100 z-20" : "opacity-0 -z-10"
+      }`}
     >
-      {children}
+      <div
+        className={cn(
+          `cursor-default bg-slate-50 px-3 md:px-10 pb-8 pt-16 min-[361px]:pt-10 md:pt-16 w-[90%] max-w-[535px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 rounded-xl flex flex-col gap-3 justify-center items-center max-h-[90vh] ${
+            isOpen
+              ? "-translate-y-1/2 opacity-100 z-30 duration-500 delay-75"
+              : "-translate-y-1/4 opacity-0 -z-10"
+          }`,
+          className
+        )}
+        ref={modal}
+        {...props}
+      >
+        <div className="flex justify-between items-center gap-3 flex-wrap will-change-transform absolute top-5 w-full px-5">
+          <div className="rounded-full flex items-center gap-2 w-[70%]">
+            {modalIcon || null}
+            <p className="font-medium text-base md:text-xl">{modalTitle}</p>
+          </div>
+
+          <button
+            className="rounded-full p-1 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-slate-400 hover:bg-slate-500"
+            onClick={handleClose}
+          >
+            {customCloseIcon || <IoClose className="text-slate-50 text-5xl" />}
+          </button>
+        </div>
+        {children}
+      </div>
     </div>,
     window.document.body
   );
 }
 
-Modal.Button = Button;
+Modal.Open = Open;
 Modal.OpenedModal = OpenedModal;
 
 export default Modal;
