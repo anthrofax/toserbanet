@@ -43,18 +43,18 @@ function Modal({
   );
 }
 
-Modal.Open = ({
+function Open({
   children,
   className,
 }: {
   children?: React.ReactNode;
   className?: string;
-}) => {
+}) {
   const { handleOpen } = useContext(ModalContext);
   return (
     <div
       onClick={(e) => {
-        console.log('test')
+        console.log("test");
         // e.stopPropagation();
         handleOpen();
       }}
@@ -63,9 +63,9 @@ Modal.Open = ({
       {children}
     </div>
   );
-};
+}
 
-Modal.OpenedModal = ({
+function OpenedModal({
   children,
   className,
   modalButton,
@@ -80,7 +80,7 @@ Modal.OpenedModal = ({
   modalTitle: string;
   customCloseIcon?: React.ReactNode;
   [key: string]: any;
-}) => {
+}) {
   const { isOpen, handleClose } = useContext(ModalContext);
   let modal = useOutsideClick(handleClose, true, true);
 
@@ -120,6 +120,9 @@ Modal.OpenedModal = ({
     </>,
     window.document.body
   );
-};
+}
+
+Modal.Open = Open;
+Modal.OpenedModal = OpenedModal
 
 export { Modal };
