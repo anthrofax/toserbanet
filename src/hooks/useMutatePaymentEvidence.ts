@@ -16,7 +16,7 @@ export function useMutatePaymentEvidence() {
       orderId: string;
       linkFotoBuktiPembayaran: string;
     }) => {
-      await updateBuktiPembayaran(orderId, linkFotoBuktiPembayaran);
+      // await updateBuktiPembayaran(orderId, linkFotoBuktiPembayaran);
     },
   });
 

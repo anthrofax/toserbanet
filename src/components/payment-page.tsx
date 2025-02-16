@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CopyButton from "@/components/copy-button";
 import { rupiahFormatter } from "@/utils/number-formatter";
 import {
@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { useWixClientContext } from "@/contexts/wix-context";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "./ui/skeleton";
+import axios from "axios";
 
 function PaymentPage({ orderId }: { orderId: string }) {
   const [namaFotoBuktiTf, setNamaFotoBuktiTf] = useState<string | null>(null);
@@ -28,12 +29,29 @@ function PaymentPage({ orderId }: { orderId: string }) {
     },
   });
 
+  const { data: buktiPembayaran } = useQuery({
+    queryKey: ["currentorder", orderId],
+    queryFn: async () => {
+      const buktiPembayaran = await axios.get(
+        "https://afridhoikhsan.wixsite.com/_functions/getData"
+      );
+
+      console.log(buktiPembayaran);
+
+      return buktiPembayaran;
+    },
+  });
+
+  useEffect(() => {
+    console.log(buktiPembayaran);
+  });
+
   const handlePhotoChange = async (result: CloudinaryUploadWidgetResults) => {
     if (typeof result.info !== "object")
       return toast.error("Tidak ada gambar yang diunggah");
 
     const photoUrl = result.info.url;
-    console.log('PhotoUrl', photoUrl)
+    console.log("PhotoUrl", photoUrl);
     await mutatePaymentEvidence({
       orderId,
       linkFotoBuktiPembayaran: photoUrl,

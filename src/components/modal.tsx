@@ -54,8 +54,7 @@ function Open({
   return (
     <div
       onClick={(e) => {
-        console.log("test");
-        // e.stopPropagation();
+        e.stopPropagation();
         handleOpen();
       }}
       className={cn("min-w-8 rounded-lg relative ", className)}

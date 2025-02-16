@@ -19,13 +19,9 @@ function PayButton({
     <Modal>
       <Modal.Open>
         {
-          <PrimaryButton
-            className={
-              className
-            }
-          >
+          <button className={className} onClick={(e) => e.stopPropagation()}>
             {buttonText}
-          </PrimaryButton>
+          </button>
         }
       </Modal.Open>
       <Modal.OpenedModal

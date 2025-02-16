@@ -170,16 +170,16 @@ export async function updateBuktiPembayaran(
   orderId: string,
   linkFotoBuktiPembayaran: string
 ) {
-  const updatedOrder = await wixClient.orders.updateOrder(orderId, {
-    extendedFields: {
-      namespaces: {
-        buktiPembayaran: {
-          title: "buktiPembayaran",
-          value: linkFotoBuktiPembayaran,
-        },
-      },
-    },
-  });
+  // const updatedOrder = await wixClient.orders.updateOrder(orderId, {
+  //   extendedFields: {
+  //     namespaces: {
+  //       toserbanet: {
+  //         title: "buktiPembayaran",
+  //         value: linkFotoBuktiPembayaran,
+  //       },
+  //     },
+  //   },
+  // });
 
-  return { updatedOrder };
+  // return { updatedOrder };
 }

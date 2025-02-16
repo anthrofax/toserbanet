@@ -24,7 +24,7 @@ function UserLayout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      <div className="col-start-1 lg:col-start-3 col-span-12 lg:col-span-12 min-h-[80vh]">
+      <div className="col-start-1 lg:col-start-3 col-span-12 lg:col-span-12 min-h-[80vh] relative">
         {children}
       </div>
     </div>

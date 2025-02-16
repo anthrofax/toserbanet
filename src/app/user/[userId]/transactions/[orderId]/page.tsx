@@ -23,6 +23,7 @@ export const metodePembayaran = new Map([
   ["bni", "Bank Nasional Indonesia (BNI)"],
   ["bri", "Bank Republik Indonesia (BRI)"],
   [null, "Pembayaran Online"],
+  ["Transfer Bank (Manual)", "Transfer Bank (Manual)"],
 ]);
 
 async function OrderDetailPage({
@@ -165,7 +166,11 @@ async function OrderDetailPage({
         </div>
 
         {order.paymentStatus !== "PAID" && (
-          <PayButton orderId={order._id || ""} buttonText="Bayar" className="w-full rounded-lg" />
+          <PayButton
+            orderId={order._id || ""}
+            buttonText="Bayar"
+            className="w-full rounded-lg"
+          />
         )}
       </div>
     </div>

@@ -41,7 +41,7 @@ export function useIsLoginSuccess() {
 
   if (!isLoading && !isError) {
     Cookies.set("refreshToken", JSON.stringify(data?.refreshToken || {}), {
-      expires: 2,
+      expires: 7,
     });
     if (typeof data !== "undefined") wixClient.auth.setTokens(data);
     return { isSuccess: true, isLoading };

@@ -1,7 +1,11 @@
 import Loader from "@/components/loader";
 
 function Loading() {
-  return <Loader />;
+  return (
+    <div>
+      <Loader />;
+    </div>
+  );
 }
 
 export default Loading;

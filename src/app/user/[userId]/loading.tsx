@@ -1,7 +1,11 @@
 import Loader from "@/components/loader";
 
 function Loading() {
-  return <Loader />;
+  return (
+    <div className="min-h-screen">
+      <Loader />;
+    </div>
+  );
 }
 
 export default Loading;
