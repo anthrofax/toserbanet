@@ -2,7 +2,7 @@ import Loader from "@/components/loader";
 
 function Loading() {
   return (
-    <div>
+    <div className="min-h-screen">
       <Loader />;
     </div>
   );

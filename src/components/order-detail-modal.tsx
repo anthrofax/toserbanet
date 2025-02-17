@@ -42,6 +42,7 @@ function OrderDetailModal({
                 orderId={data.orderId || ""}
                 buttonText="Bayar"
                 className="w-full rounded-lg"
+                orderNumber={data.orderNumber || ""}
               />
             )}
           </div>

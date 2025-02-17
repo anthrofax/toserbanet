@@ -24,6 +24,7 @@ async function OrderDetailPage({
     <OrderDetailModal
       data={{
         orderId: order._id,
+        orderNumber: order.number,
         paymentStatus: order.paymentStatus,
       }}
     >

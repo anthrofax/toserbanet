@@ -11,6 +11,7 @@ import {
 import { wixClientServer } from "./lib/wix-client-server";
 import { orders } from "@wix/ecom";
 import { wixAdminServer } from "./lib/wix-admin-server";
+import { RekeningBankQueryType } from "./types/rekening-bank";
 
 interface RajaOngkirDomesticLocationType {
   meta: {
@@ -199,5 +200,18 @@ export async function orderTokenizer({
     console.error("Midtrans Error: ", error);
 
     throw new Error("Midtrans Error: " + error);
+  }
+}
+
+export async function getRekeningBank(): Promise<RekeningBankQueryType[]> {
+  try {
+    const rekeningBank = await axios.get(
+      "https://afridhoikhsan.wixsite.com/toserbanet/_functions/rekeningBank"
+    );
+
+    return [...rekeningBank.data.body];
+  } catch (err) {
+    console.log(err);
+    return [];
   }
 }

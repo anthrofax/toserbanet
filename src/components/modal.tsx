@@ -12,7 +12,7 @@ interface ModalContextType {
   handleClose: () => void;
 }
 
-const ModalContext = createContext<ModalContextType>({
+export const ModalContext = createContext<ModalContextType>({
   isOpen: false,
   handleOpen: () => {},
   handleClose: () => {},
@@ -107,7 +107,7 @@ function OpenedModal({
         <div className="flex justify-between items-center gap-3 flex-wrap will-change-transform absolute top-5 w-full px-5">
           <div className="rounded-full flex items-center gap-2 w-[70%]">
             {modalIcon || null}
-            <p className="font-medium text-base md:text-xl">{modalTitle}</p>
+            <p className="font-medium text-base md:text-xl line-clamp-1">{modalTitle}</p>
           </div>
 
           <button className="rounded-full p-1 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-slate-400 hover:bg-slate-500 modal-close">

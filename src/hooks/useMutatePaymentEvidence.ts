@@ -1,6 +1,6 @@
 "use client";
 
-import { updateBuktiPembayaran } from "@/lib/order";
+import { addBuktiPembayaran, updateBuktiPembayaran } from "@/lib/order";
 import { useMutation } from "@tanstack/react-query";
 
 export function useMutatePaymentEvidence() {
@@ -12,11 +12,14 @@ export function useMutatePaymentEvidence() {
     mutationFn: async ({
       orderId,
       linkFotoBuktiPembayaran,
+      namaFoto,
     }: {
       orderId: string;
       linkFotoBuktiPembayaran: string;
+      namaFoto: string
     }) => {
       // await updateBuktiPembayaran(orderId, linkFotoBuktiPembayaran);
+      await addBuktiPembayaran(orderId, linkFotoBuktiPembayaran, namaFoto);
     },
   });
 

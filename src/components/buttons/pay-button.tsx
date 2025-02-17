@@ -10,22 +10,28 @@ function PayButton({
   orderId,
   buttonText,
   className,
+  orderNumber
 }: {
   orderId: string;
   buttonText?: string;
   className?: string;
+  orderNumber: string
 }) {
   return (
     <Modal>
       <Modal.Open>
         {
-          <button className={className} onClick={(e) => e.stopPropagation()}>
+          <PrimaryButton
+            className={
+              className
+            }
+          >
             {buttonText}
-          </button>
+          </PrimaryButton>
         }
       </Modal.Open>
       <Modal.OpenedModal
-        modalTitle="Pembayaran Pesanan"
+        modalTitle={`Pembayaran Pesanan #${orderNumber}`}
         modalIcon={<PiMoneyLight className="text-2xl md:text-3xl shrink-0" />}
       >
         <PaymentPage orderId={orderId} />

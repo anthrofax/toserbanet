@@ -3,6 +3,7 @@
 import { CheckoutDataType, CheckoutLineItemType } from "@/types/checkout-types";
 import { wixAdminServer } from "./wix-admin-server";
 import { orders } from "@wix/ecom";
+import axios from "axios";
 
 const wixClient = await wixAdminServer();
 
@@ -170,16 +171,66 @@ export async function updateBuktiPembayaran(
   orderId: string,
   linkFotoBuktiPembayaran: string
 ) {
-  // const updatedOrder = await wixClient.orders.updateOrder(orderId, {
-  //   extendedFields: {
-  //     namespaces: {
-  //       toserbanet: {
-  //         title: "buktiPembayaran",
-  //         value: linkFotoBuktiPembayaran,
-  //       },
-  //     },
-  //   },
-  // });
+  const updatedOrder = await wixClient.orders.updateOrder(orderId, {
+    customFields: [
+      {
+        title: "buktiPembayaran",
+        value: "test",
+      },
+    ],
+  });
 
-  // return { updatedOrder };
+  return { updatedOrder };
+}
+
+export async function getBuktiPembayaran() {
+  try {
+    const buktiPembayaran = await axios.get(
+      "https://afridhoikhsan.wixsite.com/toserbanet/_functions/buktiPembayaran"
+    );
+
+    return [...buktiPembayaran.data.body];
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+export async function getBuktiPembayaranById(orderId: string) {
+  try {
+    const buktiPembayaran = await axios.get(
+      `https://afridhoikhsan.wixsite.com/toserbanet/_functions/buktiPembayaranById?orderId=${orderId}`
+    );
+
+    return {
+      ...buktiPembayaran.data.body,
+    };
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+export async function addBuktiPembayaran(
+  orderId: string,
+  linkBuktiPembayaran: string,
+  namaFoto: string
+) {
+  try {
+    const buktiPembayaran = await axios.put(
+      "https://afridhoikhsan.wixsite.com/toserbanet/_functions/buktiPembayaran",
+      {
+        orderId,
+        linkBuktiPembayaran,
+        namaFoto,
+      }
+    );
+
+    return {
+      ...buktiPembayaran.data.body,
+    };
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 }

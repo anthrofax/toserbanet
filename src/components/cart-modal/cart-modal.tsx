@@ -33,9 +33,10 @@ import { MdOutlineInfo } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 import PaymentPage from "../payment-page";
 import { useMutatePaymentEvidence } from "@/hooks/useMutatePaymentEvidence";
+import Link from "next/link";
 
 function CartModal() {
-  const { cart, getCart, counter, isLoading } = useCartStore();
+  const { cart, getCart, counter, isLoading, removeItem } = useCartStore();
   const wixClient = useWixClientContext();
   const isLoggedIn = wixClient.auth.loggedIn();
   const { member } = useCurrentMember();
@@ -134,6 +135,7 @@ function CartModal() {
                 };
               }
 
+              removeItem(wixClient, item._id!);
               return sentItem;
             }),
             ongkir,
@@ -149,8 +151,6 @@ function CartModal() {
           type: ActionType.TO_STEP_3,
           payload: { orderId: createdOrder?._id || "" },
         });
-
-        // clearcart
       },
     });
 
@@ -588,16 +588,12 @@ function CartModal() {
               )}
               {step === 3 && (
                 <>
-                  <button
-                    className={`w-full bg-blue-500 rounded-lg p-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600`}
-                    onClick={async () => {
-                      router.push(
-                        `/user/${member?.profile?.slug}/transactions`
-                      );
-                    }}
+                  <Link
+                    href={`/user/${member?.profile?.slug}/transactions`}
+                    className={`w-full bg-blue-500 rounded-lg p-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600 text-center`}
                   >
                     Ke Halaman Transaksi
-                  </button>
+                  </Link>
                 </>
               )}
             </div>

@@ -170,6 +170,7 @@ async function OrderDetailPage({
             orderId={order._id || ""}
             buttonText="Bayar"
             className="w-full rounded-lg"
+            orderNumber={order.number || ""}
           />
         )}
       </div>

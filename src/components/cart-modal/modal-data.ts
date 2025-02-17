@@ -158,6 +158,7 @@ export function cartReducer(
       return {
         ...prevState,
         step: 3,
+        createdOrderId: action.payload.orderId,
       };
     case ActionType.CHOOSE_PROVINCE:
       return {

@@ -22,8 +22,6 @@ async function TransactionList() {
     },
   });
 
-  // console.dir(orders, { depth: null });
-
   return (
     <div className="mt-5 px-3 overflow-hidden h-full">
       {!orders || orders.orders.length < 1 ? (
@@ -95,7 +93,7 @@ async function TransactionList() {
                       </p>
                       <p className="text-slate-500 ">
                         {" "}
-                        {formatDate(new Date(`${order.purchasedDate}`))}
+                        {formatDate(new Date(`${order._createdDate}`))}
                       </p>
                     </div>
                   </div>
@@ -110,8 +108,9 @@ async function TransactionList() {
                     ) : (
                       <PayButton
                         orderId={order._id || ""}
+                        orderNumber={order.number || ""}
                         buttonText="Belum Bayar"
-                        className="rounded-lg p-2 bg-red-300 text-red-500 cursor-pointer z-10"
+                        className="rounded-lg p-2 bg-red-300 text-red-500 hover:bg-red-500 hover:text-red-300 cursor-pointer z-10"
                       />
                     )}
 
