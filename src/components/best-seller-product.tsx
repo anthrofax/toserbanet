@@ -14,22 +14,25 @@ async function BestSellerProduct() {
     .limit(10)
     .find();
 
-  const productItem: ProductItemType[] = productQuery.items.map((prod) => {
-    return {
-      title: prod.name || "",
-      imageObj: {
-        imageAlt: prod.name || "",
-        imageUrl: prod.media?.mainMedia?.image?.url || "",
-        width: prod.media?.mainMedia?.image?.width || 0,
-        height: prod.media?.mainMedia?.image?.height || 0,
-      },
-      price: {
-        discountPrice: prod.priceData?.discountedPrice || 0,
-        normalPrice: prod.priceData?.price || 0,
-      },
-      slug: prod.slug || "",
-    };
-  });
+  const productItem: ProductItemType[] = productQuery.items
+    .map((prod) => {
+      return {
+        title: prod.name || "",
+        imageObj: {
+          imageAlt: prod.name || "",
+          imageUrl: prod.media?.mainMedia?.image?.url || "",
+          width: prod.media?.mainMedia?.image?.width || 0,
+          height: prod.media?.mainMedia?.image?.height || 0,
+        },
+        price: {
+          discountPrice: prod.priceData?.discountedPrice || 0,
+          normalPrice: prod.priceData?.price || 0,
+        },
+        slug: prod.slug || "",
+        quantity: prod.stock?.quantity ? +prod.stock.quantity : 0,
+      };
+    })
+    .filter((item) => item.quantity > 0);
 
   return (
     <div className="py-5 flex flex-col gap-2">

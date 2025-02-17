@@ -56,6 +56,7 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
         normalPrice: prod.priceData?.price || 0,
       },
       slug: prod.slug || "",
+      quantity: prod.stock?.quantity ? +prod.stock.quantity : 0,
     };
   });
 
@@ -76,10 +77,9 @@ async function ProductList({ categoryId, limit, searchParams }: PropsType) {
   // Paginasi secara manual setelah filter
   const currentPage = searchParams?.page ? parseInt(searchParams.page) : 1;
   const startIndex = (currentPage - 1) * (limit || PRODUCT_PER_PAGE);
-  const paginatedItems = productItems.slice(
-    startIndex,
-    startIndex + (limit || PRODUCT_PER_PAGE)
-  );
+  const paginatedItems = productItems
+    .slice(startIndex, startIndex + (limit || PRODUCT_PER_PAGE))
+    .filter((item) => item.quantity > 0);
 
   return (
     <div className="min-h-[30rem]" id="daftar-produk">

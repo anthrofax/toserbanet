@@ -14,5 +14,6 @@ export type ProductItemType = {
   };
   slug: string;
   description?: string;
-  identifier?: string
+  identifier?: string;
+  quantity: number;
 };

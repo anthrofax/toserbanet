@@ -17,6 +17,7 @@ function ListProductScroll({
           price={product.price}
           title={product.title}
           slug={product.slug}
+          quantity={product.quantity}
           key={i}
           identifier="list-scroll"
         />

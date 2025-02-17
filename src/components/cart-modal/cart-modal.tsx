@@ -26,13 +26,11 @@ import {
   modalIconMap,
   modalTitleMap,
 } from "./modal-data";
-import { useMidtransInit } from "@/hooks/useMidtransInit";
 import { confirmAlert } from "react-confirm-alert";
 import ConfirmationBox from "../confirmation.box";
 import { MdOutlineInfo } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 import PaymentPage from "../payment-page";
-import { useMutatePaymentEvidence } from "@/hooks/useMutatePaymentEvidence";
 import Link from "next/link";
 
 function CartModal() {
@@ -43,7 +41,7 @@ function CartModal() {
   const pathname = usePathname();
   const router = useRouter();
 
-  useMidtransInit();
+  // useMidtransInit();
 
   useEffect(() => {
     getCart(wixClient);
@@ -151,6 +149,10 @@ function CartModal() {
           type: ActionType.TO_STEP_3,
           payload: { orderId: createdOrder?._id || "" },
         });
+
+        cart.lineItems.forEach((item) => {
+          removeItem(wixClient, item._id!);
+        });
       },
     });
 
@@ -188,16 +190,18 @@ function CartModal() {
   }, [cart]);
 
   useEffect(() => {
-    if (totalCartItem === 0) {
+    if (totalCartItem === 0 && step !== 3) {
       dispatch({ type: ActionType.TO_STEP_1 });
     }
   }, [totalCartItem]);
 
-  const { mutatePaymentEvidence, mutatePaymentEvidencePending } =
-    useMutatePaymentEvidence();
-
   if (/^\/user\/[^\/]+\/transactions\/[^\/]+$/.test(pathname)) {
     return null;
+  }
+
+  function handleClose() {
+    if (step === 3) router.push(`/user/${member?.profile?.slug}/transactions`);
+    dispatch({ type: ActionType.CLOSE_MODAL });
   }
 
   return (
@@ -227,7 +231,7 @@ function CartModal() {
       </div>
 
       <Modal
-        handleClose={() => dispatch({ type: ActionType.CLOSE_MODAL })}
+        handleClose={handleClose}
         handleOpen={() => dispatch({ type: ActionType.OPEN_MODAL })}
         isOpen={isModalOpen}
       >
@@ -257,7 +261,7 @@ function CartModal() {
           })}
           modalTitle={modalTitleMap.get(step) || modalTitleMap.get(1)!}
         >
-          {mutatePaymentEvidencePending || createOrderPending ? (
+          {createOrderPending ? (
             <div className="absolute inset-0 flex items-center justify-center backdrop-blur-lg h-full top-0 bg-slate-50/50 z-10">
               <div className="loader"></div>
             </div>
@@ -519,7 +523,7 @@ function CartModal() {
                 <>
                   <button
                     className="border-2 border-slate-300 w-full p-3 rounded-lg"
-                    onClick={() => dispatch({ type: ActionType.CLOSE_MODAL })}
+                    onClick={handleClose}
                   >
                     Belanja Lagi
                   </button>

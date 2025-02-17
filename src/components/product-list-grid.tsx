@@ -15,6 +15,7 @@ function ProductListGrid({ productItems }: { productItems: ProductItemType[] }) 
           }}
           title={product.title}
           slug={product.slug}
+          quantity={product.quantity}
           key={i}
           className="w-full"
         />
