@@ -130,12 +130,12 @@ function PaymentPage({
   }
 
   return (
-    <div className="mt-3 space-y-3 w-full min-h-72 relative">
+    <div className="mt-3 space-y-3 w-full min-h-72 relative overflow-y-auto max-h-[90vh] scrollbar pr-1">
       {getBuktiPembayaranLoading ? (
         <Loader className="h-full" />
       ) : (
         <>
-          <div className="flex flex-col gap-3 max-h-52 overflow-y-auto scrollbar pr-1">
+          <div className="flex flex-col gap-3 max-h-52 overflow-y-auto scrollbar pr-1 pb-5">
             {getRekeningBankLoading ? (
               Array.from({ length: 4 }).map((_, i) => {
                 return (
@@ -277,7 +277,7 @@ function PaymentPage({
             }}
           >
             {mutatePaymentEvidencePending || getBuktiPembayaranLoading ? (
-              <div className="loader-white w-[25px]"></div>
+              <div className="loader-white w-[25px] "></div>
             ) : !buktiPembayaran?.namaFoto ||
               !buktiPembayaran?.linkBuktiPembayaran ? (
               "Kirim"

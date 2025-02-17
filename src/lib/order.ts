@@ -61,7 +61,7 @@ export async function createOrder({
         email,
         memberId,
       },
-      paymentStatus: orders.PaymentStatus.PENDING,
+      paymentStatus: orders.PaymentStatus.NOT_PAID,
       weightUnit: orders.WeightUnit.KG,
       currency: "IDR",
       taxIncludedInPrices: false,

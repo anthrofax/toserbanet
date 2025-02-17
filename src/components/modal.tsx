@@ -94,7 +94,7 @@ function OpenedModal({
       />
       <div
         className={cn(
-          `overflow-hidden cursor-default bg-slate-50 px-3 md:px-10 pb-8 pt-16 min-[361px]:pt-10 md:pt-16 w-[90%] max-w-[535px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 rounded-xl flex flex-col gap-3 justify-center items-center max-h-[90vh] ${
+          `overflow-y-auto overflow-x-hidden cursor-default bg-slate-50 px-3 md:px-10 pb-8 pt-16 min-[361px]:pt-10 md:pt-16 w-[90%] max-w-[535px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 rounded-xl flex flex-col gap-3 justify-center items-center max-h-[90vh] ${
             isOpen
               ? "-translate-y-1/2 opacity-100 z-50 duration-500 delay-75"
               : "-translate-y-1/4 opacity-0 -z-10"

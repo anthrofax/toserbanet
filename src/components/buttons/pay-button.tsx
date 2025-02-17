@@ -35,6 +35,7 @@ function PayButton({
         modalIcon={<PiMoneyLight className="text-2xl md:text-3xl shrink-0" />}
       >
         <PaymentPage orderId={orderId} orderNumber={orderNumber} />
+
       </Modal.OpenedModal>
     </Modal>
   );
