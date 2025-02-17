@@ -214,7 +214,8 @@ export async function getBuktiPembayaranById(orderId: string) {
 export async function addBuktiPembayaran(
   orderId: string,
   linkBuktiPembayaran: string,
-  namaFoto: string
+  namaFoto: string,
+  orderNumber: string
 ) {
   try {
     const buktiPembayaran = await axios.put(
@@ -223,6 +224,7 @@ export async function addBuktiPembayaran(
         orderId,
         linkBuktiPembayaran,
         namaFoto,
+        orderNumber,
       }
     );
 

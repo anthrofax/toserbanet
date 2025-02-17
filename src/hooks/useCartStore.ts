@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { currentCart } from "@wix/ecom";
 import { WixClient } from "@/contexts/wix-context";
 import { toast } from "react-toastify";
+import { wixClientServer } from "@/lib/wix-client-server";
 
 type CartState = {
   cart: currentCart.Cart &
@@ -29,6 +30,7 @@ type CartState = {
     quantity: number
   ) => void;
   removeItem: (wixClient: WixClient, itemId: string) => void;
+  deleteCart: (wixClient: WixClient) => void;
 };
 
 export const useCartStore = create<CartState>((set) => ({
@@ -122,6 +124,23 @@ export const useCartStore = create<CartState>((set) => ({
     set({
       cart: response.cart,
       counter: response.cart?.lineItems.length,
+      isLoading: false,
+    });
+  },
+  deleteCart: async (wixClient) => {
+    set((state) => ({ ...state, isLoading: true }));
+
+    const response = await wixClient.currentCart.deleteCurrentCart();
+
+    set({
+      cart: {
+        lineItems: [],
+        currency: "",
+        conversionCurrency: "",
+        weightUnit: currentCart.WeightUnit.UNSPECIFIED_WEIGHT_UNIT,
+        appliedDiscounts: [],
+      },
+      counter: 0,
       isLoading: false,
     });
   },

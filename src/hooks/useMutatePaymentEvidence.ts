@@ -13,13 +13,20 @@ export function useMutatePaymentEvidence() {
       orderId,
       linkFotoBuktiPembayaran,
       namaFoto,
+      orderNumber,
     }: {
       orderId: string;
       linkFotoBuktiPembayaran: string;
-      namaFoto: string
+      namaFoto: string;
+      orderNumber: string;
     }) => {
       // await updateBuktiPembayaran(orderId, linkFotoBuktiPembayaran);
-      await addBuktiPembayaran(orderId, linkFotoBuktiPembayaran, namaFoto);
+      await addBuktiPembayaran(
+        orderId,
+        linkFotoBuktiPembayaran,
+        namaFoto,
+        orderNumber
+      );
     },
   });
 

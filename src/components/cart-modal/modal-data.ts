@@ -59,7 +59,10 @@ export const initialState = {
     layananKurir: "",
   },
   isValidToValidate: false,
-  createdOrderId: "",
+  createdOrder: {
+    orderId: "",
+    orderNumber: "",
+  },
 };
 
 export function validateForm(state: typeof initialState) {
@@ -111,14 +114,20 @@ export function cartReducer(
         totalCartItem: prevState.totalCartItem,
         isValidToValidate: false,
         buktiTf: "",
-        createdOrderId: "",
+        createdOrder: {
+          orderId: "",
+          orderNumber: "",
+        },
       };
     case ActionType.OPEN_MODAL:
       return {
         ...prevState,
         isModalOpen: true,
         isValidToValidate: false,
-        createdOrderId: "",
+        createdOrder: {
+          orderId: "",
+          orderNumber: "",
+        },
       };
     case ActionType.SET_STATE:
       if (action.payload !== undefined && action.changedStateAttr) {
@@ -134,7 +143,10 @@ export function cartReducer(
         ...prevState,
         isValidToValidate: false,
         step: 1,
-        createdOrderId: "",
+        createdOrder: {
+          orderId: "",
+          orderNumber: "",
+        },
       };
     case ActionType.TO_STEP_2_FROM_1:
       if (prevState.totalCartItem === 0) {
@@ -158,7 +170,10 @@ export function cartReducer(
       return {
         ...prevState,
         step: 3,
-        createdOrderId: action.payload.orderId,
+        createdOrder: {
+          orderId: action.payload.orderId,
+          orderNumber: action.payload.orderNumber,
+        },
       };
     case ActionType.CHOOSE_PROVINCE:
       return {

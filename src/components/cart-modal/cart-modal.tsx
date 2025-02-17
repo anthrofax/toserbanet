@@ -34,7 +34,7 @@ import PaymentPage from "../payment-page";
 import Link from "next/link";
 
 function CartModal() {
-  const { cart, getCart, counter, isLoading, removeItem } = useCartStore();
+  const { cart, getCart, counter, isLoading, removeItem, deleteCart } = useCartStore();
   const wixClient = useWixClientContext();
   const isLoggedIn = wixClient.auth.loggedIn();
   const { member } = useCurrentMember();
@@ -65,7 +65,7 @@ function CartModal() {
       errors,
       isValidToValidate,
       buktiTf,
-      createdOrderId,
+      createdOrder: { orderId, orderNumber },
     },
     dispatch,
   ] = useReducer(cartReducer, initialState);
@@ -147,12 +147,13 @@ function CartModal() {
 
         dispatch({
           type: ActionType.TO_STEP_3,
-          payload: { orderId: createdOrder?._id || "" },
+          payload: {
+            orderId: createdOrder?._id || "",
+            orderNumber: createdOrder?.number || "",
+          },
         });
 
-        cart.lineItems.forEach((item) => {
-          removeItem(wixClient, item._id!);
-        });
+        deleteCart(wixClient);
       },
     });
 
@@ -458,7 +459,9 @@ function CartModal() {
             </div>
           )}
 
-          {step === 3 && <PaymentPage orderId={createdOrderId} />}
+          {step === 3 && (
+            <PaymentPage orderId={orderId} orderNumber={orderNumber} />
+          )}
 
           {step < 3 ? (
             cart.lineItems && cart.lineItems.length > 0 ? (
@@ -594,7 +597,7 @@ function CartModal() {
                 <>
                   <Link
                     href={`/user/${member?.profile?.slug}/transactions`}
-                    className={`w-full bg-blue-500 rounded-lg p-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600 text-center`}
+                    className={`w-full bg-blue-500 rounded-lg px-5 py-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600 text-center h-max`}
                   >
                     Ke Halaman Transaksi
                   </Link>

@@ -19,7 +19,13 @@ import { ModalContext } from "./modal";
 import Loader from "./loader";
 import { useGetRekingBank } from "@/hooks/useRekeningBank";
 
-function PaymentPage({ orderId }: { orderId: string }) {
+function PaymentPage({
+  orderId,
+  orderNumber,
+}: {
+  orderId: string;
+  orderNumber: string;
+}) {
   const [namaFotoBuktiTf, setNamaFotoBuktiTf] = useState<string | null>(null);
   const [linkFotoBuktiPembayaran, setLinkFotoBuktiPembayaran] = useState<
     string | null
@@ -42,7 +48,7 @@ function PaymentPage({ orderId }: { orderId: string }) {
 
   const { data: buktiPembayaran, isLoading: getBuktiPembayaranLoading } =
     useQuery({
-      queryKey: [orderId, "buktiPembayaran"],
+      queryKey: [orderId, "buktiPembayaran", mutatePaymentEvidencePending],
       queryFn: async () => {
         try {
           const buktiPembayaran = await getBuktiPembayaranById(orderId);
@@ -105,13 +111,15 @@ function PaymentPage({ orderId }: { orderId: string }) {
   async function handleSavePaymentEvidence(
     orderId: string,
     linkFotoBuktiPembayaran: string,
-    namaFoto: string
+    namaFoto: string,
+    orderNumber: string
   ) {
     try {
       await mutatePaymentEvidence({
         orderId,
         linkFotoBuktiPembayaran,
         namaFoto,
+        orderNumber,
       });
 
       toast.success("Bukti pembayaran berhasil dikirim");
@@ -228,7 +236,7 @@ function PaymentPage({ orderId }: { orderId: string }) {
 
           {!!buktiPembayaran?.namaFoto &&
           !!buktiPembayaran?.linkBuktiPembayaran ? (
-            <p className="text-slate-500 text-xs font-semibold">
+            <p className="text-slate-500 text-xs font-semibold text-center lg:text-start">
               Bukti pembayaran anda sudah terkirim. Mohon tunggu hingga proses
               review selesai. Status pembayaran pesanan anda akan berubah begitu
               bukti pembayaran anda dinyatakan valid.
@@ -238,11 +246,12 @@ function PaymentPage({ orderId }: { orderId: string }) {
           )}
 
           <PrimaryButton
-            className="w-full rounded-lg disabled:cursor-not-allowed relative"
+            className="w-full rounded-lg disabled:cursor-not-allowed relative text-xs"
             disabled={
               !namaFotoBuktiTf ||
               !linkFotoBuktiPembayaran ||
-              mutatePaymentEvidencePending
+              mutatePaymentEvidencePending ||
+              getBuktiPembayaranLoading
             }
             onClick={() => {
               if (!linkFotoBuktiPembayaran || !namaFotoBuktiTf)
@@ -262,11 +271,12 @@ function PaymentPage({ orderId }: { orderId: string }) {
               handleSavePaymentEvidence(
                 orderId,
                 linkFotoBuktiPembayaran,
-                namaFotoBuktiTf
+                namaFotoBuktiTf,
+                orderNumber
               );
             }}
           >
-            {mutatePaymentEvidencePending ? (
+            {mutatePaymentEvidencePending || getBuktiPembayaranLoading ? (
               <div className="loader-white w-[25px]"></div>
             ) : !buktiPembayaran?.namaFoto ||
               !buktiPembayaran?.linkBuktiPembayaran ? (
