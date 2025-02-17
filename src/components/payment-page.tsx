@@ -224,7 +224,7 @@ function PaymentPage({
               clientAllowedFormats: ["pdf", "png", "jpg"],
             }}
           >
-            <p>
+            <p className="line-clamp-1">
               {namaFotoBuktiTf && namaFotoBuktiTf !== ""
                 ? namaFotoBuktiTf
                 : "Upload Bukti Transfer"}
