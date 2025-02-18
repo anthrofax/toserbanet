@@ -69,9 +69,9 @@ export async function getOngkir({
   const formData = new URLSearchParams();
   formData.append("origin", "6542");
   formData.append("destination", destination);
-  formData.append("weight", String(weight));
+  formData.append("weight", String(weight < 1 ? 1 : weight));
   formData.append("courier", courier);
-  formData.append("price", price);
+  formData.append("price", price );
 
   try {
     const response = await axios.post<RajaOngkirCostType>(

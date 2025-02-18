@@ -4,13 +4,14 @@ import { wixClientServer } from "./lib/wix-client-server";
 
 export const middleware = async (request: NextRequest) => {
   const cookies = request.cookies;
+  const refreshToken = cookies.get("refreshToken");
   const res = NextResponse.next();
   const pathname = request.nextUrl.pathname;
   const urlOrigin = request.nextUrl.origin;
 
   const wixClient = await wixClientServer();
 
-  if (!cookies.get("refreshToken")) {
+  if (!refreshToken) {
     const tokens = await wixClient.auth.generateVisitorTokens();
     console.log(tokens);
     res.cookies.set("refreshToken", JSON.stringify(tokens.refreshToken || {}), {
