@@ -246,7 +246,7 @@ function PaymentPage({
           )}
 
           <PrimaryButton
-            className="w-full rounded-lg disabled:cursor-not-allowed relative text-xs"
+            className="w-full rounded-lg disabled:cursor-not-allowed disabled:bg-slate-300 relative text-xs"
             disabled={
               !namaFotoBuktiTf ||
               !linkFotoBuktiPembayaran ||

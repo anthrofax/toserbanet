@@ -34,7 +34,8 @@ import PaymentPage from "../payment-page";
 import Link from "next/link";
 
 function CartModal() {
-  const { cart, getCart, counter, isLoading, removeItem, deleteCart } = useCartStore();
+  const { cart, getCart, counter, isLoading, removeItem, deleteCart } =
+    useCartStore();
   const wixClient = useWixClientContext();
   const isLoggedIn = wixClient.auth.loggedIn();
   const { member } = useCurrentMember();
@@ -80,9 +81,7 @@ function CartModal() {
           );
 
         if (Object.values(errors).some((error) => error))
-          return toast.error(
-            "Data yang anda masukkan masih ada yang tidak sesuai."
-          );
+          return toast.error("Data yang anda masukkan belum lengkap.");
 
         const createdOrder = await redirectToCheckout(
           {
@@ -595,12 +594,12 @@ function CartModal() {
               )}
               {step === 3 && (
                 <>
-                  <Link
-                    href={`/user/${member?.profile?.slug}/transactions`}
+                  <button
+                    onClick={handleClose}
                     className={`w-full bg-blue-500 rounded-lg px-5 py-3 text-slate-50 col-span-8 transition-all hover:bg-blue-600 text-center h-max`}
                   >
                     Ke Halaman Transaksi
-                  </Link>
+                  </button>
                 </>
               )}
             </div>
